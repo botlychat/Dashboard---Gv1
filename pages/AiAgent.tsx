@@ -3,90 +3,6 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import { initialAiConfig } from '../data/mockData';
 import { AiConfig, AiConfigData, AiBookingMethod } from '../types';
 import { useGroup, useLanguage } from '../App';
-import { getAiResponse } from '../services/geminiService';
-
-interface AiChatDemoProps {
-    config: AiConfigData;
-}
-
-const AiChatDemo: React.FC<AiChatDemoProps> = ({ config }) => {
-    const [messages, setMessages] = useState<Array<{text: string, isUser: boolean}>>([
-        { text: config.welcomeMessage, isUser: false }
-    ]);
-    const [inputText, setInputText] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleSendMessage = async () => {
-        if (!inputText.trim()) return;
-
-        const userMessage = inputText.trim();
-        setInputText('');
-        setMessages(prev => [...prev, { text: userMessage, isUser: true }]);
-        setIsLoading(true);
-
-        try {
-            // Using mock AI response
-            const response = await getAiResponse(userMessage, [], [], config);
-            setMessages(prev => [...prev, { text: response, isUser: false }]);
-        } catch (error) {
-            setMessages(prev => [...prev, { text: 'Sorry, I encountered an error. Please try again.', isUser: false }]);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSendMessage();
-        }
-    };
-
-    return (
-        <div className="border rounded-lg max-w-md mx-auto">
-            <div className="h-48 overflow-y-auto p-3 space-y-2 bg-gray-50 dark:bg-gray-900">
-                {messages.map((message, index) => (
-                    <div key={index} className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-xs p-2 rounded-lg text-sm ${
-                            message.isUser 
-                                ? 'bg-orange-500 text-white' 
-                                : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border'
-                        }`}>
-                            {message.text}
-                        </div>
-                    </div>
-                ))}
-                {isLoading && (
-                    <div className="flex justify-start">
-                        <div className="bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border max-w-xs p-2 rounded-lg text-sm">
-                            <i className="fas fa-spinner fa-spin"></i> Thinking...
-                        </div>
-                    </div>
-                )}
-            </div>
-            <div className="p-3 border-t">
-                <div className="flex space-x-2">
-                    <input
-                        type="text"
-                        value={inputText}
-                        onChange={(e) => setInputText(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        placeholder="Ask me about bookings, availability, prices..."
-                        className="flex-1 p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 text-sm"
-                        disabled={isLoading}
-                    />
-                    <button
-                        onClick={handleSendMessage}
-                        disabled={isLoading || !inputText.trim()}
-                        className="px-3 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        <i className="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 interface EditSaveButtonsProps {
     isEditing: boolean;
@@ -117,6 +33,19 @@ const AiAgentComponent: React.FC = () => {
 
     const groupConfig = config[currentGroupId] as AiConfigData;
     
+    // Safety check - if no config exists for this group, don't render
+    if (!groupConfig) {
+        return (
+            <div className="max-w-2xl mx-auto space-y-6">
+                <div className="text-center p-4">
+                    <i className="fas fa-exclamation-triangle text-2xl text-yellow-400 mb-3"></i>
+                    <h3 className="text-lg font-semibold">Configuration Not Found</h3>
+                    <p className="text-gray-500 dark:text-gray-400">No AI configuration found for this group.</p>
+                </div>
+            </div>
+        );
+    }
+    
     const [editModes, setEditModes] = useState({
         discount: false,
         welcome: false,
@@ -133,12 +62,14 @@ const AiAgentComponent: React.FC = () => {
 
      // Reset temporary states when the group changes to prevent stale data
     useEffect(() => {
-        setTempDiscountAmount(groupConfig.discountAmount || 0);
-        setTempWelcomeMessage(groupConfig.welcomeMessage);
-        setTempReminders([...(groupConfig.reminders || ['', ''])]);
-        setTempRoles([...(groupConfig.customRoles || [])]);
-        setEditModes({ discount: false, welcome: false, reminders: false, roles: false });
-    }, [currentGroupId, groupConfig]);
+        if (groupConfig) {
+            setTempDiscountAmount(groupConfig.discountAmount || 0);
+            setTempWelcomeMessage(groupConfig.welcomeMessage);
+            setTempReminders([...(groupConfig.reminders || ['', ''])]);
+            setTempRoles([...(groupConfig.customRoles || [])]);
+            setEditModes({ discount: false, welcome: false, reminders: false, roles: false });
+        }
+    }, [currentGroupId]); // Only depend on currentGroupId, not groupConfig
 
 
     const handleConfigChange = <K extends keyof AiConfigData>(key: K, value: AiConfigData[K]) => {
@@ -384,13 +315,6 @@ const AiAgentComponent: React.FC = () => {
                     </div>
                     <p className="text-end text-xs text-gray-400 mt-2">{t('totalRoles', { count: (editModes.roles ? tempRoles : groupConfig.customRoles).length })}</p>
                 </div>
-
-                {/* AI Chat Demo Section */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold mb-4">AI Agent Demo</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Test how your AI agent responds to customer inquiries (mock responses)</p>
-                    <AiChatDemo config={groupConfig} />
-                </div>
             </div>
         </div>
     );
@@ -436,7 +360,9 @@ const AiAgentContainer: React.FC = () => {
             </div>
         );
     }
-    return <AiAgentComponent key={currentGroupId} />;
+    
+    // Render the component without key to prevent remounting
+    return <AiAgentComponent />;
 }
 
 export default AiAgentContainer;
