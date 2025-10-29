@@ -1,13 +1,22 @@
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function useLocalStorage<T,>(key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      if (item === null) {
+        return initialValue;
+      }
+      // Additional safety check for non-JSON strings
+      if (typeof item === 'string' && item.length > 0 && !item.startsWith('{') && !item.startsWith('[') && !item.startsWith('"')) {
+        console.warn(`localStorage item "${key}" appears to be a plain string, not JSON:`, item);
+        return initialValue;
+      }
+      return JSON.parse(item);
     } catch (error) {
-      console.error(error);
+      console.error(`Error parsing localStorage item "${key}":`, error);
+      console.error('Raw value:', window.localStorage.getItem(key));
       return initialValue;
     }
   });

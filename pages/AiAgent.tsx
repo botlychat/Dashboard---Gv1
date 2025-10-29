@@ -31,11 +31,26 @@ const AiAgentComponent: React.FC = () => {
     const { t } = useLanguage();
     const [config, setConfig] = useLocalStorage<AiConfig>('aiConfig', initialAiConfig);
 
-    // Ensure currentGroupId is a string and get config safely
-    const safeGroupId = String(currentGroupId);
-    const groupConfig = config[safeGroupId] as AiConfigData;
+    // Safely get group config with fallback
+    const groupConfig = useMemo(() => {
+        const configData = config[currentGroupId];
+        if (!configData) {
+            // Return default config if none exists
+            return {
+                activeConversations: 0,
+                maxConversations: 100,
+                bookingMethod: AiBookingMethod.Full,
+                discountEnabled: false,
+                discountAmount: 0,
+                couponCode: '',
+                welcomeMessage: 'Hello! How can I help you today?',
+                reminders: ['', ''],
+                customRoles: []
+            };
+        }
+        return configData;
+    }, [config, currentGroupId]);
     
-    // All hooks must be called before any conditional returns
     const [editModes, setEditModes] = useState({
         discount: false,
         welcome: false,
@@ -43,11 +58,11 @@ const AiAgentComponent: React.FC = () => {
         roles: false,
     });
 
-    // Temporary states for editing - use safe defaults
-    const [tempDiscountAmount, setTempDiscountAmount] = useState(() => groupConfig?.discountAmount || 0);
-    const [tempWelcomeMessage, setTempWelcomeMessage] = useState(() => groupConfig?.welcomeMessage || '');
-    const [tempReminders, setTempReminders] = useState(() => [...(groupConfig?.reminders || ['', ''])]);
-    const [tempRoles, setTempRoles] = useState(() => [...(groupConfig?.customRoles || [])]);
+    // Temporary states for editing - initialize with safe defaults
+    const [tempDiscountAmount, setTempDiscountAmount] = useState(0);
+    const [tempWelcomeMessage, setTempWelcomeMessage] = useState('');
+    const [tempReminders, setTempReminders] = useState(['', '']);
+    const [tempRoles, setTempRoles] = useState<string[]>([]);
     const [tempNewRole, setTempNewRole] = useState('');
 
      // Reset temporary states when the group changes to prevent stale data
@@ -59,24 +74,11 @@ const AiAgentComponent: React.FC = () => {
             setTempRoles([...(groupConfig.customRoles || [])]);
             setEditModes({ discount: false, welcome: false, reminders: false, roles: false });
         }
-    }, [safeGroupId]); // Use safeGroupId instead of currentGroupId
-
-    // Safety check - if no config exists for this group, don't render main content
-    if (!groupConfig) {
-        return (
-            <div className="max-w-2xl mx-auto space-y-6">
-                <div className="text-center p-4">
-                    <i className="fas fa-exclamation-triangle text-2xl text-yellow-400 mb-3"></i>
-                    <h3 className="text-lg font-semibold">Configuration Not Found</h3>
-                    <p className="text-gray-500 dark:text-gray-400">No AI configuration found for group: {safeGroupId}</p>
-                </div>
-            </div>
-        );
-    }
+    }, [currentGroupId, groupConfig]);
 
 
     const handleConfigChange = <K extends keyof AiConfigData>(key: K, value: AiConfigData[K]) => {
-        setConfig(prev => ({...prev, [safeGroupId]: {...prev[safeGroupId], [key]: value}}));
+        setConfig(prev => ({...prev, [currentGroupId]: {...prev[currentGroupId], [key]: value}}));
     };
     
     const handleToggleEdit = (section: keyof typeof editModes, isEditing: boolean) => {
@@ -364,8 +366,20 @@ const AiAgentContainer: React.FC = () => {
         );
     }
     
-    // Render the component with key to ensure clean remounting when switching groups
-    return <AiAgentComponent key={String(currentGroupId)} />;
+    // Check if the current group has a valid config
+    if (!config[currentGroupId]) {
+        return (
+            <div className="max-w-2xl mx-auto space-y-6">
+                <div className="text-center p-4">
+                    <i className="fas fa-exclamation-triangle text-2xl text-yellow-500 mb-3"></i>
+                    <h3 className="text-lg font-semibold">{t('configurationNotFound')}</h3>
+                    <p className="text-gray-500 dark:text-gray-400">No AI configuration found for this group. Please select a different group.</p>
+                </div>
+            </div>
+        );
+    }
+    
+    return <AiAgentComponent key={currentGroupId} />;
 }
 
 export default AiAgentContainer;
