@@ -335,7 +335,7 @@ const Calendar: React.FC = () => {
         </SidePanel>
 
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+        <div className="bg-white dark:bg-gray-800 p-2 sm:p-6 rounded-lg shadow-md">
             <div className="flex flex-wrap items-center justify-between mb-6 gap-4">
                 <div className="flex items-center space-x-2">
                     <button onClick={prevMonth} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -385,7 +385,7 @@ const Calendar: React.FC = () => {
                             </div>
                         )}
                     </div>
-                    <button onClick={() => openAddBookingPanel()} className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">
+                    <button onClick={() => openAddBookingPanel()} className="hidden sm:flex items-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">
                         <i className="fas fa-plus me-2"></i>{t('addBooking')}
                     </button>
                 </div>
@@ -403,6 +403,8 @@ const Calendar: React.FC = () => {
                     const dailyPrice = availableUnitsForDay.length > 0
                         ? Math.min(...availableUnitsForDay.map(u => getDailyPrice(u, date)))
                         : null;
+                    
+                    const showPrice = currentGroupId !== 'all';
 
                     return (
                         <div key={index} className={`relative border dark:border-gray-700 min-h-[9rem] flex flex-col p-1.5 group ${isCurrentMonth ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/50'}`}>
@@ -424,7 +426,7 @@ const Calendar: React.FC = () => {
                                 </div>
                             </div>
 
-                             {dailyPrice && !dayBookings.length && (
+                             {dailyPrice && !dayBookings.length && showPrice && (
                                 <div className="absolute bottom-1 end-1 text-xs text-green-600 dark:text-green-400 font-semibold p-1 bg-green-50 dark:bg-green-900/50 rounded">
                                     {currencySymbols[accountSettings.currency]}{dailyPrice}
                                 </div>
@@ -461,6 +463,13 @@ const Calendar: React.FC = () => {
                 })}
             </div>
         </div>
+        <button 
+            onClick={() => openAddBookingPanel()} 
+            className="sm:hidden fixed bottom-6 end-6 z-40 w-14 h-14 bg-orange-500 text-white rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-orange-600 transition-colors"
+            aria-label={t('addNewBooking')}
+        >
+            <i className="fas fa-plus"></i>
+        </button>
         </>
     );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialAiConfig } from '../data/mockData';
 import { AiConfig, AiConfigData, AiBookingMethod } from '../types';
@@ -308,13 +308,40 @@ const AiAgentComponent: React.FC = () => {
 const AiAgentContainer: React.FC = () => {
     const { currentGroupId } = useGroup();
     const { t } = useLanguage();
+    const [config] = useLocalStorage<AiConfig>('aiConfig', initialAiConfig);
 
     if (currentGroupId === 'all') {
+        const { totalActive, totalMax } = useMemo(() => {
+            const allConfigs = Object.values(config);
+            const totalActive = allConfigs.reduce((sum, c) => sum + c.activeConversations, 0);
+            const totalMax = allConfigs.reduce((sum, c) => sum + c.maxConversations, 0);
+            return { totalActive, totalMax };
+        }, [config]);
+
+        const usagePercentage = totalMax > 0 ? (totalActive / totalMax) * 100 : 0;
+
         return (
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md text-center">
-                 <i className="fas fa-robot text-4xl text-gray-400 mb-4"></i>
-                <h2 className="text-xl font-semibold mb-2">{t('manageAiAgentSettings')}</h2>
-                <p className="text-gray-500">{t('selectGroupToConfigureAi')}</p>
+            <div className="max-w-2xl mx-auto space-y-6">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <h2 className="text-xl font-semibold mb-1">{t('totalActiveConversations')}</h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('acrossAllGroups')}</p>
+                    <div className="flex items-end space-x-2">
+                        <span className="text-4xl font-bold">{totalActive.toLocaleString()}</span>
+                        <span className="text-gray-500 dark:text-gray-400 pb-1">/ {totalMax.toLocaleString()} {t('conversationsInPlan')}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 my-4">
+                        <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${usagePercentage}%` }}></div>
+                    </div>
+                    <div className="flex justify-between text-sm font-medium">
+                        <span className="text-gray-600 dark:text-gray-300">{usagePercentage.toFixed(1)}% {t('used')}</span>
+                        <span className="text-green-600 dark:text-green-400">{(totalMax - totalActive).toLocaleString()} {t('remaining')}</span>
+                    </div>
+                </div>
+                <div className="text-center p-4">
+                    <i className="fas fa-info-circle text-2xl text-gray-400 dark:text-gray-500 mb-3"></i>
+                    <h3 className="text-lg font-semibold">{t('manageAiAgentSettings')}</h3>
+                    <p className="text-gray-500 dark:text-gray-400">{t('selectGroupToConfigureAi')}</p>
+                </div>
             </div>
         );
     }
