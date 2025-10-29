@@ -31,16 +31,23 @@ const AiAgentComponent: React.FC = () => {
     const { t } = useLanguage();
     const [config, setConfig] = useLocalStorage<AiConfig>('aiConfig', initialAiConfig);
 
-    const groupConfig = config[currentGroupId] as AiConfigData;
+    // Convert currentGroupId to string to ensure consistent key lookup
+    const groupIdStr = String(currentGroupId);
+    const groupConfig = config[groupIdStr] as AiConfigData;
+    
+    // Debug logging
+    console.log('AiAgent - currentGroupId:', currentGroupId, 'groupIdStr:', groupIdStr, 'groupConfig:', groupConfig);
     
     // Safety check - if no config exists for this group, don't render
     if (!groupConfig) {
+        console.log('AiAgent - No config found for group:', groupIdStr, 'Available configs:', Object.keys(config));
         return (
             <div className="max-w-2xl mx-auto space-y-6">
                 <div className="text-center p-4">
                     <i className="fas fa-exclamation-triangle text-2xl text-yellow-400 mb-3"></i>
                     <h3 className="text-lg font-semibold">Configuration Not Found</h3>
-                    <p className="text-gray-500 dark:text-gray-400">No AI configuration found for this group.</p>
+                    <p className="text-gray-500 dark:text-gray-400">No AI configuration found for group ID: {groupIdStr}</p>
+                    <p className="text-sm text-gray-400 mt-2">Available groups: {Object.keys(config).join(', ')}</p>
                 </div>
             </div>
         );
@@ -69,11 +76,11 @@ const AiAgentComponent: React.FC = () => {
             setTempRoles([...(groupConfig.customRoles || [])]);
             setEditModes({ discount: false, welcome: false, reminders: false, roles: false });
         }
-    }, [currentGroupId]); // Only depend on currentGroupId, not groupConfig
+    }, [groupIdStr]); // Use string version for consistency
 
 
     const handleConfigChange = <K extends keyof AiConfigData>(key: K, value: AiConfigData[K]) => {
-        setConfig(prev => ({...prev, [currentGroupId]: {...prev[currentGroupId], [key]: value}}));
+        setConfig(prev => ({...prev, [groupIdStr]: {...prev[groupIdStr], [key]: value}}));
     };
     
     const handleToggleEdit = (section: keyof typeof editModes, isEditing: boolean) => {
@@ -361,7 +368,7 @@ const AiAgentContainer: React.FC = () => {
         );
     }
     
-    // Render the component without key to prevent remounting
+    // Render the component without key to prevent remounting issues
     return <AiAgentComponent />;
 }
 
