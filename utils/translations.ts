@@ -18,7 +18,6 @@ export const translations: { [key:string]: { [key: string]: string } } = {
     na: 'N/A',
     of: 'of',
     unit: 'Unit',
-    fillAllRequiredFields: 'Please fill all required fields.',
 
     // Sidebar & Header
     dashboard: 'Dashboard',
@@ -74,22 +73,6 @@ export const translations: { [key:string]: { [key: string]: string } } = {
     adjustPricesForDate: 'Adjust Prices for {{date}}',
     selectAll: 'Select All',
     clearAll: 'Clear All',
-    invalidIcsUrl: 'Invalid calendar URL. Please provide a valid iCal URL that ends with .ics',
-    icsUrlHelper: 'Please use a valid iCal URL ending with .ics',
-    editCalendarSync: 'Edit Calendar Sync',
-    addCalendarSync: 'Add New Calendar Sync',
-    selectUnit: 'Select Unit',
-    calendarName: 'Calendar Name',
-    externalCalendarUrl: 'External Calendar URL (iCal/Google Calendar)',
-    cancelEdit: 'Cancel Edit',
-    updateCalendar: 'Update Calendar',
-    saveCalendar: 'Save Calendar',
-    syncNow: 'Sync Now',
-    lastSynced: 'Last synced',
-    never: 'Never',
-    savedCalendars: 'Saved Calendar URLs',
-    autoSyncInfo: '🔄 Automatic Sync: Calendars sync automatically every 1 hour. Use the manual sync button to sync immediately.',
-    noCalendarsSynced: 'No external calendars have been synced yet.',
 
     // Units
     allUnits: 'All Units',
@@ -239,7 +222,6 @@ export const translations: { [key:string]: { [key: string]: string } } = {
     na: 'غير متاح',
     of: 'من',
     unit: 'الوحدة',
-    fillAllRequiredFields: 'يرجى ملء جميع الحقول المطلوبة.',
 
     // Sidebar & Header
     dashboard: 'لوحة التحكم',
@@ -295,23 +277,6 @@ export const translations: { [key:string]: { [key: string]: string } } = {
     adjustPricesForDate: 'تعديل الأسعار لتاريخ {{date}}',
     selectAll: 'تحديد الكل',
     clearAll: 'مسح الكل',
-    invalidIcsUrl: 'رابط تقويم غير صالح. يرجى تقديم رابط iCal صالح ينتهي بـ .ics',
-    icsUrlHelper: 'يرجى استخدام رابط iCal صالح ينتهي بـ .ics',
-    editCalendarSync: 'تعديل مزامنة التقويم',
-    addCalendarSync: 'إضافة مزامنة تقويم جديدة',
-    selectUnit: 'اختر الوحدة',
-    calendarName: 'اسم التقويم',
-    externalCalendarUrl: 'رابط التقويم الخارجي (iCal/Google Calendar)',
-    cancelEdit: 'إلغاء التعديل',
-    updateCalendar: 'تحديث التقويم',
-    saveCalendar: 'حفظ التقويم',
-    syncNow: 'مزامنة الآن',
-    lastSynced: 'آخر مزامنة',
-    never: 'أبداً',
-    savedCalendars: 'روابط التقويم المحفوظة',
-    autoSyncInfo: '🔄 مزامنة تلقائية: تتم مزامنة التقاويم تلقائياً كل ساعة. استخدم زر المزامنة اليدوية للمزامنة فوراً.',
-    noCalendarsSynced: 'لم تتم مزامنة أي تقاويم خارجية بعد.',
-
 
     // Units
     allUnits: 'كل الوحدات',
