@@ -4,10 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialBookings, initialUnits } from '../data/mockData';
 import { Booking, BookingStatus, Unit, currencySymbols } from '../types';
-import { useGroup } from '../contexts/GroupContext';
-import { useAccount } from '../contexts/AccountContext';
-import { useGlobalActions } from '../contexts/GlobalActionsContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useGroup, useAccount, useGlobalActions, useLanguage } from '../App';
 
 const StatCard: React.FC<{ icon: string; title: string; value: string | number; color: string }> = ({ icon, title, value, color }) => (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex items-center space-x-4">

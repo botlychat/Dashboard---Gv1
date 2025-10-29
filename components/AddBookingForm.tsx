@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Booking, Unit, currencySymbols, FormDataType } from '../types';
-import { useAccount } from '../contexts/AccountContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useAccount, useLanguage } from '../App';
 
 interface AddBookingFormProps {
   units: Unit[];

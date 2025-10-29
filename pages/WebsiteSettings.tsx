@@ -2,8 +2,7 @@ import React, { useState, ChangeEvent } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialWebsiteSettings } from '../data/mockData';
 import { WebsiteSettings, WebsiteSettingsData } from '../types';
-import { useGroup } from '../contexts/GroupContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useGroup, useLanguage } from '../App';
 
 const WebsiteSettingsComponent: React.FC = () => {
     const { currentGroupId } = useGroup();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PricingOverride, Unit, currencySymbols } from '../types';
 import SidePanel from './SidePanel';
-import { useAccount } from '../contexts/AccountContext';
+import { useAccount } from '../App';
 
 interface PricingOverridesPanelProps {
     units: Unit[];

@@ -1,6 +1,5 @@
 import React from 'react';
-import { useAccount } from '../contexts/AccountContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useAccount, useLanguage } from '../App';
 import { Currency } from '../types';
 
 const AccountSettingsPage: React.FC = () => {

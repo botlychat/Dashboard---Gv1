@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Unit, ExternalCalendar } from '../types';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../App';
 
 interface SyncCalendarFormProps {
     units: Unit[];

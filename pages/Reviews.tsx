@@ -2,8 +2,7 @@ import React, { useState, useMemo } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialReviews, initialBookings, initialContacts, initialUnits } from '../data/mockData';
 import { Review, Booking, Contact, Unit } from '../types';
-import { useGroup } from '../contexts/GroupContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useGroup, useLanguage } from '../App';
 
 const StarRating = ({ rating }: { rating: number }) => {
   const stars = [];
