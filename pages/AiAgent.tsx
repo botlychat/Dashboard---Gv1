@@ -326,7 +326,7 @@ const AiAgentComponent: React.FC = () => {
 };
 
 const AiAgentContainer: React.FC = () => {
-    const { currentGroupId } = useGroup();
+    const { currentGroupId, setCurrentGroupId, unitGroups } = useGroup();
     const { t } = useLanguage();
     const [config] = useLocalStorage<AiConfig>('aiConfig', initialAiConfig);
 
@@ -341,7 +341,7 @@ const AiAgentContainer: React.FC = () => {
         const usagePercentage = totalMax > 0 ? (totalActive / totalMax) * 100 : 0;
 
         return (
-            <div className="max-w-2xl mx-auto space-y-6">
+            <div className="max-w-5xl mx-auto space-y-6">
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                     <h2 className="text-xl font-semibold mb-1">{t('totalActiveConversations')}</h2>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('acrossAllGroups')}</p>
@@ -355,6 +355,45 @@ const AiAgentContainer: React.FC = () => {
                     <div className="flex justify-between text-sm font-medium">
                         <span className="text-gray-600 dark:text-gray-300">{usagePercentage.toFixed(1)}% {t('used')}</span>
                         <span className="text-green-600 dark:text-green-400">{(totalMax - totalActive).toLocaleString()} {t('remaining')}</span>
+                    </div>
+                </div>
+                {/* Per-group consumption list */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <h3 className="text-lg font-semibold mb-4">{t('totalActiveConversations')}</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {unitGroups.map(group => {
+                            const cfg = config[group.id as unknown as string] || config[String(group.id)] || {
+                                activeConversations: 0,
+                                maxConversations: 100,
+                                bookingMethod: AiBookingMethod.Full,
+                                discountEnabled: false,
+                                discountAmount: 0,
+                                couponCode: '',
+                                welcomeMessage: '',
+                                reminders: ['', ''],
+                                customRoles: []
+                            };
+                            const percent = cfg.maxConversations > 0 ? (cfg.activeConversations / cfg.maxConversations) * 100 : 0;
+                            return (
+                                <div key={group.id} className="border dark:border-gray-700 rounded-md p-4 flex flex-col gap-3">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <p className="font-medium">{group.name}</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">{cfg.activeConversations.toLocaleString()} / {cfg.maxConversations.toLocaleString()} {t('conversationsInPlan')}</p>
+                                        </div>
+                                        <button
+                                            className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-md"
+                                            onClick={() => setCurrentGroupId(group.id)}
+                                        >
+                                            {t('edit')}
+                                        </button>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                        <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${percent}%` }}></div>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
                 <div className="text-center p-4">
@@ -372,7 +411,7 @@ const AiAgentContainer: React.FC = () => {
             <div className="max-w-2xl mx-auto space-y-6">
                 <div className="text-center p-4">
                     <i className="fas fa-exclamation-triangle text-2xl text-yellow-500 mb-3"></i>
-                    <h3 className="text-lg font-semibold">{t('configurationNotFound')}</h3>
+                    <h3 className="text-lg font-semibold">{t('selectGroupToConfigureAi')}</h3>
                     <p className="text-gray-500 dark:text-gray-400">No AI configuration found for this group. Please select a different group.</p>
                 </div>
             </div>
