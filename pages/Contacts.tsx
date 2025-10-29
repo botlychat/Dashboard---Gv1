@@ -4,10 +4,12 @@ import { initialContacts, initialBookings, initialUnits, initialUnitGroups } fro
 import { Contact, Booking, Unit, UnitGroup } from '../types';
 import WhatsAppCampaignModal from '../components/WhatsAppCampaignModal';
 import EditContactModal from '../components/EditContactModal';
+import { useLanguage } from '../App';
 
 const ITEMS_PER_PAGE = 25;
 
 const Contacts: React.FC = () => {
+    const { t } = useLanguage();
     const [contacts, setContacts] = useLocalStorage<Contact[]>('contacts', initialContacts);
     const [allBookings] = useLocalStorage<Booking[]>('bookings', initialBookings);
     const [allUnits] = useLocalStorage<Unit[]>('units', initialUnits);
@@ -30,12 +32,12 @@ const Contacts: React.FC = () => {
 
             return {
                 ...contact,
-                lastGroup: lastGroup?.name || 'N/A',
-                lastUnit: lastUnit?.name || 'N/A',
-                lastBooking: lastBooking ? new Date(lastBooking.checkIn).toLocaleDateString() : 'N/A',
+                lastGroup: lastGroup?.name || t('na'),
+                lastUnit: lastUnit?.name || t('na'),
+                lastBooking: lastBooking ? new Date(lastBooking.checkIn).toLocaleDateString() : t('na'),
             };
         });
-    }, [contacts, allBookings, allUnits, allGroups]);
+    }, [contacts, allBookings, allUnits, allGroups, t]);
     
     const filteredContacts = useMemo(() => {
         let filtered = contactData.filter(contact => 
@@ -118,23 +120,23 @@ const Contacts: React.FC = () => {
                 unitGroups={allGroups}
             />
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md flex justify-between items-center">
-                 <h2 className="text-xl font-semibold">Contacts Management</h2>
+                 <h2 className="text-xl font-semibold">{t('contactsManagement')}</h2>
                  <div className="flex space-x-2">
-                    <button onClick={() => setCampaignModalOpen(true)} className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 flex items-center"><i className="fas fa-envelope mr-2"></i>WhatsApp Campaign</button>
-                    <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center"><i className="fas fa-download mr-2"></i>Export All</button>
-                    <button disabled={selectedIds.length === 0} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"><i className="fas fa-download mr-2"></i>Export Selected</button>
+                    <button onClick={() => setCampaignModalOpen(true)} className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 flex items-center"><i className="fab fa-whatsapp me-2"></i>{t('whatsAppCampaign')}</button>
+                    <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center"><i className="fas fa-download me-2"></i>{t('exportAll')}</button>
+                    <button disabled={selectedIds.length === 0} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"><i className="fas fa-download me-2"></i>{t('exportSelected')}</button>
                  </div>
             </div>
             <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border dark:border-gray-700">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
-                    <input name="name" value={filters.name} onChange={handleFilterChange} placeholder="Filter by name..." className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    <input name="phone" value={filters.phone} onChange={handleFilterChange} placeholder="Filter by phone..." className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    <input name="email" value={filters.email} onChange={handleFilterChange} placeholder="Filter by email..." className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
+                    <input name="name" value={filters.name} onChange={handleFilterChange} placeholder={t('filterByName')} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
+                    <input name="phone" value={filters.phone} onChange={handleFilterChange} placeholder={t('filterByPhone')} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
+                    <input name="email" value={filters.email} onChange={handleFilterChange} placeholder={t('filterByEmail')} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
                     <select name="unit" value={filters.unit} onChange={handleFilterChange} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600">
-                        <option value="all">All Units</option>
+                        <option value="all">{t('allUnits')}</option>
                         {allUnits.map(u => <option key={u.id} value={u.name}>{u.name}</option>)}
                     </select>
-                    <button onClick={clearFilters} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">Clear Filters</button>
+                    <button onClick={clearFilters} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">{t('clearFilters')}</button>
                 </div>
             </div>
             
@@ -144,15 +146,15 @@ const Contacts: React.FC = () => {
                         <thead className="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-700 dark:text-gray-400 uppercase">
                             <tr>
                                 <th className="p-4"><input type="checkbox" checked={isAllSelected} onChange={toggleSelectAll} className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"/></th>
-                                <th className="p-4">Name</th>
-                                <th className="p-4">Phone</th>
-                                <th className="p-4">Email</th>
-                                <th className="p-4">Last Group</th>
-                                <th className="p-4">Last Unit</th>
-                                <th className="p-4">Last Booking</th>
-                                <th className="p-4">Review</th>
-                                <th className="p-4">Payment</th>
-                                <th className="p-4">Actions</th>
+                                <th className="p-4">{t('name')}</th>
+                                <th className="p-4">{t('phone')}</th>
+                                <th className="p-4">{t('email')}</th>
+                                <th className="p-4">{t('lastGroup')}</th>
+                                <th className="p-4">{t('lastUnit')}</th>
+                                <th className="p-4">{t('lastBooking')}</th>
+                                <th className="p-4">{t('review')}</th>
+                                <th className="p-4">{t('payment')}</th>
+                                <th className="p-4">{t('actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,7 +170,7 @@ const Contacts: React.FC = () => {
                                     <td className="p-4 text-orange-500 font-bold">{contact.review}⭐</td>
                                     <td className="p-4">
                                         <span className={`px-2 py-1 text-xs font-semibold rounded-full ${contact.payment === 'Paid' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'}`}>
-                                            {contact.payment}
+                                            {t(contact.payment === 'Paid' ? 'paymentPaid' : 'paymentPending')}
                                         </span>
                                     </td>
                                     <td className="p-4">
@@ -184,17 +186,17 @@ const Contacts: React.FC = () => {
                 </div>
                  <div className="p-4 bg-gray-50 dark:bg-gray-800/50 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <span className="text-sm text-gray-700 dark:text-gray-400">
-                        Showing <span className="font-semibold">{filteredContacts.length > 0 ? pageStart : 0}</span>-<span className="font-semibold">{pageEnd}</span> of <span className="font-semibold">{filteredContacts.length}</span> contacts
+                        {t('showingContacts', { start: filteredContacts.length > 0 ? pageStart : 0, end: pageEnd, total: filteredContacts.length })}
                     </span>
                     <div className="flex items-center space-x-2">
                         <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50"><i className="fas fa-chevron-left"></i></button>
                         <input type="number" value={currentPage} onChange={e => setCurrentPage(Math.max(1, Math.min(totalPages, Number(e.target.value) || 1)))} min="1" max={totalPages} className="w-16 p-2 text-center border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
-                        <span>of {totalPages}</span>
+                        <span>{t('of')} {totalPages}</span>
                         <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50"><i className="fas fa-chevron-right"></i></button>
                     </div>
                 </div>
-                <div className="text-right px-4 pb-2 text-xs text-gray-500 dark:text-gray-500">
-                     Selected: {selectedIds.length} contacts
+                <div className="text-end px-4 pb-2 text-xs text-gray-500 dark:text-gray-500">
+                     {t('selectedContacts', { count: selectedIds.length })}
                 </div>
             </div>
         </div>

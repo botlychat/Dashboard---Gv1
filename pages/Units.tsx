@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialUnits, initialUnitGroups, initialBookings } from '../data/mockData';
 import { Unit, UnitGroup, currencySymbols, Booking, PricingOverride } from '../types';
-import { useGroup, useAccount } from '../App';
+import { useGroup, useAccount, useLanguage } from '../App';
 import SidePanel from '../components/SidePanel';
 import AddUnitForm from '../components/AddUnitForm';
 import AddGroupForm from '../components/AddGroupForm';
@@ -16,6 +16,7 @@ const Units: React.FC = () => {
 
     const { currentGroupId } = useGroup();
     const { accountSettings } = useAccount();
+    const { t } = useLanguage();
     
     const [isUnitPanelOpen, setIsUnitPanelOpen] = useState(false);
     const [isAddGroupPanelOpen, setIsAddGroupPanelOpen] = useState(false);
@@ -31,7 +32,7 @@ const Units: React.FC = () => {
     }, [units, currentGroupId]);
 
     const getGroupName = (groupId: number) => {
-        return groups.find(g => g.id === groupId)?.name || 'N/A';
+        return groups.find(g => g.id === groupId)?.name || t('na');
     }
 
     const handleOpenAddPanel = () => {
@@ -89,11 +90,11 @@ const Units: React.FC = () => {
     };
     
     const currentGroup = currentGroupId !== 'all' ? groups.find(g => g.id === Number(currentGroupId)) : null;
-    const title = currentGroup ? `${currentGroup.name} Units` : 'All Units';
+    const title = currentGroup ? t('unitsForGroup', { groupName: currentGroup.name }) : t('allUnits');
 
     return (
         <div className="space-y-6">
-             <SidePanel isOpen={isUnitPanelOpen} onClose={() => setIsUnitPanelOpen(false)} title={editingUnit ? 'Edit Unit' : 'Add New Unit'}>
+             <SidePanel isOpen={isUnitPanelOpen} onClose={() => setIsUnitPanelOpen(false)} title={editingUnit ? t('editUnit') : t('addNewUnit')}>
                 <AddUnitForm 
                     unitGroups={groups}
                     onSave={handleSaveUnit}
@@ -102,7 +103,7 @@ const Units: React.FC = () => {
                 />
             </SidePanel>
             
-            <SidePanel isOpen={isAddGroupPanelOpen} onClose={() => setIsAddGroupPanelOpen(false)} title="Add New Group">
+            <SidePanel isOpen={isAddGroupPanelOpen} onClose={() => setIsAddGroupPanelOpen(false)} title={t('addGroupTitle')}>
                 <AddGroupForm
                     onAddGroup={handleAddGroup}
                     onClose={() => setIsAddGroupPanelOpen(false)}
@@ -117,20 +118,20 @@ const Units: React.FC = () => {
             />
 
             {currentGroup && (
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md border-l-4" style={{ borderColor: currentGroup.color || '#ccc' }}>
-                    <h3 className="text-lg font-semibold mb-2">Bank Details</h3>
+                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md border-s-4" style={{ borderColor: currentGroup.color || '#ccc' }}>
+                    <h3 className="text-lg font-semibold mb-2">{t('bankDetails')}</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                         <div>
-                            <p className="text-gray-500 dark:text-gray-400">Bank Name</p>
-                            <p className="font-medium">{currentGroup.bankName || 'N/A'}</p>
+                            <p className="text-gray-500 dark:text-gray-400">{t('bankName')}</p>
+                            <p className="font-medium">{currentGroup.bankName || t('na')}</p>
                         </div>
                         <div>
-                            <p className="text-gray-500 dark:text-gray-400">Account Name</p>
-                            <p className="font-medium">{currentGroup.accountName || 'N/A'}</p>
+                            <p className="text-gray-500 dark:text-gray-400">{t('accountName')}</p>
+                            <p className="font-medium">{currentGroup.accountName || t('na')}</p>
                         </div>
                         <div>
-                            <p className="text-gray-500 dark:text-gray-400">IBAN</p>
-                            <p className="font-medium">{currentGroup.accountIban || 'N/A'}</p>
+                            <p className="text-gray-500 dark:text-gray-400">{t('iban')}</p>
+                            <p className="font-medium">{currentGroup.accountIban || t('na')}</p>
                         </div>
                     </div>
                 </div>
@@ -141,10 +142,10 @@ const Units: React.FC = () => {
                     <h2 className="text-xl font-semibold">{title}</h2>
                      <div className="flex space-x-2">
                         <button onClick={() => setIsAddGroupPanelOpen(true)} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">
-                            Add Group
+                            {t('addGroup')}
                         </button>
                         <button onClick={handleOpenAddPanel} className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-md hover:bg-orange-600">
-                            <i className="fas fa-plus mr-2"></i>Add New Unit
+                            <i className="fas fa-plus me-2"></i>{t('addNewUnit')}
                         </button>
                     </div>
                 </div>
@@ -153,13 +154,13 @@ const Units: React.FC = () => {
                         <thead>
                             <tr className="text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
                                 <th className="py-3 px-4 font-medium"><input type="checkbox"/></th>
-                                <th className="py-3 px-4 font-medium">Unit Name</th>
-                                <th className="py-3 px-4 font-medium">Group</th>
-                                <th className="py-3 px-4 font-medium">Type</th>
-                                <th className="py-3 px-4 font-medium">Max Guests</th>
-                                <th className="py-3 px-4 font-medium">Base Rate</th>
-                                <th className="py-3 px-4 font-medium">Status</th>
-                                <th className="py-3 px-4 font-medium">Actions</th>
+                                <th className="py-3 px-4 font-medium">{t('unitName')}</th>
+                                <th className="py-3 px-4 font-medium">{t('group')}</th>
+                                <th className="py-3 px-4 font-medium">{t('type')}</th>
+                                <th className="py-3 px-4 font-medium">{t('maxGuests')}</th>
+                                <th className="py-3 px-4 font-medium">{t('baseRate')}</th>
+                                <th className="py-3 px-4 font-medium">{t('status')}</th>
+                                <th className="py-3 px-4 font-medium">{t('actions')}</th>
                             </tr>
                         </thead>
                         <tbody>

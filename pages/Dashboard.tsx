@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialBookings, initialUnits } from '../data/mockData';
 import { Booking, BookingStatus, Unit, currencySymbols } from '../types';
-import { useGroup, useAccount, useGlobalActions } from '../App';
+import { useGroup, useAccount, useGlobalActions, useLanguage } from '../App';
 
 const StatCard: React.FC<{ icon: string; title: string; value: string | number; color: string }> = ({ icon, title, value, color }) => (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex items-center space-x-4">
@@ -32,6 +32,7 @@ const Dashboard: React.FC = () => {
     const { currentGroupId } = useGroup();
     const { accountSettings } = useAccount();
     const { openAddBookingPanel } = useGlobalActions();
+    const { t } = useLanguage();
     const [allBookings] = useLocalStorage<Booking[]>('bookings', initialBookings);
     const [allUnits] = useLocalStorage<Unit[]>('units', initialUnits);
 
@@ -148,10 +149,10 @@ const Dashboard: React.FC = () => {
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
                  <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                        <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Overview for period:</h2>
+                        <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">{t('overviewForPeriod')}</h2>
                          <div className="flex items-center space-x-2">
                             <input type="date" name="from" value={dateRange.from} onChange={handleDateChange} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 text-sm"/>
-                            <span className="text-gray-500">to</span>
+                            <span className="text-gray-500">{t('to')}</span>
                             <input type="date" name="to" value={dateRange.to} min={dateRange.from} onChange={handleDateChange} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 text-sm"/>
                         </div>
                     </div>
@@ -160,29 +161,29 @@ const Dashboard: React.FC = () => {
                             onClick={() => openAddBookingPanel()}
                             className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors text-sm font-medium"
                         >
-                            <i className="fas fa-plus mr-2"></i>
-                            <span>Add Booking</span>
+                            <i className="fas fa-plus me-2"></i>
+                            <span>{t('addBooking')}</span>
                         </button>
                         <NavLink
                             to="/calendar"
                             className="flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm font-medium"
                         >
-                            <i className="fas fa-calendar-alt mr-2"></i>
-                            <span>View Calendar</span>
+                            <i className="fas fa-calendar-alt me-2"></i>
+                            <span>{t('viewCalendar')}</span>
                         </NavLink>
                     </div>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatCard icon="fa-bookmark" title="Total Bookings" value={stats.totalBookings} color="bg-blue-500" />
-                <StatCard icon="fa-building" title="Total Units" value={stats.totalUnits} color="bg-purple-500" />
-                <StatCard icon="fa-dollar-sign" title="Total Revenue" value={`${currencySymbol}${stats.totalRevenue.toLocaleString()}`} color="bg-green-500" />
-                <StatCard icon="fa-chart-line" title="Occupancy Rate" value={stats.occupancyRate} color="bg-orange-500" />
+                <StatCard icon="fa-bookmark" title={t('totalBookings')} value={stats.totalBookings} color="bg-blue-500" />
+                <StatCard icon="fa-building" title={t('totalUnits')} value={stats.totalUnits} color="bg-purple-500" />
+                <StatCard icon="fa-dollar-sign" title={t('totalRevenue')} value={`${currencySymbol}${stats.totalRevenue.toLocaleString()}`} color="bg-green-500" />
+                <StatCard icon="fa-chart-line" title={t('occupancyRate')} value={stats.occupancyRate} color="bg-orange-500" />
             </div>
 
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4">Monthly Revenue & Bookings (Confirmed)</h2>
+                <h2 className="text-xl font-semibold mb-4">{t('monthlyRevenueAndBookings')}</h2>
                 <div style={{ width: '100%', height: 300 }}>
                     <ResponsiveContainer>
                         <BarChart data={chartData}>
@@ -192,8 +193,8 @@ const Dashboard: React.FC = () => {
                             <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
                             <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} formatter={(value, name) => name === 'Revenue' ? `${currencySymbol}${value}` : value} />
                             <Legend />
-                            <Bar yAxisId="left" dataKey="revenue" fill="#8884d8" name="Revenue" />
-                            <Bar yAxisId="right" dataKey="bookings" fill="#82ca9d" name="Bookings" />
+                            <Bar yAxisId="left" dataKey="revenue" fill="#8884d8" name={t('revenue')} />
+                            <Bar yAxisId="right" dataKey="bookings" fill="#82ca9d" name={t('bookings')} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -201,18 +202,18 @@ const Dashboard: React.FC = () => {
             
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">Recent Bookings (All Statuses)</h2>
-                    <NavLink to="/calendar" className="text-orange-500 hover:text-orange-600 font-medium">View All</NavLink>
+                    <h2 className="text-xl font-semibold">{t('recentBookings')}</h2>
+                    <NavLink to="/calendar" className="text-orange-500 hover:text-orange-600 font-medium">{t('viewAll')}</NavLink>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
                             <tr className="text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
-                                <th className="py-3 px-4 font-medium">Client</th>
-                                <th className="py-3 px-4 font-medium">Unit</th>
-                                <th className="py-3 px-4 font-medium">Dates</th>
-                                <th className="py-3 px-4 font-medium">Status</th>
-                                <th className="py-3 px-4 font-medium text-right">Price</th>
+                                <th className="py-3 px-4 font-medium">{t('client')}</th>
+                                <th className="py-3 px-4 font-medium">{t('unit')}</th>
+                                <th className="py-3 px-4 font-medium">{t('dates')}</th>
+                                <th className="py-3 px-4 font-medium">{t('status')}</th>
+                                <th className="py-3 px-4 font-medium text-end">{t('price')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -221,14 +222,14 @@ const Dashboard: React.FC = () => {
                                 return (
                                     <tr key={booking.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
                                         <td className="py-3 px-4">{booking.clientName}</td>
-                                        <td className="py-3 px-4">{unit?.name || 'N/A'}</td>
+                                        <td className="py-3 px-4">{unit?.name || t('na')}</td>
                                         <td className="py-3 px-4">{new Date(booking.checkIn).toLocaleDateString()} - {new Date(booking.checkOut).toLocaleDateString()}</td>
                                         <td className="py-3 px-4">
                                             <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(booking.status)}`}>
-                                                {booking.status}
+                                                {t(`status${booking.status.replace(/\s+/g, '')}`)}
                                             </span>
                                         </td>
-                                        <td className="py-3 px-4 text-right font-medium">{currencySymbol}{booking.price.toLocaleString()}</td>
+                                        <td className="py-3 px-4 text-end font-medium">{currencySymbol}{booking.price.toLocaleString()}</td>
                                     </tr>
                                 )
                             })}

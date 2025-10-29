@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { UnitGroup, UnitGroupType } from '../types';
+import { useLanguage } from '../App';
 
 interface AddGroupFormProps {
   onAddGroup: (group: Omit<UnitGroup, 'id' | 'color'>) => void;
@@ -16,6 +17,7 @@ const countryCodes = [
 ];
 
 const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
+    const { t } = useLanguage();
     const [formData, setFormData] = useState({
         name: '',
         type: 'Chalets' as UnitGroupType,
@@ -86,11 +88,11 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
                     <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">Group Information</h3>
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="form-label">Group Name</label>
+                            <label className="form-label">{t('groupName')}</label>
                             <input name="name" value={formData.name} onChange={handleChange} className="form-input" required />
                         </div>
                         <div>
-                            <label className="form-label">Group Type</label>
+                            <label className="form-label">{t('groupType')}</label>
                             <select name="type" value={formData.type} onChange={handleChange} className="form-input">
                                 <option>Chalets</option>
                                 <option>Apartments</option>
@@ -122,28 +124,28 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
                         <div>
                             <label className="form-label">Group Phone Number</label>
                             <div className="flex">
-                                <select name="phoneCountryCode" value={formData.phoneCountryCode} onChange={handleChange} className="form-input !w-auto rounded-r-none">
+                                <select name="phoneCountryCode" value={formData.phoneCountryCode} onChange={handleChange} className="form-input !w-auto rounded-e-none">
                                     {countryCodes.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
                                 </select>
-                                <input name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} className="form-input rounded-l-none" />
+                                <input name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} className="form-input rounded-s-none" />
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div className="border-b dark:border-gray-700 pb-6">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">Bank Details</h3>
+                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">{t('bankDetails')}</h3>
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="form-label">Bank Name</label>
+                            <label className="form-label">{t('bankName')}</label>
                             <input name="bankName" value={formData.bankName} onChange={handleChange} className="form-input" />
                         </div>
                         <div>
-                            <label className="form-label">Account Name</label>
+                            <label className="form-label">{t('accountName')}</label>
                             <input name="accountName" value={formData.accountName} onChange={handleChange} className="form-input" />
                         </div>
                         <div className="md:col-span-2">
-                            <label className="form-label">Account IBAN</label>
+                            <label className="form-label">{t('iban')}</label>
                             <input name="accountIban" value={formData.accountIban} onChange={handleChange} className="form-input" placeholder="SAXXXXXXXXXXXXXXXXXXXXXX" />
                         </div>
                     </div>
@@ -153,19 +155,19 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
                     <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">Social Media</h3>
                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label htmlFor="instagram" className="form-label flex items-center"><i className="fab fa-instagram w-5 mr-2 text-gray-400"></i>Instagram</label>
+                            <label htmlFor="instagram" className="form-label flex items-center"><i className="fab fa-instagram w-5 me-2 text-gray-400"></i>Instagram</label>
                             <input type="url" name="instagram" id="instagram" value={formData.socialMedia.instagram} onChange={handleSocialChange} placeholder="https://www.instagram.com/username" className="form-input" />
                         </div>
                         <div>
-                            <label htmlFor="tiktok" className="form-label flex items-center"><i className="fab fa-tiktok w-5 mr-2 text-gray-400"></i>TikTok</label>
+                            <label htmlFor="tiktok" className="form-label flex items-center"><i className="fab fa-tiktok w-5 me-2 text-gray-400"></i>TikTok</label>
                             <input type="url" name="tiktok" id="tiktok" value={formData.socialMedia.tiktok} onChange={handleSocialChange} placeholder="https://www.tiktok.com/@username" className="form-input" />
                         </div>
                         <div>
-                            <label htmlFor="snapchat" className="form-label flex items-center"><i className="fab fa-snapchat w-5 mr-2 text-gray-400"></i>Snapchat</label>
+                            <label htmlFor="snapchat" className="form-label flex items-center"><i className="fab fa-snapchat w-5 me-2 text-gray-400"></i>Snapchat</label>
                             <input type="url" name="snapchat" id="snapchat" value={formData.socialMedia.snapchat} onChange={handleSocialChange} placeholder="https://www.snapchat.com/add/username" className="form-input" />
                         </div>
                         <div>
-                            <label htmlFor="facebook" className="form-label flex items-center"><i className="fab fa-facebook w-5 mr-2 text-gray-400"></i>Facebook</label>
+                            <label htmlFor="facebook" className="form-label flex items-center"><i className="fab fa-facebook w-5 me-2 text-gray-400"></i>Facebook</label>
                             <input type="url" name="facebook" id="facebook" value={formData.socialMedia.facebook} onChange={handleSocialChange} placeholder="https://www.facebook.com/username" className="form-input" />
                         </div>
                      </div>
@@ -174,10 +176,10 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
             </div>
             <div className="flex justify-end space-x-3 pt-6 mt-6 border-t dark:border-gray-700">
                 <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
-                    Cancel
+                    {t('cancel')}
                 </button>
                 <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600">
-                    Add Group
+                    {t('addGroup')}
                 </button>
             </div>
         </form>

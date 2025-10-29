@@ -1,5 +1,4 @@
-
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, createContext, useContext, useEffect } from 'react';
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -16,7 +15,50 @@ import { initialUnitGroups, initialAccountSettings, initialBookings, initialCont
 import { UnitGroup, AccountSettings, Unit, Booking, Contact, FormDataType, BookingStatus } from './types';
 import SidePanel from './components/SidePanel';
 import AddBookingForm from './components/AddBookingForm';
+import { translations } from './utils/translations';
 
+
+// Language Context
+type Language = 'en' | 'ar';
+
+interface LanguageContextType {
+    language: Language;
+    setLanguage: (lang: Language) => void;
+    t: (key: string, replacements?: { [key: string]: string | number }) => string;
+}
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [language, setLanguage] = useLocalStorage<Language>('language', 'en');
+    
+    useEffect(() => {
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    }, [language]);
+
+    const t = (key: string, replacements: { [key: string]: string | number } = {}): string => {
+        let translation = translations[language][key] || key;
+        Object.keys(replacements).forEach(placeholder => {
+            translation = translation.replace(`{{${placeholder}}}`, String(replacements[placeholder]));
+        });
+        return translation;
+    };
+
+    return (
+        <LanguageContext.Provider value={{ language, setLanguage, t }}>
+            {children}
+        </LanguageContext.Provider>
+    );
+};
+
+export const useLanguage = (): LanguageContextType => {
+    const context = useContext(LanguageContext);
+    if (!context) {
+        throw new Error('useLanguage must be used within a LanguageProvider');
+    }
+    return context;
+};
 
 // Group Context for global state management
 interface GroupContextType {
@@ -79,6 +121,7 @@ interface GlobalActionsContextType {
 const GlobalActionsContext = createContext<GlobalActionsContextType | undefined>(undefined);
 
 export const GlobalActionsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { t } = useLanguage();
     const [isAddBookingPanelOpen, setIsAddBookingPanelOpen] = useState(false);
     const [defaultBookingDate, setDefaultBookingDate] = useState<string | undefined>(undefined);
 
@@ -139,7 +182,7 @@ export const GlobalActionsProvider: React.FC<{ children: React.ReactNode }> = ({
     return (
         <GlobalActionsContext.Provider value={{ openAddBookingPanel }}>
             {children}
-            <SidePanel isOpen={isAddBookingPanelOpen} onClose={closeAddBookingPanel} title="Add New Booking">
+            <SidePanel isOpen={isAddBookingPanelOpen} onClose={closeAddBookingPanel} title={t('addNewBooking')}>
                 <AddBookingForm 
                     units={allUnits}
                     onAddBooking={handleAddBooking}
@@ -159,21 +202,23 @@ export const useGlobalActions = (): GlobalActionsContextType => {
     return context;
 };
 
-const pageTitles: { [key: string]: string } = {
-  '/': 'Dashboard',
-  '/calendar': 'Calendar',
-  '/units': 'Units',
-  '/website-settings': 'Website Settings',
-  '/ai-agent': 'AI Agent',
-  '/contacts': 'Contacts',
-  '/reviews': 'Reviews',
-  '/account-settings': 'Account Settings'
-};
-
 const MainContent: React.FC = () => {
   const location = useLocation();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const title = pageTitles[location.pathname] || 'Dashboard';
+  const { t } = useLanguage();
+
+  const pageTitles: { [key: string]: string } = {
+    '/': t('dashboard'),
+    '/calendar': t('calendar'),
+    '/units': t('units'),
+    '/website-settings': t('websiteSettings'),
+    '/ai-agent': t('aiAgent'),
+    '/contacts': t('contacts'),
+    '/reviews': t('reviews'),
+    '/account-settings': t('accountSettings')
+  };
+
+  const title = pageTitles[location.pathname] || t('dashboard');
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -200,13 +245,15 @@ const MainContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <HashRouter>
-      <AccountProvider>
-        <GroupProvider>
-          <GlobalActionsProvider>
-            <MainContent />
-          </GlobalActionsProvider>
-        </GroupProvider>
-      </AccountProvider>
+      <LanguageProvider>
+        <AccountProvider>
+          <GroupProvider>
+            <GlobalActionsProvider>
+              <MainContent />
+            </GlobalActionsProvider>
+          </GroupProvider>
+        </AccountProvider>
+      </LanguageProvider>
     </HashRouter>
   );
 };

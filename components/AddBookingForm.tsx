@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Booking, Unit, currencySymbols, FormDataType } from '../types';
-import { useAccount } from '../App';
+import { useAccount, useLanguage } from '../App';
 
 interface AddBookingFormProps {
   units: Unit[];
@@ -20,6 +20,7 @@ const countryCodes = [
 
 const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, onClose, defaultDate }) => {
     const { accountSettings } = useAccount();
+    const { t } = useLanguage();
     const currencySymbol = currencySymbols[accountSettings.currency];
 
     const [formData, setFormData] = useState({
@@ -131,23 +132,23 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
             <div className="space-y-4">
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                      <div>
-                        <label className="form-label">Client Name</label>
+                        <label className="form-label">{t('clientName')}</label>
                         <input name="clientName" value={formData.clientName} onChange={handleChange} className="form-input" />
                         {errors.clientName && <p className="text-red-500 text-xs mt-1">{errors.clientName}</p>}
                     </div>
                      <div>
-                        <label className="form-label">Email</label>
+                        <label className="form-label">{t('email')}</label>
                         <input type="email" name="clientEmail" value={formData.clientEmail} onChange={handleChange} className="form-input" />
                     </div>
                 </div>
                  <div>
-                    <label className="form-label">Phone Number</label>
+                    <label className="form-label">{t('phone')}</label>
                     <div className="flex">
                         <div className="relative" ref={countryCodeRef}>
                             <button
                                 type="button"
                                 onClick={() => setIsCountryCodeOpen(!isCountryCodeOpen)}
-                                className="form-input !w-auto rounded-r-none flex items-center justify-center px-4 h-full"
+                                className="form-input !w-auto rounded-e-none flex items-center justify-center px-4 h-full"
                                 aria-haspopup="listbox"
                                 aria-expanded={isCountryCodeOpen}
                             >
@@ -167,7 +168,7 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                                                 role="option"
                                                 aria-selected={formData.phoneCountryCode === c.code}
                                             >
-                                                <span className="mr-3 text-lg">{c.flag}</span>
+                                                <span className="me-3 text-lg">{c.flag}</span>
                                                 <span>{c.name} ({c.code})</span>
                                             </li>
                                         ))}
@@ -175,24 +176,24 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                                 </div>
                             )}
                         </div>
-                        <input name="clientPhone" value={formData.clientPhone} onChange={handleChange} className="form-input rounded-l-none" />
+                        <input name="clientPhone" value={formData.clientPhone} onChange={handleChange} className="form-input rounded-s-none" />
                     </div>
                     {errors.clientPhone && <p className="text-red-500 text-xs mt-1">{errors.clientPhone}</p>}
                  </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                      <div>
-                        <label className="form-label">Check-in Date</label>
+                        <label className="form-label">{t('checkInDate')}</label>
                         <input type="date" name="checkIn" value={formData.checkIn} onChange={handleChange} className="form-input" min={new Date().toISOString().split('T')[0]} />
                         {errors.checkIn && <p className="text-red-500 text-xs mt-1">{errors.checkIn}</p>}
                     </div>
                      <div>
-                        <label className="form-label">Check-out Date</label>
+                        <label className="form-label">{t('checkOutDate')}</label>
                         <input type="date" name="checkOut" value={formData.checkOut} onChange={handleChange} className="form-input" min={formData.checkIn || new Date().toISOString().split('T')[0]}/>
                         {errors.checkOut && <p className="text-red-500 text-xs mt-1">{errors.checkOut}</p>}
                     </div>
                  </div>
                  <div>
-                    <label className="form-label">Unit</label>
+                    <label className="form-label">{t('unit')}</label>
                     <select name="unitId" value={formData.unitId} onChange={handleChange} className="form-input">
                         <option value="">Select a Unit</option>
                         {units.map(unit => <option key={unit.id} value={unit.id}>{unit.name}</option>)}
@@ -200,12 +201,12 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                     {errors.unitId && <p className="text-red-500 text-xs mt-1">{errors.unitId}</p>}
                  </div>
                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-md text-center">
-                     <p className="text-sm text-gray-600 dark:text-gray-300">Total Price</p>
+                     <p className="text-sm text-gray-600 dark:text-gray-300">{t('totalPrice')}</p>
                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{currencySymbol}{totalPrice.toLocaleString()}</p>
                  </div>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                      <div>
-                        <label className="form-label">Booking Source</label>
+                        <label className="form-label">{t('bookingSource')}</label>
                         <select name="bookingSource" value={formData.bookingSource} onChange={handleChange} className="form-input">
                             <option>Website</option>
                             <option>Phone</option>
@@ -214,7 +215,7 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                         </select>
                      </div>
                      <div>
-                        <label className="form-label">Payment Method</label>
+                        <label className="form-label">{t('paymentMethod')}</label>
                         <select name="paymentMethod" value={formData.paymentMethod} onChange={handleChange} className="form-input">
                             <option>Credit Card</option>
                             <option>Cash</option>
@@ -222,22 +223,22 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                         </select>
                      </div>
                      <div>
-                        <label className="form-label">Paid Amount ({currencySymbol})</label>
+                        <label className="form-label">{t('paidAmount')} ({currencySymbol})</label>
                         <input type="number" name="paidAmount" value={formData.paidAmount} onChange={handleChange} className="form-input" />
                          {errors.paidAmount && <p className="text-red-500 text-xs mt-1">{errors.paidAmount}</p>}
                      </div>
                  </div>
                  <div>
-                    <label className="form-label">Notes</label>
+                    <label className="form-label">{t('notes')}</label>
                     <textarea name="notes" value={formData.notes} onChange={handleChange} rows={3} className="form-input"></textarea>
                  </div>
             </div>
             <div className="flex justify-end space-x-3 pt-6 mt-6 border-t dark:border-gray-700">
                 <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
-                    Cancel
+                    {t('cancel')}
                 </button>
                 <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600">
-                    Add Booking
+                    {t('addBooking')}
                 </button>
             </div>
         </form>

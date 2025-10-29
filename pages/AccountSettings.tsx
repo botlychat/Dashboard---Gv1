@@ -1,9 +1,10 @@
 import React from 'react';
-import { useAccount } from '../App';
+import { useAccount, useLanguage } from '../App';
 import { Currency } from '../types';
 
 const AccountSettingsPage: React.FC = () => {
     const { accountSettings, setAccountSettings } = useAccount();
+    const { t } = useLanguage();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -17,16 +18,16 @@ const AccountSettingsPage: React.FC = () => {
         e.preventDefault();
         // In a real app, this would involve an API call.
         // Here, useLocalStorage handles saving automatically.
-        alert('Settings saved!');
+        alert(t('settingsSaved'));
     };
 
     return (
         <form onSubmit={handleSave} className="max-w-4xl mx-auto space-y-8">
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">Business Information</h2>
+                <h2 className="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">{t('businessInfo')}</h2>
                 <div className="space-y-4">
                     <div>
-                        <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Commercial Business Name</label>
+                        <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('commercialBusinessName')}</label>
                         <input
                             type="text"
                             id="businessName"
@@ -37,7 +38,7 @@ const AccountSettingsPage: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Account Email</label>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('accountEmail')}</label>
                         <input
                             type="email"
                             id="email"
@@ -48,7 +49,7 @@ const AccountSettingsPage: React.FC = () => {
                         />
                     </div>
                      <div>
-                        <label htmlFor="currency" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Currency</label>
+                        <label htmlFor="currency" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('currency')}</label>
                         <select
                             id="currency"
                             name="currency"
@@ -70,18 +71,18 @@ const AccountSettingsPage: React.FC = () => {
             </div>
 
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">Change Password</h2>
+                <h2 className="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">{t('changePassword')}</h2>
                 <div className="space-y-4">
                      <div>
-                        <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Password</label>
+                        <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('currentPassword')}</label>
                         <input type="password" id="currentPassword" name="currentPassword" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600" />
                     </div>
                      <div>
-                        <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">New Password</label>
+                        <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('newPassword')}</label>
                         <input type="password" id="newPassword" name="newPassword" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600" />
                     </div>
                      <div>
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm New Password</label>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('confirmNewPassword')}</label>
                         <input type="password" id="confirmPassword" name="confirmPassword" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600" />
                     </div>
                 </div>
@@ -89,7 +90,7 @@ const AccountSettingsPage: React.FC = () => {
 
              <div className="flex justify-end">
                 <button type="submit" className="px-6 py-2 bg-orange-500 text-white font-semibold rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 dark:focus:ring-offset-gray-900">
-                    Save Changes
+                    {t('saveChanges')}
                 </button>
             </div>
         </form>

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Unit, UnitGroup, currencySymbols, Bedroom } from '../types';
-import { useAccount } from '../App';
+import { useAccount, useLanguage } from '../App';
 
 interface AddUnitFormProps {
   unitGroups: UnitGroup[];
@@ -9,7 +9,6 @@ interface AddUnitFormProps {
   editingUnit: Unit | null;
 }
 
-const TABS = ['Basic Info', 'Pricing', 'Amenities & Features', 'Media', 'Cancellation & Refund'];
 const MAX_VIDEO_SIZE_MB = 50;
 const MAX_VIDEO_SIZE_BYTES = MAX_VIDEO_SIZE_MB * 1024 * 1024;
 
@@ -55,6 +54,9 @@ const initialFormData = {
 
 
 const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, editingUnit }) => {
+  const { t } = useLanguage();
+  const TABS = [t('basicInfo'), t('pricing'), t('amenitiesAndFeatures'), t('media'), t('cancellationAndRefund')];
+
   const [activeTab, setActiveTab] = useState(TABS[0]);
   const { accountSettings } = useAccount();
   const currencySymbol = currencySymbols[accountSettings.currency];
@@ -240,11 +242,11 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
 
   const renderContent = () => {
     switch (activeTab) {
-        case 'Basic Info': return <BasicInfoTab formData={formData} handleChange={handleChange} unitGroups={unitGroups} />;
-        case 'Pricing': return <PricingTab formData={formData} handleChange={handleChange} handleWeekdayPriceChange={handleWeekdayPriceChange} currencySymbol={currencySymbol} />;
-        case 'Amenities & Features': return <AmenitiesTab formData={formData} setFormData={setFormData} />;
-        case 'Media': return <MediaTab formData={formData} handleImageChange={handleImageChange} handleVideoChange={handleVideoChange} handleRemoveMedia={handleRemoveMedia}/>;
-        case 'Cancellation & Refund': return <CancellationTab formData={formData} handleChange={handleChange} />;
+        case t('basicInfo'): return <BasicInfoTab formData={formData} handleChange={handleChange} unitGroups={unitGroups} t={t} />;
+        case t('pricing'): return <PricingTab formData={formData} handleChange={handleChange} handleWeekdayPriceChange={handleWeekdayPriceChange} currencySymbol={currencySymbol} t={t} />;
+        case t('amenitiesAndFeatures'): return <AmenitiesTab formData={formData} setFormData={setFormData} t={t} />;
+        case t('media'): return <MediaTab formData={formData} handleImageChange={handleImageChange} handleVideoChange={handleVideoChange} handleRemoveMedia={handleRemoveMedia} t={t}/>;
+        case t('cancellationAndRefund'): return <CancellationTab formData={formData} handleChange={handleChange} t={t} />;
         default: return null;
     }
   }
@@ -279,10 +281,10 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
 
       <div className="flex justify-end space-x-3 pt-6 mt-6 border-t dark:border-gray-700">
           <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
-              Cancel
+              {t('cancel')}
           </button>
           <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600">
-              {editingUnit ? 'Save Changes' : 'Add Unit'}
+              {editingUnit ? t('saveChanges') : t('addUnit')}
           </button>
       </div>
     </form>
@@ -290,14 +292,14 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
 };
 
 // Sub-components for each tab
-const BasicInfoTab = ({ formData, handleChange, unitGroups }: any) => (
+const BasicInfoTab = ({ formData, handleChange, unitGroups, t }: any) => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
         <div className="md:col-span-2">
-            <label htmlFor="name" className="form-label">Unit Name</label>
+            <label htmlFor="name" className="form-label">{t('unitName')}</label>
             <input type="text" name="name" id="name" value={formData.name} onChange={handleChange} className="form-input" required />
         </div>
         <div>
-            <label htmlFor="groupId" className="form-label">Unit Group</label>
+            <label htmlFor="groupId" className="form-label">{t('group')}</label>
             <select name="groupId" id="groupId" value={formData.groupId} onChange={handleChange} className="form-input" required>
                 {unitGroups.map((group: UnitGroup) => (
                     <option key={group.id} value={group.id}>{group.name} ({group.type})</option>
@@ -305,7 +307,7 @@ const BasicInfoTab = ({ formData, handleChange, unitGroups }: any) => (
             </select>
         </div>
         <div>
-            <label htmlFor="status" className="form-label">Status</label>
+            <label htmlFor="status" className="form-label">{t('status')}</label>
             <select name="status" id="status" value={formData.status} onChange={handleChange} className="form-input" required>
                 <option>Active</option>
                 <option>Inactive</option>
@@ -316,7 +318,7 @@ const BasicInfoTab = ({ formData, handleChange, unitGroups }: any) => (
             <input type="number" name="area" id="area" value={formData.area} onChange={handleChange} className="form-input" required />
         </div>
         <div>
-            <label htmlFor="maxGuests" className="form-label">Max Guests</label>
+            <label htmlFor="maxGuests" className="form-label">{t('maxGuests')}</label>
             <input type="number" name="maxGuests" id="maxGuests" value={formData.maxGuests} onChange={handleChange} className="form-input" required />
         </div>
         <div className="md:col-span-3">
@@ -334,7 +336,7 @@ const BasicInfoTab = ({ formData, handleChange, unitGroups }: any) => (
         </div>
          <div className="flex items-center pt-5">
             <input type="checkbox" name="parkingAvailable" id="parkingAvailable" checked={formData.parkingAvailable} onChange={handleChange} className="form-checkbox" />
-            <label htmlFor="parkingAvailable" className="ml-2 form-label !mb-0">Parking Available</label>
+            <label htmlFor="parkingAvailable" className="ms-2 form-label !mb-0">Parking Available</label>
         </div>
         <div className="md:col-span-3">
             <label htmlFor="shortDescription" className="form-label">Short Description</label>
@@ -347,21 +349,22 @@ const BasicInfoTab = ({ formData, handleChange, unitGroups }: any) => (
     </div>
 );
 
-const PricingTab = ({ formData, handleChange, handleWeekdayPriceChange, currencySymbol }: any) => {
+const PricingTab = ({ formData, handleChange, handleWeekdayPriceChange, currencySymbol, t }: any) => {
     const weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const dayKeys = ['daySun', 'dayMon', 'dayTue', 'dayWed', 'dayThu', 'dayFri', 'daySat'];
     return (
         <div className="space-y-4">
             <div>
-                <label htmlFor="baseRate" className="form-label">Base Nightly Rate ({currencySymbol})</label>
+                <label htmlFor="baseRate" className="form-label">{t('baseRate')} ({currencySymbol})</label>
                 <input type="number" name="baseRate" id="baseRate" value={formData.baseRate} onChange={handleChange} className="form-input" placeholder="e.g., 650" required />
                 <p className="text-xs text-gray-500 mt-1">This will be used if a specific day's price isn't set.</p>
             </div>
             <div className="pt-2">
                 <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Weekday Pricing Overrides (per night)</h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-                    {weekdays.map(day => (
+                    {weekdays.map((day, i) => (
                          <div key={day}>
-                            <label htmlFor={day} className="form-label capitalize">{day}</label>
+                            <label htmlFor={day} className="form-label capitalize">{t(dayKeys[i])}</label>
                             <input
                                 type="number"
                                 name={day}
@@ -383,7 +386,7 @@ const PricingTab = ({ formData, handleChange, handleWeekdayPriceChange, currency
     )
 };
 
-const AmenitiesTab = ({ formData, setFormData }: any) => {
+const AmenitiesTab = ({ formData, setFormData, t }: any) => {
 
     const handleBedroomTypeChange = (id: number, newType: string) => {
         setFormData((prev: any) => ({
@@ -414,15 +417,15 @@ const AmenitiesTab = ({ formData, setFormData }: any) => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="flex items-center">
                 <input type="checkbox" name="hasKitchen" id="hasKitchen" checked={formData.hasKitchen} onChange={handleChange} className="form-checkbox" />
-                <label htmlFor="hasKitchen" className="ml-2 form-label !mb-0">Has Kitchen</label>
+                <label htmlFor="hasKitchen" className="ms-2 form-label !mb-0">Has Kitchen</label>
             </div>
             <div className="flex items-center">
                 <input type="checkbox" name="hasPool" id="hasPool" checked={formData.hasPool} onChange={handleChange} className="form-checkbox" />
-                <label htmlFor="hasPool" className="ml-2 form-label !mb-0">Has Pool</label>
+                <label htmlFor="hasPool" className="ms-2 form-label !mb-0">Has Pool</label>
             </div>
             <div className="flex items-center">
                 <input type="checkbox" name="hasGarden" id="hasGarden" checked={formData.hasGarden} onChange={handleChange} className="form-checkbox" />
-                <label htmlFor="hasGarden" className="ml-2 form-label !mb-0">Has Garden</label>
+                <label htmlFor="hasGarden" className="ms-2 form-label !mb-0">Has Garden</label>
             </div>
         </div>
          {formData.hasPool && (
@@ -462,7 +465,7 @@ const AmenitiesTab = ({ formData, setFormData }: any) => {
                     </div>
                 ))}
                 <button type="button" onClick={handleAddBedroom} className="w-full text-sm py-2 text-orange-600 font-semibold hover:bg-orange-50 dark:hover:bg-gray-700 rounded-md">
-                    <i className="fas fa-plus mr-2"></i>Add Bedroom
+                    <i className="fas fa-plus me-2"></i>Add Bedroom
                 </button>
             </div>
         </div>
@@ -474,10 +477,10 @@ const AmenitiesTab = ({ formData, setFormData }: any) => {
     </div>
 )};
 
-const MediaTab = ({ formData, handleImageChange, handleVideoChange, handleRemoveMedia }: any) => (
+const MediaTab = ({ formData, handleImageChange, handleVideoChange, handleRemoveMedia, t }: any) => (
     <div className="space-y-6">
         <div>
-            <label className="form-label">Featured Image</label>
+            <label className="form-label">{t('homePagePicture')}</label>
             <input type="file" accept="image/*" onChange={(e) => handleImageChange(e, false)} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"/>
             {formData.featuredImage && <img src={formData.featuredImage} alt="Featured preview" className="mt-2 h-32 w-auto rounded-md object-cover"/>}
         </div>
@@ -513,9 +516,9 @@ const MediaTab = ({ formData, handleImageChange, handleVideoChange, handleRemove
 );
 
 
-const CancellationTab = ({ formData, handleChange }: any) => (
+const CancellationTab = ({ formData, handleChange, t }: any) => (
     <div>
-        <label htmlFor="cancellationPolicy" className="form-label">Cancellation & Refund Policy</label>
+        <label htmlFor="cancellationPolicy" className="form-label">{t('cancellationAndRefund')}</label>
         <textarea name="cancellationPolicy" id="cancellationPolicy" value={formData.cancellationPolicy} onChange={handleChange} rows={10} className="form-input"></textarea>
     </div>
 );

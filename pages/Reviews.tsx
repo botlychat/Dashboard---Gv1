@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialReviews, initialBookings, initialContacts, initialUnits } from '../data/mockData';
 import { Review, Booking, Contact, Unit } from '../types';
-import { useGroup } from '../App';
+import { useGroup, useLanguage } from '../App';
 
 const StarRating = ({ rating }: { rating: number }) => {
   const stars = [];
@@ -30,6 +30,7 @@ const StatCard: React.FC<{ icon: string; title: string; value: string | number; 
 );
 
 const Reviews: React.FC = () => {
+    const { t } = useLanguage();
     const [reviews] = useLocalStorage<Review[]>('reviews', initialReviews);
     const [bookings] = useLocalStorage<Booking[]>('bookings', initialBookings);
     const [contacts] = useLocalStorage<Contact[]>('contacts', initialContacts);
@@ -112,28 +113,28 @@ const Reviews: React.FC = () => {
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <StatCard icon="fa-star" title="Average Rating" value={`${stats.averageRating} / 5`} color="bg-yellow-500" />
-                <StatCard icon="fa-comments" title="Total Reviews" value={stats.totalReviews} color="bg-blue-500" />
+                <StatCard icon="fa-star" title={t('averageRating')} value={`${stats.averageRating} / 5`} color="bg-yellow-500" />
+                <StatCard icon="fa-comments" title={t('totalReviews')} value={stats.totalReviews} color="bg-blue-500" />
             </div>
 
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
                 <div className="flex flex-wrap items-center justify-between gap-4">
-                    <h2 className="text-xl font-semibold">Client Reviews</h2>
+                    <h2 className="text-xl font-semibold">{t('clientReviews')}</h2>
                     <div className="flex items-center space-x-4">
                         <div>
-                            <label htmlFor="unitFilter" className="text-sm font-medium mr-2">Filter by Unit:</label>
+                            <label htmlFor="unitFilter" className="text-sm font-medium me-2">{t('filterByUnitLabel')}</label>
                             <select
                                 id="unitFilter"
                                 value={unitFilter}
                                 onChange={e => setUnitFilter(e.target.value)}
                                 className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
                             >
-                                <option value="all">All Units</option>
+                                <option value="all">{t('allUnits')}</option>
                                 {unitsInGroup.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
                             </select>
                         </div>
                         <div>
-                            <label htmlFor="sortFilter" className="text-sm font-medium mr-2">Sort by:</label>
+                            <label htmlFor="sortFilter" className="text-sm font-medium me-2">{t('sortBy')}</label>
                             <select
                                 id="sortFilter"
                                 value={`${sortConfig.key}-${sortConfig.direction}`}
@@ -143,10 +144,10 @@ const Reviews: React.FC = () => {
                                 }}
                                 className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
                             >
-                                <option value="date-desc">Newest First</option>
-                                <option value="date-asc">Oldest First</option>
-                                <option value="rating-desc">Rating: High to Low</option>
-                                <option value="rating-asc">Rating: Low to High</option>
+                                <option value="date-desc">{t('newestFirst')}</option>
+                                <option value="date-asc">{t('oldestFirst')}</option>
+                                <option value="rating-desc">{t('ratingHighToLow')}</option>
+                                <option value="rating-asc">{t('ratingLowToHigh')}</option>
                             </select>
                         </div>
                     </div>
@@ -158,26 +159,26 @@ const Reviews: React.FC = () => {
                     <table className="w-full text-left text-sm">
                         <thead className="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-700 dark:text-gray-400 uppercase">
                             <tr>
-                                <th className="p-4">Rating</th>
-                                <th className="p-4">Unit</th>
-                                <th className="p-4">Client</th>
-                                <th className="p-4">Booking Dates</th>
-                                <th className="p-4">Feedback</th>
+                                <th className="p-4">{t('rating')}</th>
+                                <th className="p-4">{t('unit')}</th>
+                                <th className="p-4">{t('client')}</th>
+                                <th className="p-4">{t('bookingDates')}</th>
+                                <th className="p-4">{t('feedback')}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {sortedReviews.map(review => (
                                 <tr key={review.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/50">
                                     <td className="p-4"><StarRating rating={review.rating} /></td>
-                                    <td className="p-4 font-medium">{review.unit?.name || 'N/A'}</td>
+                                    <td className="p-4 font-medium">{review.unit?.name || t('na')}</td>
                                     <td className="p-4">
-                                        <p className="font-semibold text-gray-900 dark:text-white">{review.contact?.name || 'N/A'}</p>
-                                        <p className="text-xs text-gray-500">{review.contact?.phone || 'N/A'}</p>
+                                        <p className="font-semibold text-gray-900 dark:text-white">{review.contact?.name || t('na')}</p>
+                                        <p className="text-xs text-gray-500">{review.contact?.phone || t('na')}</p>
                                     </td>
                                     <td className="p-4">
                                         {review.booking ? 
                                             `${new Date(review.booking.checkIn).toLocaleDateString()} - ${new Date(review.booking.checkOut).toLocaleDateString()}`
-                                            : 'N/A'
+                                            : t('na')
                                         }
                                     </td>
                                     <td className="p-4 max-w-sm">
@@ -190,7 +191,7 @@ const Reviews: React.FC = () => {
                     </table>
                      {sortedReviews.length === 0 && (
                         <div className="text-center p-8 text-gray-500">
-                            No reviews found for the selected filters.
+                           {t('noReviewsFound')}
                         </div>
                     )}
                 </div>
