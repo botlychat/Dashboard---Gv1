@@ -1,6 +1,4 @@
 
-
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { Booking, Unit, AiConfigData } from '../types';
 
 const MODEL_NAME = 'gemini-2.5-flash';
@@ -11,35 +9,35 @@ export const getAiResponse = async (
     units: Unit[],
     config: AiConfigData
 ): Promise<string> => {
-    if (!process.env.API_KEY) {
-        console.error("API_KEY environment variable not set.");
-        return "API key not configured. Please contact the administrator.";
+    // Mock AI response without using actual API
+    console.log('AI Agent simulation - prompt:', prompt);
+    
+    // Simulate processing delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Generate a mock response based on the prompt and context
+    const mockResponses = [
+        `Hello! I'm here to help you with your ${units.length > 0 ? units[0].type.toLowerCase() : 'accommodation'} booking. ${config.welcomeMessage}`,
+        `Based on your inquiry, I can see we have ${units.filter(u => u.status === 'Active').length} available units. How can I assist you today?`,
+        `Thank you for your interest! Our ${config.bookingMethod === 'AI Agent Full Booking' ? 'AI system can handle your complete booking' : 'team can redirect you to our website for booking'}. What dates are you looking for?`,
+        `I'd be happy to help you find the perfect accommodation. We currently have ${bookings.filter(b => b.status === 'Confirmed').length} confirmed bookings this month. What are your preferences?`,
+        `Welcome! Our properties offer great amenities and we're here to make your stay comfortable. How many guests will be staying?`
+    ];
+    
+    // Return a random mock response or a contextual one
+    if (prompt.toLowerCase().includes('booking') || prompt.toLowerCase().includes('reserve')) {
+        return `I can help you with booking information! ${config.bookingMethod === 'AI Agent Full Booking' ? 'I can process your reservation directly.' : 'I\'ll guide you to our website for booking.'} What dates are you interested in?`;
     }
-    try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-        const context = `
-            You are an AI assistant for a hospitality service. 
-            Your current configuration is: ${JSON.stringify(config, null, 2)}.
-            Current available units: ${JSON.stringify(units.filter(u => u.status === 'Active'), null, 2)}.
-            Current bookings: ${JSON.stringify(bookings, null, 2)}.
-            Today's date is ${new Date().toISOString().split('T')[0]}.
-            
-            Based on this information, please answer the user's question. Be friendly and helpful.
-        `;
-
-        const response: GenerateContentResponse = await ai.models.generateContent({
-            model: MODEL_NAME,
-            contents: prompt,
-            config: {
-                systemInstruction: context,
-            }
-        });
-        
-        return response.text;
-
-    } catch (error) {
-        console.error("Error calling Gemini API:", error);
-        return "Sorry, I encountered an error while processing your request. Please try again later.";
+    
+    if (prompt.toLowerCase().includes('price') || prompt.toLowerCase().includes('cost')) {
+        return `I'd be happy to help with pricing information. ${config.discountEnabled ? `We currently have a ${config.discountAmount}% discount available with code ${config.couponCode}!` : 'Let me check our current rates for your dates.'} When would you like to stay?`;
     }
+    
+    if (prompt.toLowerCase().includes('available') || prompt.toLowerCase().includes('vacancy')) {
+        return `Let me check availability for you! We have ${units.filter(u => u.status === 'Active').length} active units. What dates are you considering?`;
+    }
+    
+    // Default response
+    const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)];
+    return randomResponse;
 };
