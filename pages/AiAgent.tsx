@@ -342,8 +342,9 @@ const AiAgentContainer: React.FC = () => {
 
     return (
         <div className="max-w-5xl mx-auto space-y-6">
-            {/* Overall summary */}
+            {/* Combined total + per-group breakdown card */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                {/* Total summary */}
                 <h2 className="text-xl font-semibold mb-1">{t('totalActiveConversations')}</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('acrossAllGroups')}</p>
                 <div className="flex items-end space-x-2">
@@ -353,50 +354,52 @@ const AiAgentContainer: React.FC = () => {
                 <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 my-4">
                     <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${usagePercentage}%` }}></div>
                 </div>
-                <div className="flex justify-between text-sm font-medium">
+                <div className="flex justify-between text-sm font-medium mb-4">
                     <span className="text-gray-600 dark:text-gray-300">{usagePercentage.toFixed(1)}% {t('used')}</span>
                     <span className="text-green-600 dark:text-green-400">{(totalMax - totalActive).toLocaleString()} {t('remaining')}</span>
                 </div>
-            </div>
 
-            {/* Per-group consumption list with quick switch */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-semibold mb-4">{t('totalActiveConversations')}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {unitGroups.map(group => {
-                        const cfg = (config as any)[group.id] || (config as any)[String(group.id)] || {
-                            activeConversations: 0,
-                            maxConversations: 100,
-                            bookingMethod: AiBookingMethod.Full,
-                            discountEnabled: false,
-                            discountAmount: 0,
-                            couponCode: '',
-                            welcomeMessage: '',
-                            reminders: ['', ''],
-                            customRoles: []
-                        } as AiConfigData;
-                        const percent = cfg.maxConversations > 0 ? (cfg.activeConversations / cfg.maxConversations) * 100 : 0;
-                        const isSelected = currentGroupId !== 'all' && Number(currentGroupId) === Number(group.id);
-                        return (
-                            <div key={group.id} className={`border dark:border-gray-700 rounded-md p-4 flex flex-col gap-3 ${isSelected ? 'ring-2 ring-orange-500' : ''}`}>
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="font-medium">{group.name}</p>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">{cfg.activeConversations.toLocaleString()} / {cfg.maxConversations.toLocaleString()} {t('conversationsInPlan')}</p>
+                {/* Breakdown: each group's share of the total */}
+                <div className="mt-2">
+                    <h3 className="text-md font-semibold mb-3">{t('totalActiveConversations')} – {t('acrossAllGroups')}</h3>
+                    <div className="space-y-3">
+                        {unitGroups.map(group => {
+                            const cfg = (config as any)[group.id] || (config as any)[String(group.id)] || {
+                                activeConversations: 0,
+                                maxConversations: 100,
+                                bookingMethod: AiBookingMethod.Full,
+                                discountEnabled: false,
+                                discountAmount: 0,
+                                couponCode: '',
+                                welcomeMessage: '',
+                                reminders: ['', ''],
+                                customRoles: []
+                            } as AiConfigData;
+                            const sharePct = totalActive > 0 ? (cfg.activeConversations / totalActive) * 100 : 0;
+                            const isSelected = currentGroupId !== 'all' && Number(currentGroupId) === Number(group.id);
+                            return (
+                                <div key={group.id} className={`flex items-center gap-3 p-2 rounded-md ${isSelected ? 'bg-orange-50 dark:bg-orange-900/10' : 'bg-transparent'}`}>
+                                    <div className="min-w-40">
+                                        <p className="font-medium truncate" title={group.name}>{group.name}</p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">{cfg.activeConversations.toLocaleString()} / {cfg.maxConversations.toLocaleString()}</p>
                                     </div>
+                                    <div className="flex-1">
+                                        <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                            <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${Math.min(100, sharePct)}%` }}></div>
+                                        </div>
+                                    </div>
+                                    <div className="w-20 text-end text-sm font-medium">{sharePct.toFixed(1)}%</div>
                                     <button
-                                        className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-md"
+                                        className="px-3 py-1 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-md"
                                         onClick={() => setCurrentGroupId(group.id)}
+                                        title={t('edit')}
                                     >
                                         {t('edit')}
                                     </button>
                                 </div>
-                                <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                    <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${percent}%` }}></div>
-                                </div>
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
 
