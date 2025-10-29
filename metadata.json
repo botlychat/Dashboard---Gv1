@@ -1,0 +1,5 @@
+{
+  "name": "Hospitality Dashboard",
+  "description": "A comprehensive admin panel for managing hotel or vacation rental units, bookings, scheduling, and contacts. Features an AI-powered agent for assistance.",
+  "requestFramePermissions": []
+}
