@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Unit, UnitGroup, currencySymbols, Bedroom } from '../types';
-import { useAccount, useLanguage } from '../App';
+import { useAccount } from '../contexts/AccountContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface AddUnitFormProps {
   unitGroups: UnitGroup[];

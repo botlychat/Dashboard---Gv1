@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useGroup, useLanguage } from '../App';
+import { useGroup } from '../contexts/GroupContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface HeaderProps {
   title: string;

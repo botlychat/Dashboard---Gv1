@@ -4,7 +4,7 @@ import { initialContacts, initialBookings, initialUnits, initialUnitGroups } fro
 import { Contact, Booking, Unit, UnitGroup } from '../types';
 import WhatsAppCampaignModal from '../components/WhatsAppCampaignModal';
 import EditContactModal from '../components/EditContactModal';
-import { useLanguage } from '../App';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const ITEMS_PER_PAGE = 25;
 

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialAiConfig } from '../data/mockData';
 import { AiConfig, AiConfigData, AiBookingMethod } from '../types';
-import { useGroup, useLanguage } from '../App';
+import { useGroup } from '../contexts/GroupContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface EditSaveButtonsProps {
     isEditing: boolean;

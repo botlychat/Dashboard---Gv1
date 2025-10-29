@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Unit, currencySymbols } from '../types';
-import { useAccount } from '../App';
+// FIX: Corrected the import path for the useAccount hook.
+import { useAccount } from '../contexts/AccountContext';
 
 interface AdjustPricePanelProps {
     date: Date;

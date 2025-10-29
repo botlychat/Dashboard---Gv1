@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UnitGroup, UnitGroupType } from '../types';
-import { useLanguage } from '../App';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface AddGroupFormProps {
   onAddGroup: (group: Omit<UnitGroup, 'id' | 'color'>) => void;

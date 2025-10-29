@@ -1,6 +1,6 @@
 import React from 'react';
 import { Booking, Unit, BookingStatus, currencySymbols } from '../types';
-import { useAccount } from '../App';
+import { useAccount } from '../contexts/AccountContext';
 
 interface BookingDetailsPanelProps {
   booking: Booking;
