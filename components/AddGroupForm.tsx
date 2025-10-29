@@ -85,7 +85,7 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
             <div className="space-y-6">
                 
                 <div className="border-b dark:border-gray-700 pb-6">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">Group Information</h3>
+                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">{t('groupInformation')}</h3>
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="form-label">{t('groupName')}</label>
@@ -94,35 +94,35 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
                         <div>
                             <label className="form-label">{t('groupType')}</label>
                             <select name="type" value={formData.type} onChange={handleChange} className="form-input">
-                                <option>Chalets</option>
-                                <option>Apartments</option>
-                                <option>Hotel Rooms</option>
+                                <option>{t('chalets')}</option>
+                                <option>{t('apartments')}</option>
+                                <option>{t('hotelRooms')}</option>
                             </select>
                         </div>
                         <div>
-                            <label className="form-label">Commercial Registration No.</label>
+                            <label className="form-label">{t('crNumber')}</label>
                             <input name="crNumber" value={formData.crNumber} onChange={handleChange} className="form-input" />
                         </div>
                         <div>
-                            <label className="form-label">Tourism Licensing No.</label>
+                            <label className="form-label">{t('tourismLicenseNumber')}</label>
                             <input name="tourismLicenseNumber" value={formData.tourismLicenseNumber} onChange={handleChange} className="form-input" />
                         </div>
                     </div>
                 </div>
 
                 <div className="border-b dark:border-gray-700 pb-6">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">Location & Contact</h3>
+                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">{t('locationAndContact')}</h3>
                     <div className="mt-4 space-y-4">
                         <div>
-                            <label className="form-label">Location Description</label>
+                            <label className="form-label">{t('locationDescription')}</label>
                             <textarea name="locationDescription" value={formData.locationDescription} onChange={handleChange} rows={3} className="form-input"></textarea>
                         </div>
                         <div>
-                            <label className="form-label">Google Maps URL</label>
+                            <label className="form-label">{t('googleMapsUrl')}</label>
                             <input type="url" name="googleMapsLocation" value={formData.googleMapsLocation} onChange={handleChange} className="form-input" placeholder="https://maps.app.goo.gl/..." />
                         </div>
                         <div>
-                            <label className="form-label">Group Phone Number</label>
+                            <label className="form-label">{t('groupPhoneNumber')}</label>
                             <div className="flex">
                                 <select name="phoneCountryCode" value={formData.phoneCountryCode} onChange={handleChange} className="form-input !w-auto rounded-e-none">
                                     {countryCodes.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
@@ -152,22 +152,22 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
                 </div>
 
                 <div>
-                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">Social Media</h3>
+                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">{t('socialMedia')}</h3>
                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label htmlFor="instagram" className="form-label flex items-center"><i className="fab fa-instagram w-5 me-2 text-gray-400"></i>Instagram</label>
+                            <label htmlFor="instagram" className="form-label flex items-center"><i className="fab fa-instagram w-5 me-2 text-gray-400"></i>{t('instagram')}</label>
                             <input type="url" name="instagram" id="instagram" value={formData.socialMedia.instagram} onChange={handleSocialChange} placeholder="https://www.instagram.com/username" className="form-input" />
                         </div>
                         <div>
-                            <label htmlFor="tiktok" className="form-label flex items-center"><i className="fab fa-tiktok w-5 me-2 text-gray-400"></i>TikTok</label>
+                            <label htmlFor="tiktok" className="form-label flex items-center"><i className="fab fa-tiktok w-5 me-2 text-gray-400"></i>{t('tiktok')}</label>
                             <input type="url" name="tiktok" id="tiktok" value={formData.socialMedia.tiktok} onChange={handleSocialChange} placeholder="https://www.tiktok.com/@username" className="form-input" />
                         </div>
                         <div>
-                            <label htmlFor="snapchat" className="form-label flex items-center"><i className="fab fa-snapchat w-5 me-2 text-gray-400"></i>Snapchat</label>
+                            <label htmlFor="snapchat" className="form-label flex items-center"><i className="fab fa-snapchat w-5 me-2 text-gray-400"></i>{t('snapchat')}</label>
                             <input type="url" name="snapchat" id="snapchat" value={formData.socialMedia.snapchat} onChange={handleSocialChange} placeholder="https://www.snapchat.com/add/username" className="form-input" />
                         </div>
                         <div>
-                            <label htmlFor="facebook" className="form-label flex items-center"><i className="fab fa-facebook w-5 me-2 text-gray-400"></i>Facebook</label>
+                            <label htmlFor="facebook" className="form-label flex items-center"><i className="fab fa-facebook w-5 me-2 text-gray-400"></i>{t('facebook')}</label>
                             <input type="url" name="facebook" id="facebook" value={formData.socialMedia.facebook} onChange={handleSocialChange} placeholder="https://www.facebook.com/username" className="form-input" />
                         </div>
                      </div>

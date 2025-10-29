@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PricingOverride, Unit, currencySymbols } from '../types';
 import SidePanel from './SidePanel';
-import { useAccount } from '../App';
+import { useAccount, useLanguage } from '../App';
 
 interface PricingOverridesPanelProps {
     units: Unit[];
@@ -11,6 +11,7 @@ interface PricingOverridesPanelProps {
 }
 
 const PricingOverridesPanel: React.FC<PricingOverridesPanelProps> = ({ units, pricingOverrides, onSave, onDelete }) => {
+    const { t } = useLanguage();
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [editingOverride, setEditingOverride] = useState<PricingOverride | null>(null);
 
@@ -35,14 +36,14 @@ const PricingOverridesPanel: React.FC<PricingOverridesPanelProps> = ({ units, pr
     }
     
     const getUnitNames = (unitIds: number[]): string => {
-        if (unitIds.length === units.length) return 'All Units';
-        if (unitIds.length > 2) return `${unitIds.length} units`;
+        if (unitIds.length === units.length) return t('allUnits');
+        if (unitIds.length > 2) return `${unitIds.length} ${t('units')}`;
         return units.filter(u => unitIds.includes(u.id)).map(u => u.name).join(', ');
     }
 
     return (
         <>
-            <SidePanel isOpen={isPanelOpen} onClose={handleClosePanel} title={editingOverride ? 'Edit Pricing Override' : 'Add New Pricing Override'}>
+            <SidePanel isOpen={isPanelOpen} onClose={handleClosePanel} title={editingOverride ? t('editUnit') : t('addOverridePeriod')}>
                 <OverrideForm
                     units={units}
                     onSave={handleSaveAndClose}
@@ -53,9 +54,9 @@ const PricingOverridesPanel: React.FC<PricingOverridesPanelProps> = ({ units, pr
 
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-semibold">Pricing Overrides</h2>
+                    <h2 className="text-xl font-semibold">{t('pricingOverrides')}</h2>
                     <button onClick={handleAddNew} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">
-                        <i className="fas fa-plus mr-2"></i>Add Override Period
+                        <i className="fas fa-plus mr-2"></i>{t('addOverridePeriod')}
                     </button>
                 </div>
                 <div className="space-y-3">
@@ -72,7 +73,7 @@ const PricingOverridesPanel: React.FC<PricingOverridesPanelProps> = ({ units, pr
                                 <div className="flex items-center space-x-4">
                                     <p className="font-bold text-lg text-green-600 dark:text-green-400">
                                         {currencySymbols['SAR']}{po.price.toFixed(2)}
-                                        <span className="text-xs text-gray-500 dark:text-gray-400 font-normal">/night</span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400 font-normal">{t('night')}</span>
                                     </p>
                                     <div>
                                         <button onClick={() => handleEdit(po)} className="text-gray-500 hover:text-blue-500 p-2"><i className="fas fa-edit"></i></button>
@@ -82,7 +83,7 @@ const PricingOverridesPanel: React.FC<PricingOverridesPanelProps> = ({ units, pr
                             </div>
                         ))
                     ) : (
-                        <p className="text-center text-gray-500 py-4">No pricing overrides created yet.</p>
+                        <p className="text-center text-gray-500 py-4">{t('noPricingOverridesCreated')}</p>
                     )}
                 </div>
             </div>
@@ -99,6 +100,7 @@ interface OverrideFormProps {
 }
 
 const OverrideForm: React.FC<OverrideFormProps> = ({ units, onSave, onClose, editingOverride }) => {
+    const { t } = useLanguage();
     const { accountSettings } = useAccount();
     const currencySymbol = currencySymbols[accountSettings.currency];
     const [formData, setFormData] = useState({
@@ -161,30 +163,30 @@ const OverrideForm: React.FC<OverrideFormProps> = ({ units, onSave, onClose, edi
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-                <label className="block text-sm font-medium mb-1">Override Name</label>
-                <input name="name" value={formData.name} onChange={handleChange} placeholder="e.g., Christmas Special" required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
+                <label className="block text-sm font-medium mb-1">{t('overrideName')}</label>
+                <input name="name" value={formData.name} onChange={handleChange} placeholder={`${t('example')}: ${t('christmasSpecial')}`} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  <div>
-                    <label className="block text-sm font-medium mb-1">Start Date</label>
+                    <label className="block text-sm font-medium mb-1">{t('startDate')}</label>
                     <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
                 </div>
                 <div>
-                    <label className="block text-sm font-medium mb-1">End Date</label>
+                    <label className="block text-sm font-medium mb-1">{t('endDate')}</label>
                     <input type="date" name="endDate" value={formData.endDate} min={formData.startDate} onChange={handleChange} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
                 </div>
             </div>
              <div>
-                <label className="block text-sm font-medium mb-1">Price Per Night ({currencySymbol})</label>
-                <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="e.g., 950" required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
+                <label className="block text-sm font-medium mb-1">{t('price')} ({t('perNight')} {currencySymbol})</label>
+                <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder={`${t('example')}: 950`} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
             </div>
 
             <div>
-                 <label className="block text-sm font-medium mb-2">Apply to Units</label>
+                 <label className="block text-sm font-medium mb-2">{t('applyToUnits')}</label>
                  <div className="max-h-60 overflow-y-auto space-y-2 p-2 border dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-900/50">
                      <label className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer font-semibold border-b dark:border-gray-600">
                         <input type="checkbox" checked={areAllUnitsSelected} onChange={handleSelectAllUnits} className="h-5 w-5 rounded border-gray-300 text-orange-600 focus:ring-orange-500" />
-                        <span className="ml-4">Select All Units</span>
+                        <span className="ml-4">{t('selectAllUnits')}</span>
                      </label>
                     {units.map(unit => (
                         <label key={unit.id} className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer">
@@ -197,10 +199,10 @@ const OverrideForm: React.FC<OverrideFormProps> = ({ units, onSave, onClose, edi
             
             <div className="flex justify-end space-x-3 pt-6 border-t dark:border-gray-700">
                 <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
-                    Cancel
+                    {t('cancel')}
                 </button>
                 <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600">
-                    {editingOverride ? 'Save Changes' : 'Create Override'}
+                    {editingOverride ? t('saveChanges') : t('create')}
                 </button>
             </div>
         </form>
