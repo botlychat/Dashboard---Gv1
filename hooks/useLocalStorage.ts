@@ -8,15 +8,22 @@ function useLocalStorage<T,>(key: string, initialValue: T): [T, React.Dispatch<R
       if (item === null) {
         return initialValue;
       }
-      // Additional safety check for non-JSON strings
-      if (typeof item === 'string' && item.length > 0 && !item.startsWith('{') && !item.startsWith('[') && !item.startsWith('"')) {
+      // Migration: if value looks like a plain string (e.g., en) and not JSON, coerce it
+      const looksLikePlainString = typeof item === 'string' && item.length > 0 && !item.trim().startsWith('{') && !item.trim().startsWith('[') && !item.trim().startsWith('"');
+      if (looksLikePlainString) {
         console.warn(`localStorage item "${key}" appears to be a plain string, not JSON:`, item);
-        return initialValue;
+        // Decide what to store based on expected type
+        const valueToUse = (typeof (initialValue as any) === 'string') ? (item as any as T) : initialValue;
+        // Normalize storage to JSON to avoid future parse errors
+        try { window.localStorage.setItem(key, JSON.stringify(valueToUse)); } catch {}
+        return valueToUse;
       }
       return JSON.parse(item);
     } catch (error) {
       console.error(`Error parsing localStorage item "${key}":`, error);
       console.error('Raw value:', window.localStorage.getItem(key));
+      // On parse error, reset to initial and normalize storage
+      try { window.localStorage.setItem(key, JSON.stringify(initialValue)); } catch {}
       return initialValue;
     }
   });
@@ -33,20 +40,32 @@ function useLocalStorage<T,>(key: string, initialValue: T): [T, React.Dispatch<R
 
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
-        if (e.key === key) {
-            try {
-                const newValue = e.newValue ? JSON.parse(e.newValue) : initialValue;
-                setStoredValue(newValue);
-            } catch (error) {
-                console.error("Error parsing localStorage change", error);
-            }
+      if (e.key === key) {
+        try {
+          if (e.newValue === null) {
+            setStoredValue(initialValue);
+            return;
+          }
+          const val = e.newValue;
+          const looksLikePlainString = typeof val === 'string' && val.length > 0 && !val.trim().startsWith('{') && !val.trim().startsWith('[') && !val.trim().startsWith('"');
+          if (looksLikePlainString) {
+            const valueToUse = (typeof (initialValue as any) === 'string') ? (val as any as T) : initialValue;
+            try { window.localStorage.setItem(key, JSON.stringify(valueToUse)); } catch {}
+            setStoredValue(valueToUse);
+          } else {
+            setStoredValue(JSON.parse(val));
+          }
+        } catch (error) {
+          console.error("Error parsing localStorage change for key:", key, error);
+          setStoredValue(initialValue);
         }
+      }
     };
     window.addEventListener('storage', handleStorageChange);
     return () => {
-        window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('storage', handleStorageChange);
     };
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
   return [storedValue, setValue];
