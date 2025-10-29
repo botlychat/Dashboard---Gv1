@@ -6,7 +6,6 @@ import Dashboard from './pages/Dashboard';
 import Calendar from './pages/Calendar';
 import Units from './pages/Units';
 import WebsiteSettings from './pages/WebsiteSettings';
-import AiAgent from './pages/AiAgent';
 import Contacts from './pages/Contacts';
 import Reviews from './pages/Reviews';
 import AccountSettingsPage from './pages/AccountSettings';
@@ -231,7 +230,6 @@ const MainContent: React.FC = () => {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/units" element={<Units />} />
             <Route path="/website-settings" element={<WebsiteSettings />} />
-            <Route path="/ai-agent" element={<AiAgent />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/account-settings" element={<AccountSettingsPage />} />

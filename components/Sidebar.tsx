@@ -15,7 +15,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
     { to: '/calendar', icon: 'fa-calendar-days', label: t('calendar') },
     { to: '/units', icon: 'fa-building', label: t('units') },
     { to: '/website-settings', icon: 'fa-globe', label: t('websiteSettings') },
-    { to: '/ai-agent', icon: 'fa-robot', label: t('aiAgent') },
     { to: '/contacts', icon: 'fa-address-book', label: t('contacts') },
     { to: '/reviews', icon: 'fa-star', label: t('reviews') },
   ];
