@@ -1,98 +1,20 @@
-# Hospitality Dashboard
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-A comprehensive admin panel for managing hotel or vacation rental units, bookings, scheduling, and contacts. Features a mock AI-powered agent for assistance.
+# Run and deploy your AI Studio app
 
-## Live Demo
+This contains everything you need to run your app locally.
 
-🚀 **View the live application**: [https://botlychat.github.io/Dashboard---Gv1/](https://botlychat.github.io/Dashboard---Gv1/)
-
-## Features
-
-- 📊 **Dashboard**: Overview of bookings, revenue, and occupancy
-- 📅 **Calendar**: Manage bookings and availability
-- 🏢 **Units Management**: Add and configure properties
-- 🤖 **AI Agent**: Mock intelligent assistant for customer support (no API required)
-- 👥 **Contacts**: Customer management system
-- ⭐ **Reviews**: Feedback and ratings management
-- 🌐 **Website Settings**: Customize your property websites
-- ⚙️ **Account Settings**: Business configuration
-
-## AI Agent Demo
-
-The AI Agent feature includes a **mock chat interface** that demonstrates how an intelligent assistant would work for your hospitality business. The AI agent can:
-
-- Answer customer questions about availability
-- Provide pricing information
-- Handle booking inquiries
-- Offer personalized recommendations
-
-**Note**: This uses simulated responses for demonstration purposes - no external API keys required!
+View your app in AI Studio: https://ai.studio/apps/drive/1KRzboxr2FizKz-IRJFN2MIiCAVfY7lUS
 
 ## Run Locally
 
-**Prerequisites:** Node.js
+**Prerequisites:**  Node.js
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/botlychat/Dashboard---Gv1.git
-   cd Dashboard---Gv1
-   ```
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-
-4. **Open your browser to:**
-   `http://localhost:3000/Dashboard---Gv1/`
-
-## Build and Deploy
-
-**Build for production:**
-```bash
-npm run build
-```
-
-**Deploy to GitHub Pages:**
-The application automatically deploys to GitHub Pages when you push to the main branch.
-
-## Technology Stack
-
-- **Frontend**: React 19 + TypeScript
-- **Styling**: Tailwind CSS
-- **Icons**: Font Awesome
-- **Charts**: Recharts
-- **Build Tool**: Vite
-- **Deployment**: GitHub Pages
-
-## Architecture
-
-- 📁 **`components/`** - Reusable UI components
-- 📁 **`pages/`** - Main application pages
-- 📁 **`services/`** - Mock AI service (no external dependencies)
-- 📁 **`data/`** - Sample data and configurations
-- 📁 **`hooks/`** - Custom React hooks
-- 📁 **`utils/`** - Utility functions and translations
-
-## Mock Data
-
-The application comes with sample data for:
-- Hotel units and properties
-- Booking records
-- Customer contacts
-- AI agent configurations
-- Website settings
-
-## Multi-language Support
-
-- 🇺🇸 English
-- 🇸🇦 Arabic (RTL support)
-
-## License
-
-This project is for demonstration purposes.
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

@@ -32,10 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
       <div className={`fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity lg:hidden ${isOpen ? 'block' : 'hidden'}`} onClick={() => setIsOpen(false)}></div>
       <aside className={`fixed inset-y-0 ${language === 'ar' ? 'right-0' : 'left-0'} z-30 w-64 bg-gray-800 text-white transform ${transformClass} transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:flex-shrink-0 select-none`}>
         <div className="flex items-center justify-center h-20 border-b border-gray-700">
-          <div className="flex items-center space-x-2">
-            <span className="bg-orange-500 text-white text-2xl font-bold w-10 h-10 flex items-center justify-center rounded-md">RG</span>
-            <span className="text-xl font-semibold">{t('riyadhGetaways')}</span>
-          </div>
+          <span className="text-xl font-semibold">{t('botlySolutions')}</span>
         </div>
         <nav className="mt-4 px-2">
           {navItems.map((item) => (
@@ -54,8 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
           ))}
         </nav>
         <div className="absolute bottom-0 w-full p-4 text-center text-gray-500 text-xs">
-          <p>&copy; {new Date().getFullYear()} {t('riyadhGetaways')}</p>
-          <p>{t('yourComfortOurPriority')}</p>
+          <p>{t('poweredByBotly')}</p>
         </div>
       </aside>
     </>
