@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useLanguage } from '../App';
+import { useLanguage, useAccount } from '../App';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -9,6 +9,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
   const { t, language } = useLanguage();
+  const { accountSettings } = useAccount();
 
   const navItems = [
     { to: '/', icon: 'fa-chart-pie', label: t('dashboard') },
@@ -32,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
       <div className={`fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity lg:hidden ${isOpen ? 'block' : 'hidden'}`} onClick={() => setIsOpen(false)}></div>
       <aside className={`fixed inset-y-0 ${language === 'ar' ? 'right-0' : 'left-0'} z-30 w-64 bg-gray-800 text-white transform ${transformClass} transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:flex-shrink-0 select-none`}>
         <div className="flex items-center justify-center h-20 border-b border-gray-700">
-          <span className="text-xl font-semibold">{t('botlySolutions')}</span>
+          <span className="text-xl font-semibold truncate px-2">{accountSettings.businessName}</span>
         </div>
         <nav className="mt-4 px-2">
           {navItems.map((item) => (
