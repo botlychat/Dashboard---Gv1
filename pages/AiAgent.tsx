@@ -35,12 +35,8 @@ const AiAgentComponent: React.FC = () => {
     const groupIdStr = String(currentGroupId);
     const groupConfig = config[groupIdStr] as AiConfigData;
     
-    // Debug logging
-    console.log('AiAgent - currentGroupId:', currentGroupId, 'groupIdStr:', groupIdStr, 'groupConfig:', groupConfig);
-    
     // Safety check - if no config exists for this group, don't render
     if (!groupConfig) {
-        console.log('AiAgent - No config found for group:', groupIdStr, 'Available configs:', Object.keys(config));
         return (
             <div className="max-w-2xl mx-auto space-y-6">
                 <div className="text-center p-4">
