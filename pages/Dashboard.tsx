@@ -184,24 +184,6 @@ const Dashboard: React.FC = () => {
                 <StatCard icon="fa-chart-line" title={t('occupancyRate')} value={stats.occupancyRate} color="bg-orange-500" />
             </div>
 
-            <div className="hidden md:block bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4">{t('monthlyRevenueAndBookings')}</h2>
-                <div style={{ width: '100%', height: 300 }}>
-                    <ResponsiveContainer>
-                        <BarChart data={chartData} margin={{ left: language === 'ar' ? 10 : 10, right: language === 'ar' ? 30 : 20, top: 5, bottom: 5 }}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128, 128, 128, 0.2)" />
-                            <XAxis dataKey="name" />
-                            <YAxis yAxisId="left" orientation={language === 'ar' ? 'right' : 'left'} stroke="#8884d8" width={language === 'ar' ? 110 : 70} tickFormatter={(tick) => formatCurrency(tick, accountSettings.currency, language)} />
-                            <YAxis yAxisId="right" orientation={language === 'ar' ? 'left' : 'right'} stroke="#82ca9d" width={60} />
-                            <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} formatter={(value, name) => name === 'Revenue' ? formatCurrency(value as number, accountSettings.currency, language) : value} />
-                            <Legend />
-                            <Bar yAxisId="left" dataKey="revenue" fill="#8884d8" name={t('revenue')} />
-                            <Bar yAxisId="right" dataKey="bookings" fill="#82ca9d" name={t('bookings')} />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
-            </div>
-            
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">{t('recentBookings')}</h2>
@@ -237,6 +219,24 @@ const Dashboard: React.FC = () => {
                             })}
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <div className="hidden md:block bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-4">{t('monthlyRevenueAndBookings')}</h2>
+                <div style={{ width: '100%', height: 300 }}>
+                    <ResponsiveContainer>
+                        <BarChart data={chartData} margin={{ left: language === 'ar' ? 10 : 10, right: language === 'ar' ? 30 : 20, top: 5, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128, 128, 128, 0.2)" />
+                            <XAxis dataKey="name" />
+                            <YAxis yAxisId="left" orientation={language === 'ar' ? 'right' : 'left'} stroke="#8884d8" width={language === 'ar' ? 110 : 70} tickFormatter={(tick) => formatCurrency(tick, accountSettings.currency, language)} />
+                            <YAxis yAxisId="right" orientation={language === 'ar' ? 'left' : 'right'} stroke="#82ca9d" width={60} />
+                            <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} formatter={(value, name) => name === 'Revenue' ? formatCurrency(value as number, accountSettings.currency, language) : value} />
+                            <Legend />
+                            <Bar yAxisId="left" dataKey="revenue" fill="#8884d8" name={t('revenue')} />
+                            <Bar yAxisId="right" dataKey="bookings" fill="#82ca9d" name={t('bookings')} />
+                        </BarChart>
+                    </ResponsiveContainer>
                 </div>
             </div>
         </div>
