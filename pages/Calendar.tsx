@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialBookings, initialUnits } from '../data/mockData';
-import { Booking, Unit, BookingStatus, ExternalCalendar, currencySymbols, PricingOverride } from '../types';
+import { Booking, Unit, BookingStatus, ExternalCalendar, currencySymbols, currencyNames, PricingOverride } from '../types';
 import { useGroup, useAccount, useGlobalActions, useLanguage } from '../App';
 import SidePanel from '../components/SidePanel';
 import SyncCalendarForm from '../components/SyncCalendarForm';
@@ -56,7 +56,7 @@ const Calendar: React.FC = () => {
     const { currentGroupId } = useGroup();
     const { accountSettings } = useAccount();
     const { openAddBookingPanel } = useGlobalActions();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const [allBookings, setAllBookings] = useLocalStorage<Booking[]>('bookings', initialBookings);
     const [allUnits, setAllUnits] = useLocalStorage<Unit[]>('units', initialUnits);
     const [pricingOverrides] = useLocalStorage<PricingOverride[]>('pricingOverrides', []);
@@ -428,7 +428,7 @@ const Calendar: React.FC = () => {
 
                              {dailyPrice && !dayBookings.length && showPrice && (
                                 <div className="absolute bottom-1 end-1 text-xs text-green-600 dark:text-green-400 font-semibold p-1 bg-green-50 dark:bg-green-900/50 rounded">
-                                    {currencySymbols[accountSettings.currency]}{dailyPrice}
+                                    {currencySymbols[accountSettings.currency]}{dailyPrice} {currencyNames[language][accountSettings.currency]}
                                 </div>
                             )}
 

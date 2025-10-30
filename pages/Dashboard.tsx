@@ -3,17 +3,17 @@ import { NavLink } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialBookings, initialUnits } from '../data/mockData';
-import { Booking, BookingStatus, Unit, currencySymbols } from '../types';
+import { Booking, BookingStatus, Unit, currencySymbols, currencyNames } from '../types';
 import { useGroup, useAccount, useGlobalActions, useLanguage } from '../App';
 
 const StatCard: React.FC<{ icon: string; title: string; value: string | number; color: string }> = ({ icon, title, value, color }) => (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md flex items-center space-x-4">
-        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${color}`}>
-            <i className={`fas ${icon} text-white text-xl`}></i>
+    <div className="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow-md flex flex-col md:flex-row md:items-center md:space-x-4 gap-2 md:gap-0">
+        <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center ${color} flex-shrink-0`}>
+            <i className={`fas ${icon} text-white text-lg md:text-xl`}></i>
         </div>
-        <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
-            <p className="text-2xl font-bold text-gray-800 dark:text-white">{value}</p>
+        <div className="flex-1">
+            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">{title}</p>
+            <p className="text-lg md:text-2xl font-bold text-gray-800 dark:text-white">{value}</p>
         </div>
     </div>
 );
@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
     const { currentGroupId } = useGroup();
     const { accountSettings } = useAccount();
     const { openAddBookingPanel } = useGlobalActions();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const [allBookings] = useLocalStorage<Booking[]>('bookings', initialBookings);
     const [allUnits] = useLocalStorage<Unit[]>('units', initialUnits);
 
@@ -44,6 +44,7 @@ const Dashboard: React.FC = () => {
     });
 
     const currencySymbol = currencySymbols[accountSettings.currency];
+    const currencyName = currencyNames[language][accountSettings.currency];
 
     const { units, bookings: bookingsInGroup } = useMemo(() => {
         if (currentGroupId === 'all') {
@@ -178,7 +179,7 @@ const Dashboard: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                 <StatCard icon="fa-bookmark" title={t('totalBookings')} value={stats.totalBookings} color="bg-blue-500" />
                 <StatCard icon="fa-building" title={t('totalUnits')} value={stats.totalUnits} color="bg-purple-500" />
-                <StatCard icon="fa-dollar-sign" title={t('totalRevenue')} value={`${currencySymbol}${stats.totalRevenue.toLocaleString()}`} color="bg-green-500" />
+                <StatCard icon="fa-dollar-sign" title={t('totalRevenue')} value={`${currencySymbol}${stats.totalRevenue.toLocaleString()} ${currencyName}`} color="bg-green-500" />
                 <StatCard icon="fa-chart-line" title={t('occupancyRate')} value={stats.occupancyRate} color="bg-orange-500" />
             </div>
 

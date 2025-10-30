@@ -119,12 +119,12 @@ const Contacts: React.FC = () => {
                 units={allUnits}
                 unitGroups={allGroups}
             />
-            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md flex justify-between items-center">
-                 <h2 className="text-xl font-semibold">{t('contactsManagement')}</h2>
-                 <div className="flex space-x-2">
-                    <button onClick={() => setCampaignModalOpen(true)} className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 flex items-center"><i className="fab fa-whatsapp me-2"></i>{t('whatsAppCampaign')}</button>
-                    <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center"><i className="fas fa-download me-2"></i>{t('exportAll')}</button>
-                    <button disabled={selectedIds.length === 0} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"><i className="fas fa-download me-2"></i>{t('exportSelected')}</button>
+            <div className="bg-white dark:bg-gray-800 p-3 md:p-4 rounded-lg shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                 <h2 className="text-lg md:text-xl font-semibold truncate">{t('contactsManagement')}</h2>
+                 <div className="flex flex-wrap gap-2 w-full md:w-auto">
+                    <button onClick={() => setCampaignModalOpen(true)} className="flex-1 md:flex-none px-2 md:px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 flex items-center justify-center md:justify-start text-sm md:text-base"><i className="fab fa-whatsapp me-1 md:me-2"></i><span className="hidden sm:inline">{t('whatsAppCampaign')}</span><span className="sm:hidden">WhatsApp</span></button>
+                    <button className="flex-1 md:flex-none px-2 md:px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center justify-center md:justify-start text-sm md:text-base"><i className="fas fa-download me-1 md:me-2"></i><span className="hidden sm:inline">{t('exportAll')}</span><span className="sm:hidden">All</span></button>
+                    <button disabled={selectedIds.length === 0} className="flex-1 md:flex-none px-2 md:px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center justify-center md:justify-start text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"><i className="fas fa-download me-1 md:me-2"></i><span className="hidden sm:inline">{t('exportSelected')}</span><span className="sm:hidden">Selected</span></button>
                  </div>
             </div>
             <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border dark:border-gray-700">

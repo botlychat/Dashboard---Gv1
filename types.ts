@@ -163,6 +163,29 @@ export const currencySymbols: { [key in Currency]: string } = {
     EUR: '€',
 };
 
+export const currencyNames: { en: { [key in Currency]: string }, ar: { [key in Currency]: string } } = {
+    en: {
+        SAR: 'SAR',
+        AED: 'AED',
+        QAR: 'QAR',
+        BHD: 'BHD',
+        OMR: 'OMR',
+        KWD: 'KWD',
+        USD: 'USD',
+        EUR: 'EUR',
+    },
+    ar: {
+        SAR: 'ريال',
+        AED: 'درهم',
+        QAR: 'ريال',
+        BHD: 'دينار',
+        OMR: 'ريال',
+        KWD: 'دينار',
+        USD: 'دولار',
+        EUR: 'يورو',
+    }
+};
+
 export interface ExternalCalendar {
   id: number;
   unitId: number;
