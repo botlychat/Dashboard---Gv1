@@ -398,13 +398,13 @@ const Calendar: React.FC = () => {
                     <button onClick={() => setIsGetUrlPanelOpen(true)} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100 flex items-center">
                         <i className="fas fa-link me-2"></i>{t('getURL')}
                     </button>
-                    <div className="relative" ref={filterRef}>
+                    <div className="relative z-50" ref={filterRef}>
                         <button onClick={() => setFilterOpen(!isFilterOpen)} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100 flex items-center">
                             {t('filterByUnit', { count: selectedUnitIds.length })}
                             <i className={`fas fa-chevron-down ms-2 text-xs transition-transform ${isFilterOpen ? 'rotate-180' : ''}`}></i>
                         </button>
                         {isFilterOpen && (
-                            <div className="absolute z-10 mt-2 w-64 max-h-60 overflow-y-auto rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 end-0">
+                            <div className="absolute z-50 mt-2 w-64 max-h-60 overflow-y-auto rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 end-0">
                                 <div className="p-2">
                                     {units.map(unit => (
                                         <label key={unit.id} className="flex items-center px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
