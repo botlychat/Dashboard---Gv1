@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Unit, Booking } from '../types';
-import { useToast } from '../App';
+import { useToast, useLanguage } from '../App';
 
 interface CloseUnitsPanelProps {
     date: Date;
@@ -12,6 +12,7 @@ interface CloseUnitsPanelProps {
 
 const CloseUnitsPanel: React.FC<CloseUnitsPanelProps> = ({ date, units, bookingsForDay, onClose, onSave }) => {
     const { showToast } = useToast();
+    const { t } = useLanguage();
     const availableUnits = units.filter(unit => 
         !bookingsForDay.some(b => b.unitId === unit.id)
     );
@@ -34,7 +35,7 @@ const CloseUnitsPanel: React.FC<CloseUnitsPanelProps> = ({ date, units, bookings
     
     const handleSave = () => {
         if(selectedUnitIds.length === 0) {
-            showToast("Please select at least one unit to close.", 'warning');
+            showToast(t('selectAtLeastOneUnit'), 'warning');
             return;
         }
         onSave(selectedUnitIds);
@@ -43,7 +44,7 @@ const CloseUnitsPanel: React.FC<CloseUnitsPanelProps> = ({ date, units, bookings
     return (
         <div className="space-y-6">
             <p className="text-sm text-gray-600">
-                Select the units you want to mark as unavailable for <span className="font-semibold">{date.toLocaleDateString()}</span>. This will prevent them from being booked.
+                {t('selectUnitsMessage', { date: date.toLocaleDateString() })}
             </p>
 
             <div className="max-h-96 overflow-y-auto space-y-2 p-2 border rounded-md bg-gray-50">
@@ -60,7 +61,7 @@ const CloseUnitsPanel: React.FC<CloseUnitsPanelProps> = ({ date, units, bookings
                         </label>
                     ))
                 ) : (
-                    <p className="text-center text-gray-500 p-4">All units are already booked or blocked for this day.</p>
+                    <p className="text-center text-gray-500 p-4">{t('allUnitsBookedOrBlocked')}</p>
                 )}
             </div>
 

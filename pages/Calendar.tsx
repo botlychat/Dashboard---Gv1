@@ -646,7 +646,7 @@ const Calendar: React.FC = () => {
         {cancelBookingId && (
             <ConfirmDialog
                 title={t('cancelBooking')}
-                message="Are you sure you want to cancel this booking? This action cannot be undone."
+                message={t('confirmCancelBooking')}
                 confirmText={t('confirm')}
                 cancelText={t('cancel')}
                 type="danger"

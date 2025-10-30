@@ -207,7 +207,7 @@ const Contacts: React.FC = () => {
             {deleteContactId && (
                 <ConfirmDialog
                     title={t('deleteContact')}
-                    message="Delete this contact? This action cannot be undone."
+                    message={t('confirmDeleteContact')}
                     confirmText={t('delete')}
                     cancelText={t('cancel')}
                     type="danger"

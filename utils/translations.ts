@@ -295,6 +295,25 @@ export const translations: { [key:string]: { [key: string]: string } } = {
     waitingApproval: 'Waiting Approval',
     canceled: 'Canceled',
     unknown: 'Unknown',
+
+    // Confirmation & Error Messages
+    cancelBooking: 'Cancel Booking',
+    confirmCancelBooking: 'Are you sure you want to cancel this booking? This action cannot be undone.',
+    confirm: 'Confirm',
+    fileTooLarge: 'File "{{fileName}}" is too large. Maximum size is {{maxSize}}MB.',
+    selectValidGroup: 'Please select a valid group.',
+    selectAtLeastOneUnit: 'Please select at least one unit to close.',
+    allUnitsBookedOrBlocked: 'All units are already booked or blocked for this day.',
+    selectUnitsMessage: 'Select the units you want to mark as unavailable for {{date}}. This will prevent them from being booked.',
+    noRecipientsToSend: 'No recipients to send to.',
+    scheduleMinHours: 'Please schedule the campaign at least {{hours}} hours in advance.',
+    campaignScheduledSuccess: 'Campaign scheduled for {{count}} recipients on {{date}}.\nTotal Cost: {{cost}} SR',
+    deleteUnit: 'Delete Unit',
+    confirmDeleteUnit: 'Are you sure you want to delete this unit? This will also remove all of its associated bookings. This action cannot be undone.',
+    deletePricingPeriod: 'Delete Pricing Period',
+    confirmDeletePricing: 'Are you sure you want to delete this pricing period?',
+    deleteContact: 'Delete Contact',
+    confirmDeleteContact: 'Delete this contact? This action cannot be undone.',
   },
   ar: {
     // General
@@ -592,5 +611,24 @@ export const translations: { [key:string]: { [key: string]: string } } = {
     waitingApproval: 'في انتظار الموافقة',
     canceled: 'ملغي',
     unknown: 'غير معروف',
+
+    // Confirmation & Error Messages
+    cancelBooking: 'إلغاء الحجز',
+    confirmCancelBooking: 'هل أنت متأكد من إلغاء هذا الحجز؟ لا يمكن التراجع عن هذا الإجراء.',
+    confirm: 'تأكيد',
+    fileTooLarge: 'الملف "{{fileName}}" كبير جداً. الحد الأقصى للحجم هو {{maxSize}} ميجابايت.',
+    selectValidGroup: 'يرجى تحديد مجموعة صالحة.',
+    selectAtLeastOneUnit: 'يرجى تحديد وحدة واحدة على الأقل للإغلاق.',
+    allUnitsBookedOrBlocked: 'جميع الوحدات محجوزة أو محظورة بالفعل في هذا اليوم.',
+    selectUnitsMessage: 'حدد الوحدات التي تريد وضع علامة عليها كغير متاحة في {{date}}. سيمنع ذلك حجزها.',
+    noRecipientsToSend: 'لا توجد جهات اتصال للإرسال إليها.',
+    scheduleMinHours: 'يرجى جدولة الحملة قبل {{hours}} ساعة على الأقل.',
+    campaignScheduledSuccess: 'تم جدولة الحملة لـ {{count}} جهة اتصال في {{date}}.\nالتكلفة الإجمالية: {{cost}} ريال',
+    deleteUnit: 'حذف الوحدة',
+    confirmDeleteUnit: 'هل أنت متأكد من حذف هذه الوحدة؟ سيؤدي ذلك أيضاً إلى إزالة جميع حجوزاتها المرتبطة. لا يمكن التراجع عن هذا الإجراء.',
+    deletePricingPeriod: 'حذف فترة التسعير',
+    confirmDeletePricing: 'هل أنت متأكد من حذف فترة التسعير هذه؟',
+    deleteContact: 'حذف جهة الاتصال',
+    confirmDeleteContact: 'حذف جهة الاتصال هذه؟ لا يمكن التراجع عن هذا الإجراء.',
   }
 };

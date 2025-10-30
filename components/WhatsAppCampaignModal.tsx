@@ -39,7 +39,7 @@ const WhatsAppCampaignModal: React.FC<WhatsAppCampaignModalProps> = ({ isOpen, o
       if (e.target.files && e.target.files[0]) {
           const file = e.target.files[0];
           if (file.size > MAX_ATTACHMENT_SIZE_MB * 1024 * 1024) {
-              showToast(`File is too large. Max size is ${MAX_ATTACHMENT_SIZE_MB}MB.`, 'error');
+              showToast(t('fileTooLarge', { fileName: file.name, maxSize: MAX_ATTACHMENT_SIZE_MB.toString() }), 'error');
               e.target.value = '';
               setAttachment(null);
           } else {
@@ -51,14 +51,14 @@ const WhatsAppCampaignModal: React.FC<WhatsAppCampaignModalProps> = ({ isOpen, o
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if(recipients.length === 0) {
-        showToast("No recipients to send to.", 'error');
+        showToast(t('noRecipientsToSend'), 'error');
         return;
     }
     if(!scheduleDate) {
-        showToast(`Please schedule the campaign at least ${MIN_SCHEDULE_HOURS} hours in advance.`, 'warning');
+        showToast(t('scheduleMinHours', { hours: MIN_SCHEDULE_HOURS.toString() }), 'warning');
         return;
     }
-    showToast(`Campaign scheduled for ${recipients.length} recipients on ${new Date(scheduleDate).toLocaleString()}.\nTotal Cost: ${totalCost} SR`, 'success');
+    showToast(t('campaignScheduledSuccess', { count: recipients.length.toString(), date: new Date(scheduleDate).toLocaleString(), cost: totalCost.toString() }), 'success');
     onClose();
   };
 

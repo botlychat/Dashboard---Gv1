@@ -163,7 +163,7 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
         const files = Array.from(e.target.files);
         const validFiles = files.filter((file: File) => {
             if (file.size > MAX_VIDEO_SIZE_BYTES) {
-                showToast(`File "${file.name}" is too large. Maximum size is ${MAX_VIDEO_SIZE_MB}MB.`, 'error');
+                showToast(t('fileTooLarge', { fileName: file.name, maxSize: MAX_VIDEO_SIZE_MB.toString() }), 'error');
                 return false;
             }
             return true;
@@ -191,7 +191,7 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedGroup) {
-        showToast("Please select a valid group.", 'error');
+        showToast(t('selectValidGroup'), 'error');
         return;
     }
 

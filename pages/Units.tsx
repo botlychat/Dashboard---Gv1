@@ -199,7 +199,7 @@ const Units: React.FC = () => {
             {deleteConfirm && deleteConfirm.type === 'unit' && (
                 <ConfirmDialog
                     title={t('deleteUnit')}
-                    message="Are you sure you want to delete this unit? This will also remove all of its associated bookings. This action cannot be undone."
+                    message={t('confirmDeleteUnit')}
                     confirmText={t('delete')}
                     cancelText={t('cancel')}
                     type="danger"
@@ -211,7 +211,7 @@ const Units: React.FC = () => {
             {deleteConfirm && deleteConfirm.type === 'pricing' && (
                 <ConfirmDialog
                     title={t('deletePricingPeriod')}
-                    message="Are you sure you want to delete this pricing period?"
+                    message={t('confirmDeletePricing')}
                     confirmText={t('delete')}
                     cancelText={t('cancel')}
                     type="danger"
