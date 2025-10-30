@@ -72,6 +72,7 @@ const Calendar: React.FC = () => {
     const [dateForAction, setDateForAction] = useState<Date | null>(null);
     const [isCloseUnitsPanelOpen, setIsCloseUnitsPanelOpen] = useState(false);
     const [isAdjustPricePanelOpen, setIsAdjustPricePanelOpen] = useState(false);
+    const [actionMenuPosition, setActionMenuPosition] = useState<'left' | 'right'>('right');
     const filterRef = useRef<HTMLDivElement>(null);
     const actionMenuRef = useRef<HTMLDivElement>(null);
     
@@ -142,6 +143,21 @@ const Calendar: React.FC = () => {
         const isoDate = date.toISOString().split('T')[0];
         openAddBookingPanel(isoDate);
         setActionMenuDate(null);
+    };
+
+    const handleActionMenuClick = (date: Date, event: React.MouseEvent) => {
+        // Determine if menu should open to the left to avoid going off-screen
+        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+        const spaceToRight = window.innerWidth - rect.right;
+        const menuWidth = 192; // w-48 = 12rem = 192px
+        
+        if (spaceToRight < menuWidth + 10) {
+            setActionMenuPosition('left');
+        } else {
+            setActionMenuPosition('right');
+        }
+        
+        setActionMenuDate(date);
     };
 
     const openActionPanel = (date: Date, panel: 'closeUnits' | 'adjustPrice') => {
@@ -236,6 +252,24 @@ const Calendar: React.FC = () => {
             currentDateOnly.setHours(0,0,0,0);
             return currentDateOnly >= checkIn && currentDateOnly < checkOut;
         });
+    };
+
+    // Helper to determine booking position for multi-day display
+    const getBookingPosition = (booking: Booking, date: Date): 'first' | 'middle' | 'last' | 'single' => {
+        const checkIn = new Date(booking.checkIn);
+        const checkOut = new Date(booking.checkOut);
+        checkIn.setHours(0,0,0,0);
+        checkOut.setHours(0,0,0,0);
+        const currentDateOnly = new Date(date);
+        currentDateOnly.setHours(0,0,0,0);
+
+        const isFirst = currentDateOnly.getTime() === checkIn.getTime();
+        const isLast = new Date(currentDateOnly.getTime() + 86400000).getTime() === checkOut.getTime(); // next day equals checkout
+
+        if (isFirst && isLast) return 'single';
+        if (isFirst) return 'first';
+        if (isLast) return 'last';
+        return 'middle';
     };
     
     const getDailyPrice = (unit: Unit, date: Date): number => {
@@ -413,11 +447,11 @@ const Calendar: React.FC = () => {
                                     {date.getDate()}
                                 </span>
                                 <div className="relative">
-                                    <button onClick={() => setActionMenuDate(date)} className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 rounded-full">
+                                    <button onClick={(e) => handleActionMenuClick(date, e)} className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 rounded-full">
                                         <i className="fas fa-plus-circle"></i>
                                     </button>
                                     {actionMenuDate?.getTime() === date.getTime() && (
-                                        <div ref={actionMenuRef} className="absolute z-20 end-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 text-start">
+                                        <div ref={actionMenuRef} className={`absolute z-20 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 text-start ${actionMenuPosition === 'left' ? 'start-0' : 'end-0'}`}>
                                             <button onClick={() => handleAddBookingFromDate(date)} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-plus me-2"></i>{t('addNewBooking')}</button>
                                             <button onClick={() => openActionPanel(date, 'closeUnits')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-lock me-2"></i>{t('closeUnits')}</button>
                                             <button onClick={() => openActionPanel(date, 'adjustPrice')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-dollar-sign me-2"></i>{t('adjustDayPrice')}</button>
@@ -437,11 +471,29 @@ const Calendar: React.FC = () => {
                                     const unit = getUnitById(booking.unitId);
                                     const statusConfig = getBookingStatusConfig(booking.status, t);
                                     const isBlocker = booking.clientName === t('unitClosed');
+                                    const bookingPosition = getBookingPosition(booking, date);
+                                    
+                                    // Determine border radius and padding for continuous multi-day display
+                                    let borderRadiusClass = 'rounded-md';
+                                    let paddingClass = 'px-1.5';
+                                    
+                                    if (bookingPosition === 'first') {
+                                        borderRadiusClass = 'rounded-s-md rounded-e-none';
+                                        paddingClass = 'ps-1.5 pe-0';
+                                    } else if (bookingPosition === 'middle') {
+                                        borderRadiusClass = 'rounded-none';
+                                        paddingClass = 'px-0';
+                                    } else if (bookingPosition === 'last') {
+                                        borderRadiusClass = 'rounded-e-md rounded-s-none';
+                                        paddingClass = 'ps-0 pe-1.5';
+                                    }
+                                    // 'single' keeps default rounded-md and px-1.5
+                                    
                                     return (
                                         <div 
                                             key={booking.id} 
                                             onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
-                                            className={`p-1.5 rounded-md truncate border-s-4 ${isBlocker ? 'bg-gray-200 dark:bg-gray-600 border-gray-400 cursor-not-allowed text-gray-700 dark:text-gray-300' : `cursor-pointer ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`} 
+                                            className={`py-1.5 ${paddingClass} ${borderRadiusClass} truncate border-s-4 ${isBlocker ? 'bg-gray-200 dark:bg-gray-600 border-gray-400 cursor-not-allowed text-gray-700 dark:text-gray-300' : `cursor-pointer ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`} 
                                             title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}>
                                             
                                              {isBlocker ? (
