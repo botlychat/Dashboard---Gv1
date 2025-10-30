@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialAiConfig } from '../data/mockData';
 import { AiConfig, AiConfigData, AiBookingMethod } from '../types';
-import { useGroup, useLanguage } from '../App';
+import { useGroup, useLanguage, useTheme } from '../App';
 
 interface EditSaveButtonsProps {
     isEditing: boolean;
@@ -332,6 +332,7 @@ const AiAgentComponent: React.FC = () => {
 const AiAgentContainer: React.FC = () => {
     const { currentGroupId, setCurrentGroupId, unitGroups } = useGroup();
     const { t } = useLanguage();
+    const { themeColor } = useTheme();
     const [config] = useLocalStorage<AiConfig>('aiConfig', initialAiConfig);
 
     // Fixed plan total: 1500 conversations across all groups
@@ -382,24 +383,30 @@ const AiAgentContainer: React.FC = () => {
                             const groupPercentage = (cfg.activeConversations / TOTAL_PLAN) * 100;
                             const isSelected = currentGroupId !== 'all' && Number(currentGroupId) === Number(group.id);
                             return (
-                                <div key={group.id} className={`flex items-center gap-3 p-2 rounded-md ${isSelected ? 'bg-orange-50' : 'bg-transparent'}`}>
+                                <div 
+                                    key={group.id} 
+                                    className="flex items-center gap-3 p-2 rounded-md"
+                                    style={isSelected ? { backgroundColor: themeColor } : {}}
+                                >
                                     <div className="min-w-40">
-                                        <p className="font-medium truncate" title={group.name}>{group.name}</p>
-                                        <p className={`text-xs ${isSelected ? 'dark:text-gray-200' : 'dark:text-gray-300'} text-gray-500`}>Consumed: {cfg.activeConversations.toLocaleString()}</p>
+                                        <p className={`font-medium truncate ${isSelected ? 'text-white' : 'text-gray-900'}`} title={group.name}>{group.name}</p>
+                                        <p className={`text-xs ${isSelected ? 'text-white' : 'text-gray-500'}`}>Consumed: {cfg.activeConversations.toLocaleString()}</p>
                                     </div>
                                     <div className="flex-1">
-                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                            <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${Math.min(100, groupPercentage)}%` }}></div>
+                                        <div className={`w-full rounded-full h-2.5 ${isSelected ? 'bg-white/30' : 'bg-gray-200'}`}>
+                                            <div className={`h-2.5 rounded-full ${isSelected ? 'bg-white' : 'bg-orange-500'}`} style={{ width: `${Math.min(100, groupPercentage)}%` }}></div>
                                         </div>
                                     </div>
-                                    <div className="w-20 text-end text-sm font-medium">{groupPercentage.toFixed(1)}%</div>
-                                    <button
-                                        className="px-3 py-1 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-md"
-                                        onClick={() => setCurrentGroupId(group.id)}
-                                        title={t('edit')}
-                                    >
-                                        {t('edit')}
-                                    </button>
+                                    <div className={`w-20 text-end text-sm font-medium ${isSelected ? 'text-white' : 'text-gray-900'}`}>{groupPercentage.toFixed(1)}%</div>
+                                    {!isSelected && (
+                                        <button
+                                            className="px-3 py-1 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-md"
+                                            onClick={() => setCurrentGroupId(group.id)}
+                                            title={t('edit')}
+                                        >
+                                            {t('edit')}
+                                        </button>
+                                    )}
                                 </div>
                             );
                         })}
