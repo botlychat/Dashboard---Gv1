@@ -203,9 +203,9 @@ export const currencyNames: { en: { [key in Currency]: string }, ar: { [key in C
 export const formatCurrency = (amount: number, currency: Currency, language: 'en' | 'ar'): string => {
     const symbol = currencySymbols[language][currency];
     const formattedAmount = amount.toLocaleString();
-    // In Arabic: currency symbol appears first in the string (will display on right in RTL)
-    // In English: currency symbol appears after the number (displays on right in LTR)
-    return language === 'ar' ? `${symbol} ${formattedAmount}` : `${formattedAmount} ${symbol}`;
+    // Both languages: number first, then symbol
+    // This displays correctly: "1,400 SAR" in English and "1,400 ر.س" in Arabic
+    return `${formattedAmount} ${symbol}`;
 };
 
 export interface ExternalCalendar {
