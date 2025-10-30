@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialBookings, initialUnits } from '../data/mockData';
-import { Booking, BookingStatus, Unit, currencySymbols, currencyNames, formatCurrency } from '../types';
+import { Booking, BookingStatus, Unit, currencySymbols, formatCurrency } from '../types';
 import { useGroup, useAccount, useGlobalActions, useLanguage, useTheme } from '../App';
 
 const StatCard: React.FC<{ icon: string; title: string; value: string | number; color: string }> = ({ icon, title, value, color }) => (
@@ -45,7 +45,6 @@ const Dashboard: React.FC = () => {
     });
 
     const currencySymbol = currencySymbols[language][accountSettings.currency];
-    const currencyName = currencyNames[language][accountSettings.currency];
 
     const { units, bookings: bookingsInGroup } = useMemo(() => {
         if (currentGroupId === 'all') {
@@ -181,7 +180,7 @@ const Dashboard: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                 <StatCard icon="fa-bookmark" title={t('totalBookings')} value={stats.totalBookings} color="bg-blue-500" />
                 <StatCard icon="fa-building" title={t('totalUnits')} value={stats.totalUnits} color="bg-purple-500" />
-                <StatCard icon="fa-dollar-sign" title={t('totalRevenue')} value={`${formatCurrency(stats.totalRevenue, accountSettings.currency, language)} ${currencyName}`} color="bg-green-500" />
+                <StatCard icon="fa-dollar-sign" title={t('totalRevenue')} value={formatCurrency(stats.totalRevenue, accountSettings.currency, language)} color="bg-green-500" />
                 <StatCard icon="fa-chart-line" title={t('occupancyRate')} value={stats.occupancyRate} color="bg-orange-500" />
             </div>
 

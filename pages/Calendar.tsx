@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialBookings, initialUnits } from '../data/mockData';
-import { Booking, Unit, BookingStatus, ExternalCalendar, currencySymbols, currencyNames, PricingOverride, formatCurrency } from '../types';
+import { Booking, Unit, BookingStatus, ExternalCalendar, currencySymbols, PricingOverride, formatCurrency } from '../types';
 import { useGroup, useAccount, useGlobalActions, useLanguage } from '../App';
 import SidePanel from '../components/SidePanel';
 import SyncCalendarForm from '../components/SyncCalendarForm';
