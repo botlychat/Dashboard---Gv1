@@ -178,24 +178,24 @@ export const currencySymbols: { en: { [key in Currency]: string }, ar: { [key in
 
 export const currencyNames: { en: { [key in Currency]: string }, ar: { [key in Currency]: string } } = {
     en: {
-        SAR: 'SAR',
-        AED: 'AED',
-        QAR: 'QAR',
-        BHD: 'BHD',
-        OMR: 'OMR',
-        KWD: 'KWD',
-        USD: 'USD',
-        EUR: 'EUR',
+        SAR: 'Saudi Riyal',
+        AED: 'UAE Dirham',
+        QAR: 'Qatari Riyal',
+        BHD: 'Bahraini Dinar',
+        OMR: 'Omani Rial',
+        KWD: 'Kuwaiti Dinar',
+        USD: 'US Dollar',
+        EUR: 'Euro',
     },
     ar: {
-        SAR: 'ر.س',
-        AED: 'د.إ',
-        QAR: 'ر.ق',
-        BHD: 'د.ب',
-        OMR: 'ر.ع',
-        KWD: 'د.ك',
-        USD: '$',
-        EUR: '€',
+        SAR: 'ريال سعودي',
+        AED: 'درهم إماراتي',
+        QAR: 'ريال قطري',
+        BHD: 'دينار بحريني',
+        OMR: 'ريال عماني',
+        KWD: 'دينار كويتي',
+        USD: 'دولار أمريكي',
+        EUR: 'يورو',
     }
 };
 
@@ -203,8 +203,8 @@ export const currencyNames: { en: { [key in Currency]: string }, ar: { [key in C
 export const formatCurrency = (amount: number, currency: Currency, language: 'en' | 'ar'): string => {
     const symbol = currencySymbols[language][currency];
     const formattedAmount = amount.toLocaleString();
-    // In Arabic, currency comes before the number (on the left in RTL layout)
-    return language === 'ar' ? `${symbol} ${formattedAmount}` : `${symbol}${formattedAmount}`;
+    // In Arabic, currency comes on the left; in English, currency comes on the right
+    return language === 'ar' ? `${symbol} ${formattedAmount}` : `${formattedAmount} ${symbol}`;
 };
 
 export interface ExternalCalendar {

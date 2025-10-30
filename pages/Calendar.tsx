@@ -590,10 +590,10 @@ const Calendar: React.FC = () => {
                                  {dailyPrice && !dayBookings.length && showPrice && (
                                     <div className="absolute bottom-1 inset-x-0 flex flex-col items-center justify-center text-center px-1">
                                         <div className="text-[10px] sm:text-xs text-green-600 font-bold leading-tight">
-                                            {currencySymbols[language][accountSettings.currency]}{dailyPrice.toLocaleString()}
-                                        </div>
-                                        <div className="text-[8px] sm:text-[10px] text-green-600 font-medium leading-tight">
-                                            {currencyNames[language][accountSettings.currency]}
+                                            {language === 'ar' 
+                                                ? `${currencySymbols[language][accountSettings.currency]} ${dailyPrice.toLocaleString()}`
+                                                : `${dailyPrice.toLocaleString()} ${currencySymbols[language][accountSettings.currency]}`
+                                            }
                                         </div>
                                     </div>
                                 )}
