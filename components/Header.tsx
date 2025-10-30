@@ -30,19 +30,19 @@ const Header: React.FC<HeaderProps> = ({ title, onToggleSidebar }) => {
   }, []);
 
   return (
-    <header className="flex items-center justify-between h-16 px-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex-shrink-0 select-none">
+    <header className="flex items-center justify-between h-16 px-3 md:px-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex-shrink-0 select-none">
       <div className="flex items-center">
         <button onClick={onToggleSidebar} aria-label="Toggle sidebar menu" className="text-gray-500 focus:outline-none focus:text-gray-700 lg:hidden">
           <i className="fas fa-bars text-xl"></i>
         </button>
-        <h1 className="text-2xl font-semibold text-gray-800 dark:text-white ms-4 lg:ms-0">{title}</h1>
+        <h1 className="text-lg md:text-2xl font-semibold text-gray-800 dark:text-white ms-2 md:ms-4 lg:ms-0 truncate">{title}</h1>
       </div>
       <div className="flex items-center space-x-4">
         <div className="relative">
           <select
             value={currentGroupId}
             onChange={(e) => setCurrentGroupId(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-            className="w-48 py-2 ps-3 pe-8 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-orange-500 dark:focus:border-orange-500 focus:outline-none focus:ring focus:ring-orange-500 focus:ring-opacity-50 appearance-none"
+            className="w-32 md:w-48 py-2 ps-3 pe-8 text-sm md:text-base text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-orange-500 dark:focus:border-orange-500 focus:outline-none focus:ring focus:ring-orange-500 focus:ring-opacity-50 appearance-none"
           >
             <option value="all">{t('allGroups')}</option>
             {unitGroups.map(group => (
@@ -59,7 +59,7 @@ const Header: React.FC<HeaderProps> = ({ title, onToggleSidebar }) => {
                 <i className="fas fa-user text-gray-600 dark:text-gray-300"></i>
             </button>
             {isProfileMenuOpen && (
-                <div className="absolute end-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 border dark:border-gray-700">
+                <div className="absolute end-0 mt-2 w-48 md:w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 border dark:border-gray-700">
                     <div className="px-4 py-2 border-b dark:border-gray-700">
                         <p className="text-sm font-medium">{t('signedInAs')}</p>
                         <p className="text-sm font-semibold truncate">admin@example.com</p>

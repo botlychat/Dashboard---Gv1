@@ -156,17 +156,17 @@ const Dashboard: React.FC = () => {
                             <input type="date" name="to" value={dateRange.to} min={dateRange.from} onChange={handleDateChange} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 text-sm"/>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2">
                         <button
                             onClick={() => openAddBookingPanel()}
-                            className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors text-sm font-medium"
+                            className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors text-sm font-medium w-full sm:w-auto justify-center"
                         >
                             <i className="fas fa-plus me-2"></i>
                             <span>{t('addBooking')}</span>
                         </button>
                         <NavLink
                             to="/calendar"
-                            className="flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm font-medium"
+                            className="flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm font-medium w-full sm:w-auto justify-center"
                         >
                             <i className="fas fa-calendar-alt me-2"></i>
                             <span>{t('viewCalendar')}</span>
@@ -175,14 +175,14 @@ const Dashboard: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                 <StatCard icon="fa-bookmark" title={t('totalBookings')} value={stats.totalBookings} color="bg-blue-500" />
                 <StatCard icon="fa-building" title={t('totalUnits')} value={stats.totalUnits} color="bg-purple-500" />
                 <StatCard icon="fa-dollar-sign" title={t('totalRevenue')} value={`${currencySymbol}${stats.totalRevenue.toLocaleString()}`} color="bg-green-500" />
                 <StatCard icon="fa-chart-line" title={t('occupancyRate')} value={stats.occupancyRate} color="bg-orange-500" />
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div className="hidden md:block bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 <h2 className="text-xl font-semibold mb-4">{t('monthlyRevenueAndBookings')}</h2>
                 <div style={{ width: '100%', height: 300 }}>
                     <ResponsiveContainer>
