@@ -52,28 +52,28 @@ const PricingOverridesPanel: React.FC<PricingOverridesPanelProps> = ({ units, pr
                 />
             </SidePanel>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-semibold">{t('pricingOverrides')}</h2>
-                    <button onClick={handleAddNew} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">
+                    <button onClick={handleAddNew} className="px-4 py-2 bg-gray-200 text-sm font-medium rounded-md hover:bg-gray-300">
                         <i className="fas fa-plus mr-2"></i>{t('addOverridePeriod')}
                     </button>
                 </div>
                 <div className="space-y-3">
                     {pricingOverrides.length > 0 ? (
                         pricingOverrides.map(po => (
-                             <div key={po.id} className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-md flex flex-wrap items-center justify-between gap-4">
+                             <div key={po.id} className="p-3 bg-gray-50 rounded-md flex flex-wrap items-center justify-between gap-4">
                                 <div>
                                     <p className="font-semibold">{po.name}</p>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <p className="text-sm text-gray-500">
                                         {new Date(po.startDate).toLocaleDateString()} - {new Date(po.endDate).toLocaleDateString()}
                                     </p>
-                                    <p className="text-xs text-gray-400 dark:text-gray-500 italic mt-1">{getUnitNames(po.unitIds)}</p>
+                                    <p className="text-xs text-gray-400 italic mt-1">{getUnitNames(po.unitIds)}</p>
                                 </div>
                                 <div className="flex items-center space-x-4">
-                                    <p className="font-bold text-lg text-green-600 dark:text-green-400">
+                                    <p className="font-bold text-lg text-green-600">
                                         {currencySymbols['SAR']}{po.price.toFixed(2)}
-                                        <span className="text-xs text-gray-500 dark:text-gray-400 font-normal">{t('night')}</span>
+                                        <span className="text-xs text-gray-500 font-normal">{t('night')}</span>
                                     </p>
                                     <div>
                                         <button onClick={() => handleEdit(po)} className="text-gray-500 hover:text-blue-500 p-2"><i className="fas fa-edit"></i></button>
@@ -164,32 +164,32 @@ const OverrideForm: React.FC<OverrideFormProps> = ({ units, onSave, onClose, edi
         <form onSubmit={handleSubmit} className="space-y-6">
             <div>
                 <label className="block text-sm font-medium mb-1">{t('overrideName')}</label>
-                <input name="name" value={formData.name} onChange={handleChange} placeholder={`${t('example')}: ${t('christmasSpecial')}`} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"/>
+                <input name="name" value={formData.name} onChange={handleChange} placeholder={`${t('example')}: ${t('christmasSpecial')}`} required className="w-full p-2 border rounded-md"/>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  <div>
                     <label className="block text-sm font-medium mb-1">{t('startDate')}</label>
-                    <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"/>
+                    <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} required className="w-full p-2 border rounded-md"/>
                 </div>
                 <div>
                     <label className="block text-sm font-medium mb-1">{t('endDate')}</label>
-                    <input type="date" name="endDate" value={formData.endDate} min={formData.startDate} onChange={handleChange} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"/>
+                    <input type="date" name="endDate" value={formData.endDate} min={formData.startDate} onChange={handleChange} required className="w-full p-2 border rounded-md"/>
                 </div>
             </div>
              <div>
                 <label className="block text-sm font-medium mb-1">{t('price')} ({t('perNight')} {currencySymbol})</label>
-                <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder={`${t('example')}: 950`} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"/>
+                <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder={`${t('example')}: 950`} required className="w-full p-2 border rounded-md"/>
             </div>
 
             <div>
                  <label className="block text-sm font-medium mb-2">{t('applyToUnits')}</label>
-                 <div className="max-h-60 overflow-y-auto space-y-2 p-2 border dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-900/50">
-                     <label className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer font-semibold border-b dark:border-gray-600">
+                 <div className="max-h-60 overflow-y-auto space-y-2 p-2 border rounded-md bg-gray-50">
+                     <label className="flex items-center p-3 hover:bg-gray-100 rounded-md cursor-pointer font-semibold border-b">
                         <input type="checkbox" checked={areAllUnitsSelected} onChange={handleSelectAllUnits} className="h-5 w-5 rounded border-gray-300 text-orange-600 focus:ring-orange-500" />
                         <span className="ml-4">{t('selectAllUnits')}</span>
                      </label>
                     {units.map(unit => (
-                        <label key={unit.id} className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer">
+                        <label key={unit.id} className="flex items-center p-3 hover:bg-gray-100 rounded-md cursor-pointer">
                             <input type="checkbox" checked={formData.unitIds.includes(unit.id)} onChange={() => handleUnitSelection(unit.id)} className="h-5 w-5 rounded border-gray-300 text-orange-600 focus:ring-orange-500" />
                             <span className="ml-4">{unit.name}</span>
                         </label>
@@ -197,8 +197,8 @@ const OverrideForm: React.FC<OverrideFormProps> = ({ units, onSave, onClose, edi
                  </div>
             </div>
             
-            <div className="flex justify-end space-x-3 pt-6 border-t dark:border-gray-700">
-                <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+            <div className="flex justify-end space-x-3 pt-6 border-t">
+                <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
                     {t('cancel')}
                 </button>
                 <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600">

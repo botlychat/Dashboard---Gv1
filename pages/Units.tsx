@@ -119,30 +119,30 @@ const Units: React.FC = () => {
             />
 
             {currentGroup && (
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md border-s-4" style={{ borderColor: currentGroup.color || '#ccc' }}>
+                <div className="bg-white p-4 rounded-lg shadow-md border-s-4" style={{ borderColor: currentGroup.color || '#ccc' }}>
                     <h3 className="text-lg font-semibold mb-2">{t('bankDetails')}</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                         <div>
-                            <p className="text-gray-500 dark:text-gray-400">{t('bankName')}</p>
+                            <p className="text-gray-500">{t('bankName')}</p>
                             <p className="font-medium">{currentGroup.bankName || t('na')}</p>
                         </div>
                         <div>
-                            <p className="text-gray-500 dark:text-gray-400">{t('accountName')}</p>
+                            <p className="text-gray-500">{t('accountName')}</p>
                             <p className="font-medium">{currentGroup.accountName || t('na')}</p>
                         </div>
                         <div>
-                            <p className="text-gray-500 dark:text-gray-400">{t('iban')}</p>
+                            <p className="text-gray-500">{t('iban')}</p>
                             <p className="font-medium">{currentGroup.accountIban || t('na')}</p>
                         </div>
                     </div>
                 </div>
             )}
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div className="bg-white p-6 rounded-lg shadow-md">
                  <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-semibold">{title}</h2>
                      <div className="flex space-x-2">
-                        <button onClick={() => setIsAddGroupPanelOpen(true)} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white text-sm font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">
+                        <button onClick={() => setIsAddGroupPanelOpen(true)} className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-300">
                             {t('addGroup')}
                         </button>
                         <button onClick={handleOpenAddPanel} className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-md hover:bg-orange-600">
@@ -153,7 +153,7 @@ const Units: React.FC = () => {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
+                            <tr className="text-gray-500 border-b">
                                 <th className="py-3 px-4 font-medium"><input type="checkbox"/></th>
                                 <th className="py-3 px-4 font-medium">{t('unitName')}</th>
                                 <th className="py-3 px-4 font-medium">{t('group')}</th>
@@ -166,7 +166,7 @@ const Units: React.FC = () => {
                         </thead>
                         <tbody>
                             {filteredUnits.map(unit => (
-                                <tr key={unit.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <tr key={unit.id} className="border-b hover:bg-gray-50">
                                     <td className="py-3 px-4"><input type="checkbox"/></td>
                                     <td className="py-3 px-4 font-semibold">{unit.name}</td>
                                     <td className="py-3 px-4">{getGroupName(unit.groupId)}</td>
@@ -174,7 +174,7 @@ const Units: React.FC = () => {
                                     <td className="py-3 px-4">{unit.maxGuests}</td>
                                     <td className="py-3 px-4">{currencySymbol}{unit.pricing.baseRate.toFixed(2)} {currencyName}</td>
                                     <td className="py-3 px-4">
-                                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${unit.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'}`}>
+                                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${unit.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                                             {unit.status}
                                         </span>
                                     </td>

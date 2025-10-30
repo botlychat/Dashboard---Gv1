@@ -161,7 +161,7 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                                 <span>{countryCodes.find(c => c.code === formData.phoneCountryCode)?.flag}</span>
                             </button>
                             {isCountryCodeOpen && (
-                                <div className="absolute z-10 mt-1 w-56 bg-white dark:bg-gray-700 rounded-md shadow-lg border dark:border-gray-600">
+                                <div className="absolute z-10 mt-1 w-56 bg-white rounded-md shadow-lg border">
                                     <ul className="py-1 max-h-60 overflow-y-auto" role="listbox">
                                         {countryCodes.map(c => (
                                             <li
@@ -170,7 +170,7 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                                                     setFormData(prev => ({ ...prev, phoneCountryCode: c.code }));
                                                     setIsCountryCodeOpen(false);
                                                 }}
-                                                className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                                                className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center"
                                                 role="option"
                                                 aria-selected={formData.phoneCountryCode === c.code}
                                             >
@@ -206,9 +206,9 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                     </select>
                     {errors.unitId && <p className="text-red-500 text-xs mt-1">{errors.unitId}</p>}
                  </div>
-                 <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-md text-center">
-                     <p className="text-sm text-gray-600 dark:text-white">{t('totalPrice')}</p>
-                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{currencySymbol}{totalPrice.toLocaleString()}</p>
+                 <div className="p-4 bg-gray-50 rounded-md text-center">
+                     <p className="text-sm text-gray-600">{t('totalPrice')}</p>
+                     <p className="text-2xl font-bold text-gray-900">{currencySymbol}{totalPrice.toLocaleString()}</p>
                  </div>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                      <div>
@@ -239,8 +239,8 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                     <textarea name="notes" value={formData.notes} onChange={handleChange} rows={3} className="form-input"></textarea>
                  </div>
             </div>
-            <div className="flex justify-end space-x-3 pt-6 mt-6 border-t dark:border-gray-700">
-                <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+            <div className="flex justify-end space-x-3 pt-6 mt-6 border-t">
+                <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
                     {t('cancel')}
                 </button>
                 <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600">

@@ -40,19 +40,19 @@ const CloseUnitsPanel: React.FC<CloseUnitsPanelProps> = ({ date, units, bookings
 
     return (
         <div className="space-y-6">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600">
                 Select the units you want to mark as unavailable for <span className="font-semibold">{date.toLocaleDateString()}</span>. This will prevent them from being booked.
             </p>
 
-            <div className="max-h-96 overflow-y-auto space-y-2 p-2 border dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-900/50">
+            <div className="max-h-96 overflow-y-auto space-y-2 p-2 border rounded-md bg-gray-50">
                 {availableUnits.length > 0 ? (
                     availableUnits.map(unit => (
-                        <label key={unit.id} className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer">
+                        <label key={unit.id} className="flex items-center p-3 hover:bg-gray-100 rounded-md cursor-pointer">
                             <input
                                 type="checkbox"
                                 checked={selectedUnitIds.includes(unit.id)}
                                 onChange={() => handleToggleUnit(unit.id)}
-                                className="h-5 w-5 rounded border-gray-300 text-orange-600 focus:ring-orange-500 dark:bg-gray-800 dark:border-gray-600"
+                                className="h-5 w-5 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                             />
                             <span className="ml-4 font-medium">{unit.name}</span>
                         </label>
@@ -69,8 +69,8 @@ const CloseUnitsPanel: React.FC<CloseUnitsPanelProps> = ({ date, units, bookings
                 </div>
             )}
 
-            <div className="flex justify-end space-x-3 pt-6 border-t dark:border-gray-700">
-                <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+            <div className="flex justify-end space-x-3 pt-6 border-t">
+                <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
                     Cancel
                 </button>
                 <button 

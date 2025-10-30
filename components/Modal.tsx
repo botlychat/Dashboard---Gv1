@@ -31,16 +31,16 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-5xl bg-white dark:bg-gray-800 rounded-lg shadow-xl transform transition-all"
+        className="relative w-full max-w-5xl bg-white rounded-lg shadow-xl transform transition-all"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white" id="modal-title">
+        <div className="flex items-start justify-between p-4 border-b border-gray-200 rounded-t">
+          <h3 className="text-xl font-semibold text-gray-900" id="modal-title">
             {title}
           </h3>
           <button
             type="button"
-            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
             onClick={onClose}
             aria-label="Close modal"
           >

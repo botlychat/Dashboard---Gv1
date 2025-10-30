@@ -17,10 +17,10 @@ const EditSaveButtons: React.FC<EditSaveButtonsProps> = ({ isEditing, onEdit, on
         {isEditing ? (
             <>
                 <button type="button" onClick={onSave} className="px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-green-600">{t('save')}</button>
-                <button type="button" onClick={onCancel} className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">{t('cancel')}</button>
+                <button type="button" onClick={onCancel} className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">{t('cancel')}</button>
             </>
         ) : (
-            <button type="button" onClick={onEdit} className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">{t('edit')}</button>
+            <button type="button" onClick={onEdit} className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">{t('edit')}</button>
         )}
     </div>
 );
@@ -138,35 +138,35 @@ const AiAgentComponent: React.FC = () => {
             <div className="space-y-6">
                 {/* Only show active conversations card when viewing 'all' groups overview - when a specific group is selected, this info is in the overview card already */}
                 {currentGroupId === 'all' && (
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                <div className="bg-white p-6 rounded-lg shadow-md">
                     <h2 className="text-xl font-semibold mb-1">{t('activeConversations')}</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-300 mb-4">{t('currentActiveConversations')}</p>
+                    <p className="text-sm text-gray-500 mb-4">{t('currentActiveConversations')}</p>
                     <div className="flex items-end space-x-2">
                         <span className="text-4xl font-bold">{groupConfig.activeConversations}</span>
-                        <span className="text-gray-500 dark:text-gray-300 pb-1">/ 1500 {t('conversationsInPlan')}</span>
+                        <span className="text-gray-500 pb-1">/ 1500 {t('conversationsInPlan')}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 my-4">
+                    <div className="w-full bg-gray-200 rounded-full h-2.5 my-4">
                         <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${usagePercentage}%` }}></div>
                     </div>
                     <div className="flex justify-between text-sm font-medium">
-                        <span className="text-gray-600 dark:text-gray-200">{usagePercentage.toFixed(1)}% {t('used')}</span>
-                        <span className="text-green-600 dark:text-green-400">{1500 - groupConfig.activeConversations} {t('remaining')}</span>
+                        <span className="text-gray-600">{usagePercentage.toFixed(1)}% {t('used')}</span>
+                        <span className="text-green-600">{1500 - groupConfig.activeConversations} {t('remaining')}</span>
                     </div>
                 </div>
                 )}
 
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                <div className="bg-white p-6 rounded-lg shadow-md">
                     <h2 className="text-xl font-semibold mb-1">{t('bookingMethod')}</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-300 mb-4">{t('aiHandlesBooking')}</p>
+                    <p className="text-sm text-gray-500 mb-4">{t('aiHandlesBooking')}</p>
                     <div className="space-y-3">
                         {[AiBookingMethod.Full, AiBookingMethod.WebsiteOnly].map(method => (
                             <div
                                 key={method}
                                 onClick={() => handleConfigChange('bookingMethod', method)}
-                                className={`p-4 border rounded-lg cursor-pointer transition-all ${groupConfig.bookingMethod === method ? 'bg-orange-50 border-orange-500 dark:bg-orange-900/20 dark:border-orange-500' : 'bg-gray-50 hover:bg-gray-100 dark:bg-gray-700/50 dark:border-gray-600 dark:hover:bg-gray-700'}`}
+                                className={`p-4 border rounded-lg cursor-pointer transition-all ${groupConfig.bookingMethod === method ? 'bg-orange-50 border-orange-500' : 'bg-gray-50 hover:bg-gray-100'}`}
                             >
-                                <h3 className="font-semibold text-gray-800 dark:text-gray-100">{t(method === AiBookingMethod.Full ? 'aiFullBooking' : 'websiteOnlyBooking')}</h3>
-                                <p className="text-xs text-gray-500 dark:text-gray-300 mt-1">
+                                <h3 className="font-semibold text-gray-800">{t(method === AiBookingMethod.Full ? 'aiFullBooking' : 'websiteOnlyBooking')}</h3>
+                                <p className="text-xs text-gray-500 mt-1">
                                     {t(method === AiBookingMethod.Full ? 'aiFullBookingDesc' : 'websiteOnlyBookingDesc')}
                                 </p>
                             </div>
@@ -174,20 +174,20 @@ const AiAgentComponent: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                <div className="bg-white p-6 rounded-lg shadow-md">
                     <h2 className="text-xl font-semibold mb-4">{t('discountSettings')}</h2>
                     <label className="flex items-center justify-between cursor-pointer">
-                        <span className="font-medium text-gray-700 dark:text-gray-200">{t('enableAiDiscount')}</span>
+                        <span className="font-medium text-gray-700">{t('enableAiDiscount')}</span>
                         <div className="relative">
                             <input type="checkbox" checked={groupConfig.discountEnabled} onChange={(e) => handleConfigChange('discountEnabled', e.target.checked)} className="sr-only peer" />
-                            <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-500"></div>
+                            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
                         </div>
                     </label>
                      {groupConfig.discountEnabled && (
-                        <div className="mt-4 pt-4 border-t dark:border-gray-700 space-y-4">
+                        <div className="mt-4 pt-4 border-t space-y-4">
                             <div>
                                 <div className="flex justify-between items-center mb-2">
-                                    <label className="font-medium text-gray-700 dark:text-gray-200">{t('discountAmount')}</label>
+                                    <label className="font-medium text-gray-700">{t('discountAmount')}</label>
                                     <EditSaveButtons
                                         isEditing={editModes.discount}
                                         onEdit={() => handleToggleEdit('discount', true)}
@@ -202,7 +202,7 @@ const AiAgentComponent: React.FC = () => {
                                         value={editModes.discount ? tempDiscountAmount : (groupConfig.discountAmount || 0)}
                                         onChange={(e) => setTempDiscountAmount(Number(e.target.value))}
                                         readOnly={!editModes.discount}
-                                        className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 read-only:bg-gray-100 dark:read-only:bg-gray-700/50"
+                                        className="w-full p-2 border rounded-md read-only:bg-gray-100"
                                         min="0" max="100"
                                     />
                                      {editModes.discount && (
@@ -213,15 +213,15 @@ const AiAgentComponent: React.FC = () => {
                                 </div>
                             </div>
                             <div>
-                                <label className="font-medium text-gray-700 dark:text-gray-200 mb-2 block">{t('couponCode')}</label>
+                                <label className="font-medium text-gray-700 mb-2 block">{t('couponCode')}</label>
                                 <div className="flex items-center space-x-2">
-                                    <p className="flex-grow p-2 border rounded-md bg-gray-100 dark:bg-gray-900/50 dark:border-gray-600 dark:text-gray-100 font-mono text-center tracking-widest">
+                                    <p className="flex-grow p-2 border rounded-md bg-gray-100 font-mono text-center tracking-widest">
                                         {groupConfig.couponCode || t('na')}
                                     </p>
-                                    <button type="button" onClick={generateCouponCode} className="p-2 bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300" title={t('generateNewCode')}>
+                                    <button type="button" onClick={generateCouponCode} className="p-2 bg-gray-200 rounded-md hover:bg-gray-300" title={t('generateNewCode')}>
                                         <i className="fas fa-sync-alt"></i>
                                     </button>
-                                    <button type="button" onClick={() => copyToClipboard(groupConfig.couponCode)} disabled={!groupConfig.couponCode} className="p-2 bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300 disabled:opacity-50" title={t('copyCode')}>
+                                    <button type="button" onClick={() => copyToClipboard(groupConfig.couponCode)} disabled={!groupConfig.couponCode} className="p-2 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50" title={t('copyCode')}>
                                         <i className="fas fa-copy"></i>
                                     </button>
                                 </div>
@@ -233,7 +233,7 @@ const AiAgentComponent: React.FC = () => {
             
             {/* Right Column */}
             <div className="space-y-6">
-                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-semibold">{t('welcomeMessage')}</h2>
                         <EditSaveButtons
@@ -250,15 +250,15 @@ const AiAgentComponent: React.FC = () => {
                         readOnly={!editModes.welcome}
                         rows={4}
                         maxLength={500}
-                        className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 focus:ring-orange-500 focus:border-orange-500 read-only:bg-gray-100 dark:read-only:bg-gray-700/50"
+                        className="w-full p-2 border rounded-md focus:ring-orange-500 focus:border-orange-500 read-only:bg-gray-100"
                         placeholder="Hello! Welcome to Riyadh Getaways. How can I help you today?"
                     ></textarea>
-                    <p className="text-end text-xs text-gray-400 dark:text-gray-300 mt-1">
+                    <p className="text-end text-xs text-gray-400 mt-1">
                         {editModes.welcome ? tempWelcomeMessage.length : groupConfig.welcomeMessage.length}/500
                     </p>
                 </div>
 
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                <div className="bg-white p-6 rounded-lg shadow-md">
                      <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-semibold">{t('reminders')}</h2>
                          <EditSaveButtons
@@ -274,24 +274,24 @@ const AiAgentComponent: React.FC = () => {
                             value={editModes.reminders ? tempReminders[0] || '' : groupConfig.reminders[0] || ''} 
                             onChange={e => setTempReminders([e.target.value, tempReminders[1]])} 
                             readOnly={!editModes.reminders}
-                            className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 read-only:bg-gray-100 dark:read-only:bg-gray-700/50"
+                            className="w-full p-2 border rounded-md read-only:bg-gray-100"
                             placeholder="Enter first reminder message..."
                         />
                          <input 
                             value={editModes.reminders ? tempReminders[1] || '' : groupConfig.reminders[1] || ''} 
                             onChange={e => setTempReminders([tempReminders[0], e.target.value])}
                             readOnly={!editModes.reminders}
-                            className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 read-only:bg-gray-100 dark:read-only:bg-gray-700/50"
+                            className="w-full p-2 border rounded-md read-only:bg-gray-100"
                             placeholder="Enter second reminder message..."
                         />
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                <div className="bg-white p-6 rounded-lg shadow-md">
                     <div className="flex justify-between items-center mb-4">
                         <div>
                             <h2 className="text-xl font-semibold">{t('customRoles')}</h2>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{t('addUpto10Roles')}</p>
+                            <p className="text-sm text-gray-500">{t('addUpto10Roles')}</p>
                         </div>
                         <EditSaveButtons
                             isEditing={editModes.roles}
@@ -307,14 +307,14 @@ const AiAgentComponent: React.FC = () => {
                                 value={tempNewRole}
                                 onChange={(e) => setTempNewRole(e.target.value)}
                                 placeholder={t('enterRole')}
-                                className="flex-grow p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
+                                className="flex-grow p-2 border rounded-md"
                             />
                             <button onClick={handleAddRole} disabled={tempRoles.length >= 10} className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 disabled:bg-orange-300">{t('add')}</button>
                         </div>
                      )}
                      <div className="mt-3 space-y-2">
                         {(editModes.roles ? tempRoles : groupConfig.customRoles).map((role, index) => (
-                            <div key={index} className="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-2 rounded-md">
+                            <div key={index} className="flex justify-between items-center bg-gray-100 p-2 rounded-md">
                                 <span className="text-sm">{role}</span>
                                 {editModes.roles && (
                                     <button onClick={() => handleRemoveRole(role)} className="text-red-500 hover:text-red-700 text-xs"><i className="fas fa-trash"></i></button>
@@ -347,20 +347,20 @@ const AiAgentContainer: React.FC = () => {
     return (
         <div className="max-w-5xl mx-auto space-y-6">
             {/* Combined total + per-group breakdown card */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div className="bg-white p-6 rounded-lg shadow-md">
                 {/* Total summary */}
                 <h2 className="text-xl font-semibold mb-1">{t('totalActiveConversations')}</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('acrossAllGroups')}</p>
+                <p className="text-sm text-gray-500 mb-4">{t('acrossAllGroups')}</p>
                 <div className="flex items-end space-x-2">
                     <span className="text-4xl font-bold">{totalActive.toLocaleString()}</span>
-                    <span className="text-gray-500 dark:text-gray-400 pb-1">/ {TOTAL_PLAN.toLocaleString()} {t('conversationsInPlan')}</span>
+                    <span className="text-gray-500 pb-1">/ {TOTAL_PLAN.toLocaleString()} {t('conversationsInPlan')}</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 my-4">
+                <div className="w-full bg-gray-200 rounded-full h-2.5 my-4">
                     <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${usagePercentage}%` }}></div>
                 </div>
                 <div className="flex justify-between text-sm font-medium mb-4">
-                    <span className="text-gray-600 dark:text-gray-300">{usagePercentage.toFixed(1)}% {t('used')}</span>
-                    <span className="text-green-600 dark:text-green-400">{(TOTAL_PLAN - totalActive).toLocaleString()} {t('remaining')}</span>
+                    <span className="text-gray-600">{usagePercentage.toFixed(1)}% {t('used')}</span>
+                    <span className="text-green-600">{(TOTAL_PLAN - totalActive).toLocaleString()} {t('remaining')}</span>
                 </div>
 
                 {/* Breakdown: each group's share of the total */}
@@ -382,13 +382,13 @@ const AiAgentContainer: React.FC = () => {
                             const groupPercentage = (cfg.activeConversations / TOTAL_PLAN) * 100;
                             const isSelected = currentGroupId !== 'all' && Number(currentGroupId) === Number(group.id);
                             return (
-                                <div key={group.id} className={`flex items-center gap-3 p-2 rounded-md ${isSelected ? 'bg-orange-50 dark:bg-orange-900/10 dark:text-white' : 'bg-transparent'}`}>
+                                <div key={group.id} className={`flex items-center gap-3 p-2 rounded-md ${isSelected ? 'bg-orange-50' : 'bg-transparent'}`}>
                                     <div className="min-w-40">
                                         <p className="font-medium truncate" title={group.name}>{group.name}</p>
                                         <p className={`text-xs ${isSelected ? 'dark:text-gray-200' : 'dark:text-gray-300'} text-gray-500`}>Consumed: {cfg.activeConversations.toLocaleString()}</p>
                                     </div>
                                     <div className="flex-1">
-                                        <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
                                             <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${Math.min(100, groupPercentage)}%` }}></div>
                                         </div>
                                     </div>
@@ -410,9 +410,9 @@ const AiAgentContainer: React.FC = () => {
             {/* Settings panel */}
             {currentGroupId === 'all' ? (
                 <div className="text-center p-4">
-                    <i className="fas fa-info-circle text-2xl text-gray-400 dark:text-gray-500 mb-3"></i>
+                    <i className="fas fa-info-circle text-2xl text-gray-400 mb-3"></i>
                     <h3 className="text-lg font-semibold">{t('manageAiAgentSettings')}</h3>
-                    <p className="text-gray-500 dark:text-gray-400">{t('selectGroupToConfigureAi')}</p>
+                    <p className="text-gray-500">{t('selectGroupToConfigureAi')}</p>
                 </div>
             ) : (
                 <AiAgentComponent key={currentGroupId as any} />

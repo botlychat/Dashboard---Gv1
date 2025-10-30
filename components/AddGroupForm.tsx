@@ -84,8 +84,8 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
             `}</style>
             <div className="space-y-6">
                 
-                <div className="border-b dark:border-gray-700 pb-6">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">{t('groupInformation')}</h3>
+                <div className="border-b pb-6">
+                    <h3 className="text-lg font-medium leading-6 text-gray-900">{t('groupInformation')}</h3>
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="form-label">{t('groupName')}</label>
@@ -110,8 +110,8 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
                     </div>
                 </div>
 
-                <div className="border-b dark:border-gray-700 pb-6">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">{t('locationAndContact')}</h3>
+                <div className="border-b pb-6">
+                    <h3 className="text-lg font-medium leading-6 text-gray-900">{t('locationAndContact')}</h3>
                     <div className="mt-4 space-y-4">
                         <div>
                             <label className="form-label">{t('locationDescription')}</label>
@@ -133,8 +133,8 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
                     </div>
                 </div>
                 
-                <div className="border-b dark:border-gray-700 pb-6">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">{t('bankDetails')}</h3>
+                <div className="border-b pb-6">
+                    <h3 className="text-lg font-medium leading-6 text-gray-900">{t('bankDetails')}</h3>
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="form-label">{t('bankName')}</label>
@@ -152,7 +152,7 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
                 </div>
 
                 <div>
-                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">{t('socialMedia')}</h3>
+                    <h3 className="text-lg font-medium leading-6 text-gray-900">{t('socialMedia')}</h3>
                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label htmlFor="instagram" className="form-label flex items-center"><i className="fab fa-instagram w-5 me-2 text-gray-400"></i>{t('instagram')}</label>
@@ -174,8 +174,8 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({ onAddGroup, onClose }) => {
                 </div>
 
             </div>
-            <div className="flex justify-end space-x-3 pt-6 mt-6 border-t dark:border-gray-700">
-                <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+            <div className="flex justify-end space-x-3 pt-6 mt-6 border-t">
+                <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
                     {t('cancel')}
                 </button>
                 <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600">

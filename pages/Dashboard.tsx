@@ -7,24 +7,24 @@ import { Booking, BookingStatus, Unit, currencySymbols, currencyNames } from '..
 import { useGroup, useAccount, useGlobalActions, useLanguage, useTheme } from '../App';
 
 const StatCard: React.FC<{ icon: string; title: string; value: string | number; color: string }> = ({ icon, title, value, color }) => (
-    <div className="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow-md flex flex-col md:flex-row md:items-center md:space-x-4 gap-2 md:gap-0">
+    <div className="bg-white p-3 md:p-6 rounded-lg shadow-md flex flex-col md:flex-row md:items-center md:space-x-4 gap-2 md:gap-0">
         <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center ${color} flex-shrink-0`}>
             <i className={`fas ${icon} text-white text-lg md:text-xl`}></i>
         </div>
         <div className="flex-1">
-            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-300">{title}</p>
-            <p className="text-lg md:text-2xl font-bold text-gray-800 dark:text-white">{value}</p>
+            <p className="text-xs md:text-sm text-gray-500">{title}</p>
+            <p className="text-lg md:text-2xl font-bold text-gray-800">{value}</p>
         </div>
     </div>
 );
 
 const getStatusColor = (status: BookingStatus) => {
     switch (status) {
-        case BookingStatus.Confirmed: return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-        case BookingStatus.Pending: return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
-        case BookingStatus.InProgress: return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
-        case BookingStatus.Cancelled: return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
-        default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+        case BookingStatus.Confirmed: return 'bg-green-100 text-green-800';
+        case BookingStatus.Pending: return 'bg-blue-100 text-blue-800';
+        case BookingStatus.InProgress: return 'bg-yellow-100 text-yellow-800';
+        case BookingStatus.Cancelled: return 'bg-red-100 text-red-800';
+        default: return 'bg-gray-100 text-gray-800';
     }
 };
 
@@ -148,14 +148,14 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+            <div className="bg-white p-4 rounded-lg shadow-md">
                  <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                        <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">{t('overviewForPeriod')}</h2>
+                        <h2 className="text-lg font-semibold text-gray-700">{t('overviewForPeriod')}</h2>
                          <div className="flex items-center space-x-2">
-                            <input type="date" name="from" value={dateRange.from} onChange={handleDateChange} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 text-sm"/>
+                            <input type="date" name="from" value={dateRange.from} onChange={handleDateChange} className="p-2 border rounded-md text-sm"/>
                             <span className="text-gray-500">{t('to')}</span>
-                            <input type="date" name="to" value={dateRange.to} min={dateRange.from} onChange={handleDateChange} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 text-sm"/>
+                            <input type="date" name="to" value={dateRange.to} min={dateRange.from} onChange={handleDateChange} className="p-2 border rounded-md text-sm"/>
                         </div>
                     </div>
                     <div className="flex flex-row items-center justify-center gap-2">
@@ -169,7 +169,7 @@ const Dashboard: React.FC = () => {
                         </button>
                         <NavLink
                             to="/calendar"
-                            className="flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm font-medium justify-center"
+                            className="flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium justify-center"
                         >
                             <i className="fas fa-calendar-alt me-2"></i>
                             <span>{t('viewCalendar')}</span>
@@ -185,7 +185,7 @@ const Dashboard: React.FC = () => {
                 <StatCard icon="fa-chart-line" title={t('occupancyRate')} value={stats.occupancyRate} color="bg-orange-500" />
             </div>
 
-            <div className="hidden md:block bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div className="hidden md:block bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-xl font-semibold mb-4">{t('monthlyRevenueAndBookings')}</h2>
                 <div style={{ width: '100%', height: 300 }}>
                     <ResponsiveContainer>
@@ -203,7 +203,7 @@ const Dashboard: React.FC = () => {
                 </div>
             </div>
             
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div className="bg-white p-6 rounded-lg shadow-md">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">{t('recentBookings')}</h2>
                     <NavLink to="/calendar" className="text-orange-500 hover:text-orange-600 font-medium">{t('viewAll')}</NavLink>
@@ -211,7 +211,7 @@ const Dashboard: React.FC = () => {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="text-gray-500 dark:text-gray-300 border-b dark:border-gray-700">
+                            <tr className="text-gray-500 border-b">
                                 <th className="py-3 px-4 font-medium">{t('client')}</th>
                                 <th className="py-3 px-4 font-medium">{t('unit')}</th>
                                 <th className="py-3 px-4 font-medium">{t('dates')}</th>
@@ -223,7 +223,7 @@ const Dashboard: React.FC = () => {
                             {recentBookings.map(booking => {
                                 const unit = units.find(u => u.id === booking.unitId);
                                 return (
-                                    <tr key={booking.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <tr key={booking.id} className="border-b hover:bg-gray-50">
                                         <td className="py-3 px-4">{booking.clientName}</td>
                                         <td className="py-3 px-4">{unit?.name || t('na')}</td>
                                         <td className="py-3 px-4">{new Date(booking.checkIn).toLocaleDateString()} - {new Date(booking.checkOut).toLocaleDateString()}</td>

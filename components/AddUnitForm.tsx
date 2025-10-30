@@ -262,14 +262,14 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
             .form-checkbox { height: 1.25rem; width: 1.25rem; border-radius: 0.25rem; border-color: #d1d5db; color: #f97316; }
             html.dark .form-checkbox { background-color: #374151; border-color: #6b7280;}
       `}</style>
-      <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
+      <div className="border-b border-gray-200 mb-4">
           <nav className="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">
               {TABS.map(tab => (
                   <button
                       key={tab}
                       type="button"
                       onClick={() => setActiveTab(tab)}
-                      className={`whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm ${activeTab === tab ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200'}`}
+                      className={`whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm ${activeTab === tab ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
                   >
                       {tab}
                   </button>
@@ -279,8 +279,8 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
 
       <div className="space-y-4">{renderContent()}</div>
 
-      <div className="flex justify-end space-x-3 pt-6 mt-6 border-t dark:border-gray-700">
-          <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+      <div className="flex justify-end space-x-3 pt-6 mt-6 border-t">
+          <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
               {t('cancel')}
           </button>
           <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md shadow-sm hover:bg-orange-600">
@@ -360,7 +360,7 @@ const PricingTab = ({ formData, handleChange, handleWeekdayPriceChange, currency
                 <p className="text-xs text-gray-500 mt-1">This will be used if a specific day's price isn't set.</p>
             </div>
             <div className="pt-2">
-                <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Weekday Pricing Overrides (per night)</h4>
+                <h4 className="font-medium text-gray-800 mb-2">Weekday Pricing Overrides (per night)</h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
                     {weekdays.map((day, i) => (
                          <div key={day}>
@@ -379,7 +379,7 @@ const PricingTab = ({ formData, handleChange, handleWeekdayPriceChange, currency
                 </div>
             </div>
              <div className="pt-2 text-gray-500">
-                <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Special Date Overrides</h4>
+                <h4 className="font-medium text-gray-800 mb-2">Special Date Overrides</h4>
                 <p className="text-sm">Create and manage specific date overrides from the main Calendar page by clicking the '+' on a date.</p>
             </div>
         </div>
@@ -448,7 +448,7 @@ const AmenitiesTab = ({ formData, setFormData, t }: any) => {
         </div>
         <div>
             <label className="form-label">Bedrooms ({formData.bedrooms.length})</label>
-            <div className="space-y-2 p-3 border dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-900/50">
+            <div className="space-y-2 p-3 border rounded-md bg-gray-50">
                 {formData.bedrooms.map((bed: Bedroom, index: number) => (
                     <div key={bed.id} className="flex items-center space-x-2">
                         <span className="text-gray-500 font-medium">{index + 1}.</span>
@@ -464,7 +464,7 @@ const AmenitiesTab = ({ formData, setFormData, t }: any) => {
                         </button>
                     </div>
                 ))}
-                <button type="button" onClick={handleAddBedroom} className="w-full text-sm py-2 text-orange-600 font-semibold hover:bg-orange-50 dark:hover:bg-gray-700 rounded-md">
+                <button type="button" onClick={handleAddBedroom} className="w-full text-sm py-2 text-orange-600 font-semibold hover:bg-orange-50 rounded-md">
                     <i className="fas fa-plus me-2"></i>Add Bedroom
                 </button>
             </div>

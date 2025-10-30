@@ -119,31 +119,31 @@ const Contacts: React.FC = () => {
                 units={allUnits}
                 unitGroups={allGroups}
             />
-            <div className="bg-white dark:bg-gray-800 p-3 md:p-4 rounded-lg shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+            <div className="bg-white p-3 md:p-4 rounded-lg shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                  <h2 className="text-lg md:text-xl font-semibold truncate">{t('contactsManagement')}</h2>
                  <div className="flex flex-wrap gap-2 w-full md:w-auto">
                     <button onClick={() => setCampaignModalOpen(true)} className="flex-1 md:flex-none px-2 md:px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 flex items-center justify-center md:justify-start text-sm md:text-base"><i className="fab fa-whatsapp me-1 md:me-2"></i><span className="hidden sm:inline">{t('whatsAppCampaign')}</span><span className="sm:hidden">WhatsApp</span></button>
-                    <button className="flex-1 md:flex-none px-2 md:px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center justify-center md:justify-start text-sm md:text-base"><i className="fas fa-download me-1 md:me-2"></i><span className="hidden sm:inline">{t('exportAll')}</span><span className="sm:hidden">All</span></button>
-                    <button disabled={selectedIds.length === 0} className="flex-1 md:flex-none px-2 md:px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center justify-center md:justify-start text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"><i className="fas fa-download me-1 md:me-2"></i><span className="hidden sm:inline">{t('exportSelected')}</span><span className="sm:hidden">Selected</span></button>
+                    <button className="flex-1 md:flex-none px-2 md:px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 flex items-center justify-center md:justify-start text-sm md:text-base"><i className="fas fa-download me-1 md:me-2"></i><span className="hidden sm:inline">{t('exportAll')}</span><span className="sm:hidden">All</span></button>
+                    <button disabled={selectedIds.length === 0} className="flex-1 md:flex-none px-2 md:px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 flex items-center justify-center md:justify-start text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"><i className="fas fa-download me-1 md:me-2"></i><span className="hidden sm:inline">{t('exportSelected')}</span><span className="sm:hidden">Selected</span></button>
                  </div>
             </div>
-            <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border dark:border-gray-700">
+            <div className="bg-gray-50 p-4 rounded-lg border">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
-                    <input name="name" value={filters.name} onChange={handleFilterChange} placeholder={t('filterByName')} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    <input name="phone" value={filters.phone} onChange={handleFilterChange} placeholder={t('filterByPhone')} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    <input name="email" value={filters.email} onChange={handleFilterChange} placeholder={t('filterByEmail')} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" />
-                    <select name="unit" value={filters.unit} onChange={handleFilterChange} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600">
+                    <input name="name" value={filters.name} onChange={handleFilterChange} placeholder={t('filterByName')} className="p-2 border rounded-md" />
+                    <input name="phone" value={filters.phone} onChange={handleFilterChange} placeholder={t('filterByPhone')} className="p-2 border rounded-md" />
+                    <input name="email" value={filters.email} onChange={handleFilterChange} placeholder={t('filterByEmail')} className="p-2 border rounded-md" />
+                    <select name="unit" value={filters.unit} onChange={handleFilterChange} className="p-2 border rounded-md">
                         <option value="all">{t('allUnits')}</option>
                         {allUnits.map(u => <option key={u.id} value={u.name}>{u.name}</option>)}
                     </select>
-                    <button onClick={clearFilters} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">{t('clearFilters')}</button>
+                    <button onClick={clearFilters} className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">{t('clearFilters')}</button>
                 </div>
             </div>
             
-             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+             <div className="bg-white rounded-lg shadow-md overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-700 dark:text-gray-400 uppercase">
+                        <thead className="bg-gray-50 text-xs text-gray-700 uppercase">
                             <tr>
                                 <th className="p-4"><input type="checkbox" checked={isAllSelected} onChange={toggleSelectAll} className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"/></th>
                                 <th className="p-4">{t('name')}</th>
@@ -159,9 +159,9 @@ const Contacts: React.FC = () => {
                         </thead>
                         <tbody>
                             {paginatedContacts.map(contact => (
-                                <tr key={contact.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/50">
+                                <tr key={contact.id} className="border-b hover:bg-gray-50">
                                     <td className="p-4"><input type="checkbox" checked={selectedIds.includes(contact.id)} onChange={() => toggleSelect(contact.id)} className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"/></td>
-                                    <td className="p-4 font-semibold text-gray-900 dark:text-white">{contact.name}</td>
+                                    <td className="p-4 font-semibold text-gray-900">{contact.name}</td>
                                     <td className="p-4">{contact.phone}</td>
                                     <td className="p-4">{contact.email}</td>
                                     <td className="p-4">{contact.lastGroup}</td>
@@ -169,7 +169,7 @@ const Contacts: React.FC = () => {
                                     <td className="p-4">{contact.lastBooking}</td>
                                     <td className="p-4 text-orange-500 font-bold">{contact.review}⭐</td>
                                     <td className="p-4">
-                                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${contact.payment === 'Paid' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'}`}>
+                                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${contact.payment === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
                                             {t(contact.payment === 'Paid' ? 'paymentPaid' : 'paymentPending')}
                                         </span>
                                     </td>
@@ -184,18 +184,18 @@ const Contacts: React.FC = () => {
                         </tbody>
                     </table>
                 </div>
-                 <div className="p-4 bg-gray-50 dark:bg-gray-800/50 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <span className="text-sm text-gray-700 dark:text-gray-400">
+                 <div className="p-4 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <span className="text-sm text-gray-700">
                         {t('showingContacts', { start: filteredContacts.length > 0 ? pageStart : 0, end: pageEnd, total: filteredContacts.length })}
                     </span>
                     <div className="flex items-center space-x-2">
-                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50"><i className="fas fa-chevron-left"></i></button>
-                        <input type="number" value={currentPage} onChange={e => setCurrentPage(Math.max(1, Math.min(totalPages, Number(e.target.value) || 1)))} min="1" max={totalPages} className="w-16 p-2 text-center border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
+                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 rounded-md hover:bg-gray-200 disabled:opacity-50"><i className="fas fa-chevron-left"></i></button>
+                        <input type="number" value={currentPage} onChange={e => setCurrentPage(Math.max(1, Math.min(totalPages, Number(e.target.value) || 1)))} min="1" max={totalPages} className="w-16 p-2 text-center border rounded-md"/>
                         <span>{t('of')} {totalPages}</span>
-                        <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50"><i className="fas fa-chevron-right"></i></button>
+                        <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-2 rounded-md hover:bg-gray-200 disabled:opacity-50"><i className="fas fa-chevron-right"></i></button>
                     </div>
                 </div>
-                <div className="text-end px-4 pb-2 text-xs text-gray-500 dark:text-gray-500">
+                <div className="text-end px-4 pb-2 text-xs text-gray-500">
                      {t('selectedContacts', { count: selectedIds.length })}
                 </div>
             </div>

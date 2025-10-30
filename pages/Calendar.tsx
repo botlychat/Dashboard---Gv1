@@ -15,36 +15,36 @@ const getBookingStatusConfig = (status: BookingStatus, t: (key: string) => strin
     switch (status) {
         case BookingStatus.Confirmed:
             return {
-                bgColor: 'bg-green-100 dark:bg-green-900',
-                textColor: 'text-green-800 dark:text-green-200',
+                bgColor: 'bg-green-100',
+                textColor: 'text-green-800',
                 borderColor: 'border-green-500',
                 label: t('statusConfirmed')
             };
         case BookingStatus.InProgress:
             return {
-                bgColor: 'bg-yellow-100 dark:bg-yellow-900',
-                textColor: 'text-yellow-800 dark:text-yellow-200',
+                bgColor: 'bg-yellow-100',
+                textColor: 'text-yellow-800',
                 borderColor: 'border-yellow-500',
                 label: t('statusInProgress')
             };
         case BookingStatus.Pending:
             return {
-                bgColor: 'bg-blue-100 dark:bg-blue-900',
-                textColor: 'text-blue-800 dark:text-blue-200',
+                bgColor: 'bg-blue-100',
+                textColor: 'text-blue-800',
                 borderColor: 'border-blue-500',
                 label: t('statusPending')
             };
         case BookingStatus.Cancelled:
             return {
-                bgColor: 'bg-red-100 dark:bg-red-900',
-                textColor: 'text-red-800 dark:text-red-200',
+                bgColor: 'bg-red-100',
+                textColor: 'text-red-800',
                 borderColor: 'border-red-500',
                 label: t('statusCancelled')
             };
         default:
             return {
-                bgColor: 'bg-gray-100 dark:bg-gray-700',
-                textColor: 'text-gray-800 dark:text-gray-200',
+                bgColor: 'bg-gray-100',
+                textColor: 'text-gray-800',
                 borderColor: 'border-gray-500',
                 label: 'Unknown'
             };
@@ -373,49 +373,49 @@ const Calendar: React.FC = () => {
         </SidePanel>
 
 
-        <div className="bg-white dark:bg-gray-800 p-2 sm:p-6 rounded-lg shadow-md">
+        <div className="bg-white p-2 sm:p-6 rounded-lg shadow-md">
             <div className="flex flex-wrap items-center justify-between mb-6 gap-4">
                 <div className="flex items-center space-x-2">
-                    <button onClick={prevMonth} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <button onClick={prevMonth} className="p-2 rounded-full hover:bg-gray-100">
                         <i className="fas fa-chevron-left"></i>
                     </button>
                     <h2 className="text-xl font-semibold">
                         {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
                     </h2>
-                    <button onClick={nextMonth} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <button onClick={nextMonth} className="p-2 rounded-full hover:bg-gray-100">
                         <i className="fas fa-chevron-right"></i>
                     </button>
-                    <button onClick={today} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600">{t('today')}</button>
+                    <button onClick={today} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100">{t('today')}</button>
                 </div>
                 <div className="flex items-center space-x-2">
-                     <button onClick={() => setIsSyncPanelOpen(true)} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600 flex items-center">
+                     <button onClick={() => setIsSyncPanelOpen(true)} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100 flex items-center">
                         <i className="fas fa-sync-alt me-2"></i>{t('syncCalendar')}
                     </button>
-                    <button onClick={() => setIsGetUrlPanelOpen(true)} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600 flex items-center">
+                    <button onClick={() => setIsGetUrlPanelOpen(true)} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100 flex items-center">
                         <i className="fas fa-link me-2"></i>{t('getURL')}
                     </button>
                     <div className="relative" ref={filterRef}>
-                        <button onClick={() => setFilterOpen(!isFilterOpen)} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600 flex items-center">
+                        <button onClick={() => setFilterOpen(!isFilterOpen)} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100 flex items-center">
                             {t('filterByUnit', { count: selectedUnitIds.length })}
                             <i className={`fas fa-chevron-down ms-2 text-xs transition-transform ${isFilterOpen ? 'rotate-180' : ''}`}></i>
                         </button>
                         {isFilterOpen && (
-                            <div className="absolute z-10 mt-2 w-64 max-h-60 overflow-y-auto rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 end-0">
+                            <div className="absolute z-10 mt-2 w-64 max-h-60 overflow-y-auto rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 end-0">
                                 <div className="p-2">
                                     {units.map(unit => (
-                                        <label key={unit.id} className="flex items-center px-2 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md cursor-pointer">
+                                        <label key={unit.id} className="flex items-center px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
                                             <input
                                                 type="checkbox"
                                                 checked={selectedUnitIds.includes(unit.id)}
                                                 onChange={() => handleUnitSelection(unit.id)}
-                                                className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500 dark:bg-gray-800 dark:border-gray-600"
+                                                className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                                             />
                                             <span className="ms-3">{unit.name}</span>
                                         </label>
                                     ))}
                                 </div>
                                 {units.length > 0 && 
-                                    <div className="border-t border-gray-200 dark:border-gray-600 px-4 py-2 flex justify-between">
+                                    <div className="border-t border-gray-200 px-4 py-2 flex justify-between">
                                         <button onClick={() => setSelectedUnitIds(units.map(u => u.id))} className="text-xs text-orange-500 hover:text-orange-700">{t('selectAll')}</button>
                                         <button onClick={() => setSelectedUnitIds([])} className="text-xs text-gray-500 hover:text-gray-700">{t('clearAll')}</button>
                                     </div>
@@ -428,7 +428,7 @@ const Calendar: React.FC = () => {
                     </button>
                 </div>
             </div>
-            <div className="grid grid-cols-7 text-center font-semibold text-gray-600 dark:text-gray-300 border-b dark:border-gray-700 pb-2 mb-2">
+            <div className="grid grid-cols-7 text-center font-semibold text-gray-600 border-b pb-2 mb-2">
                 {dayHeaderKeys.map(dayKey => <div key={dayKey}>{t(dayKey)}</div>)}
             </div>
             <div className="relative overflow-visible">
@@ -465,7 +465,7 @@ const Calendar: React.FC = () => {
                                         <div
                                             key={booking.id}
                                             onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
-                                            className={`py-1.5 px-1.5 text-xs rounded-md border-s-4 pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 dark:bg-gray-600 border-gray-400 cursor-not-allowed text-gray-700 dark:text-gray-300' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
+                                            className={`py-1.5 px-1.5 text-xs rounded-md border-s-4 pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 border-gray-400 cursor-not-allowed text-gray-700' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
                                             style={{
                                                 gridRow: row,
                                                 gridColumn: `${col} / span ${daysInFirstWeek}`,
@@ -508,27 +508,27 @@ const Calendar: React.FC = () => {
                         const showPrice = currentGroupId !== 'all';
 
                         return (
-                            <div key={index} className={`relative border dark:border-gray-700 min-h-[9rem] flex flex-col p-1.5 group overflow-visible ${isCurrentMonth ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/50'}`}>
+                            <div key={index} className={`relative border min-h-[9rem] flex flex-col p-1.5 group overflow-visible ${isCurrentMonth ? 'bg-white' : 'bg-gray-50'}`}>
                                 <div className="flex justify-between items-start">
-                                    <span className={`text-sm font-medium self-start mb-1 ${isToday ? 'bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center' : ''} ${!isCurrentMonth ? 'text-gray-400 dark:text-gray-400' : ''}`}>
+                                    <span className={`text-sm font-medium self-start mb-1 ${isToday ? 'bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center' : ''} ${!isCurrentMonth ? 'text-gray-400' : ''}`}>
                                         {date.getDate()}
                                     </span>
                                     <div className="relative">
-                                        <button onClick={(e) => handleActionMenuClick(date, e)} className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 rounded-full">
+                                        <button onClick={(e) => handleActionMenuClick(date, e)} className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-gray-600 p-1 rounded-full">
                                             <i className="fas fa-plus-circle"></i>
                                         </button>
                                         {actionMenuDate?.getTime() === date.getTime() && (
-                                            <div ref={actionMenuRef} className={`absolute z-20 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 text-start overflow-hidden ${actionMenuPosition === 'left' ? 'start-0' : 'end-0'}`}>
-                                                <button onClick={() => handleAddBookingFromDate(date)} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-plus me-2"></i>{t('addNewBooking')}</button>
-                                                <button onClick={() => openActionPanel(date, 'closeUnits')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-lock me-2"></i>{t('closeUnits')}</button>
-                                                <button onClick={() => openActionPanel(date, 'adjustPrice')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-dollar-sign me-2"></i>{t('adjustDayPrice')}</button>
+                                            <div ref={actionMenuRef} className={`absolute z-20 mt-2 w-48 bg-white rounded-md shadow-lg border text-start overflow-hidden ${actionMenuPosition === 'left' ? 'start-0' : 'end-0'}`}>
+                                                <button onClick={() => handleAddBookingFromDate(date)} className="block w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i className="fas fa-plus me-2"></i>{t('addNewBooking')}</button>
+                                                <button onClick={() => openActionPanel(date, 'closeUnits')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i className="fas fa-lock me-2"></i>{t('closeUnits')}</button>
+                                                <button onClick={() => openActionPanel(date, 'adjustPrice')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i className="fas fa-dollar-sign me-2"></i>{t('adjustDayPrice')}</button>
                                             </div>
                                         )}
                                     </div>
                                 </div>
 
                                  {dailyPrice && !dayBookings.length && showPrice && (
-                                    <div className="absolute bottom-1 end-1 text-xs text-green-600 dark:text-green-400 font-semibold p-1 bg-green-50 dark:bg-green-900/50 rounded">
+                                    <div className="absolute bottom-1 end-1 text-xs text-green-600 font-semibold p-1 bg-green-50 rounded">
                                         {currencySymbols[accountSettings.currency]}{dailyPrice} {currencyNames[language][accountSettings.currency]}
                                     </div>
                                 )}
@@ -550,7 +550,7 @@ const Calendar: React.FC = () => {
                                             <div 
                                                 key={booking.id} 
                                                 onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
-                                                className={`py-1.5 px-1.5 rounded-md truncate border-s-4 ${isBlocker ? 'bg-gray-200 dark:bg-gray-600 border-gray-400 cursor-not-allowed text-gray-700 dark:text-gray-300' : `cursor-pointer ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`} 
+                                                className={`py-1.5 px-1.5 rounded-md truncate border-s-4 ${isBlocker ? 'bg-gray-200 border-gray-400 cursor-not-allowed text-gray-700' : `cursor-pointer ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`} 
                                                 title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}>
                                                 
                                                  {isBlocker ? (

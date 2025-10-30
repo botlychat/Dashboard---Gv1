@@ -13,32 +13,32 @@ const getBookingStatusConfig = (status: BookingStatus, t: (key: string) => strin
     switch (status) {
         case BookingStatus.Confirmed:
             return {
-                bgColor: 'bg-green-100 dark:bg-green-900',
-                textColor: 'text-green-800 dark:text-green-300',
+                bgColor: 'bg-green-100',
+                textColor: 'text-green-800',
                 label: t('active')
             };
         case BookingStatus.InProgress:
             return {
-                bgColor: 'bg-yellow-100 dark:bg-yellow-900',
-                textColor: 'text-yellow-800 dark:text-yellow-300',
+                bgColor: 'bg-yellow-100',
+                textColor: 'text-yellow-800',
                 label: t('underBooking')
             };
         case BookingStatus.Pending:
             return {
-                bgColor: 'bg-blue-100 dark:bg-blue-900',
-                textColor: 'text-blue-800 dark:text-blue-300',
+                bgColor: 'bg-blue-100',
+                textColor: 'text-blue-800',
                 label: t('waitingApproval')
             };
         case BookingStatus.Cancelled:
             return {
-                bgColor: 'bg-red-100 dark:bg-red-900',
-                textColor: 'text-red-800 dark:text-red-300',
+                bgColor: 'bg-red-100',
+                textColor: 'text-red-800',
                 label: t('canceled')
             };
         default:
             return {
-                bgColor: 'bg-gray-100 dark:bg-gray-700',
-                textColor: 'text-gray-800 dark:text-gray-200',
+                bgColor: 'bg-gray-100',
+                textColor: 'text-gray-800',
                 label: t('unknown')
             };
     }
@@ -46,17 +46,17 @@ const getBookingStatusConfig = (status: BookingStatus, t: (key: string) => strin
 
 const InfoBlock: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
     <div>
-        <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">{title}</h4>
-        <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg space-y-2">{children}</div>
+        <h4 className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wider">{title}</h4>
+        <div className="bg-gray-50 p-4 rounded-lg space-y-2">{children}</div>
     </div>
 );
 
 const InfoItem: React.FC<{ icon: string; label: string; value?: React.ReactNode }> = ({ icon, label, value }) => (
     <div className="flex items-start">
-        <i className={`fas ${icon} w-5 text-center text-gray-400 dark:text-gray-500 mt-1`}></i>
+        <i className={`fas ${icon} w-5 text-center text-gray-400 mt-1`}></i>
         <div className="ml-3">
-            <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
-            <p className="font-medium text-gray-800 dark:text-gray-200">{value}</p>
+            <p className="text-sm text-gray-500">{label}</p>
+            <p className="font-medium text-gray-800">{value}</p>
         </div>
     </div>
 );
@@ -105,23 +105,23 @@ const BookingDetailsPanel: React.FC<BookingDetailsPanelProps> = ({ booking, unit
                  <InfoBlock title={t('financials')}>
                      <div className="space-y-3">
                          <div className="flex justify-between items-center text-lg">
-                             <span className="text-gray-600 dark:text-gray-300">{t('totalPrice')}:</span>
-                             <span className="font-bold text-gray-900 dark:text-white">{currencySymbol}{booking.price.toLocaleString()}</span>
+                             <span className="text-gray-600">{t('totalPrice')}:</span>
+                             <span className="font-bold text-gray-900">{currencySymbol}{booking.price.toLocaleString()}</span>
                          </div>
                          <div className="flex justify-between items-center text-sm">
-                             <span className="text-gray-500 dark:text-gray-400">{t('paidAmount')}:</span>
-                             <span className="font-medium text-green-600 dark:text-green-400">{currencySymbol}{(booking.paidAmount || 0).toLocaleString()}</span>
+                             <span className="text-gray-500">{t('paidAmount')}:</span>
+                             <span className="font-medium text-green-600">{currencySymbol}{(booking.paidAmount || 0).toLocaleString()}</span>
                          </div>
-                          <div className="border-t dark:border-gray-600 my-2"></div>
-                         <div className={`flex justify-between items-center text-lg font-bold ${balance > 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-800 dark:text-gray-200'}`}>
+                          <div className="border-t my-2"></div>
+                         <div className={`flex justify-between items-center text-lg font-bold ${balance > 0 ? 'text-red-600' : 'text-gray-800'}`}>
                              <span>{t('balanceDue')}:</span>
                              <span>{currencySymbol}{balance.toLocaleString()}</span>
                          </div>
                      </div>
                 </InfoBlock>
             </div>
-            <div className="flex justify-end pt-6 mt-6 border-t dark:border-gray-700 space-x-2">
-                 <button onClick={onClose} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600">{t('close')}</button>
+            <div className="flex justify-end pt-6 mt-6 border-t space-x-2">
+                 <button onClick={onClose} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100">{t('close')}</button>
                  {canBeCancelled && (
                     <button onClick={() => onCancelBooking(booking.id)} className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700">{t('cancelReservation')}</button>
                  )}

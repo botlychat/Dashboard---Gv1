@@ -18,7 +18,7 @@ const GetCalendarUrlPanel: React.FC<GetCalendarUrlPanelProps> = ({ units }) => {
 
     return (
         <div className="space-y-6">
-            <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border-l-4 border-orange-500 text-orange-700 dark:text-orange-300">
+            <div className="p-4 bg-orange-50 border-l-4 border-orange-500 text-orange-700">
                 <h4 className="font-bold">💡 {t('howToUse')}:</h4>
                 <ol className="list-decimal list-inside mt-2 text-sm">
                     <li>{t('clickCopyUrlForAnyUnit')}</li>
@@ -27,22 +27,22 @@ const GetCalendarUrlPanel: React.FC<GetCalendarUrlPanelProps> = ({ units }) => {
                 </ol>
             </div>
             <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t('unitCalendarUrls')}</h3>
+                <h3 className="text-lg font-medium text-gray-900">{t('unitCalendarUrls')}</h3>
                 {units.map(unit => {
                     const calendarUrl = `https://www.riyadh-getaways.com/api/ical/${unit.id}/${Date.now().toString(36)}.ics`;
                     return (
-                        <div key={unit.id} className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-md">
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{unit.name}</label>
+                        <div key={unit.id} className="p-3 bg-gray-50 rounded-md">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{unit.name}</label>
                             <div className="flex items-center space-x-2">
                                 <input 
                                     type="text" 
                                     readOnly 
                                     value={calendarUrl} 
-                                    className="flex-grow bg-gray-100 dark:bg-gray-600 border-gray-300 dark:border-gray-500 rounded-md shadow-sm text-sm p-2" 
+                                    className="flex-grow bg-gray-100 border-gray-300 rounded-md shadow-sm text-sm p-2" 
                                 />
                                 <button
                                     onClick={() => handleCopy(unit.id, calendarUrl)}
-                                    className="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600"
+                                    className="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
                                 >
                                     {copiedUnitId === unit.id ? <><i className="fas fa-check text-green-500 mr-2"></i>{t('copied')}</> : <><i className="fas fa-copy mr-2"></i>{t('copy')}</>}
                                 </button>

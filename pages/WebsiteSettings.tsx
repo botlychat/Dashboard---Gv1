@@ -35,20 +35,20 @@ const WebsiteSettingsComponent: React.FC = () => {
 
     return (
          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">{t('homePagePicture')}</h2>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-4 border-b pb-2">{t('homePagePicture')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                     <div>
-                        <label htmlFor="image-upload" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('uploadNewImage')}</label>
+                        <label htmlFor="image-upload" className="block text-sm font-medium text-gray-700 mb-2">{t('uploadNewImage')}</label>
                         <input id="image-upload" type="file" accept="image/*" onChange={handleImageUpload} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"/>
                         <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 10MB.</p>
                     </div>
                     <div>
-                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('currentImagePreview')}</p>
+                        <p className="text-sm font-medium text-gray-700 mb-2">{t('currentImagePreview')}</p>
                         {imagePreview ? (
                             <img src={imagePreview} alt="Homepage" className="w-full h-48 object-cover rounded-lg shadow-inner" />
                         ) : (
-                            <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
                                 <span className="text-gray-500">{t('noImageSelected')}</span>
                             </div>
                         )}
@@ -56,31 +56,31 @@ const WebsiteSettingsComponent: React.FC = () => {
                 </div>
             </div>
             
-            <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">{t('themeColor')}</h2>
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-4 border-b pb-2">{t('themeColor')}</h2>
                  <div className="flex flex-col md:flex-row md:items-center gap-4">
                     <div className="flex items-center gap-2">
                         <input type="color" name="themeColor" value={groupSettings.themeColor} onChange={handleSettingChange} className="w-12 h-12 p-1 border-none rounded-md cursor-pointer flex-shrink-0"/>
-                        <label className="text-xs md:text-sm text-gray-600 dark:text-gray-400">{t('pickColor')}</label>
+                        <label className="text-xs md:text-sm text-gray-600">{t('pickColor')}</label>
                     </div>
-                    <input type="text" name="themeColor" value={groupSettings.themeColor} onChange={handleSettingChange} className="px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 focus:ring-orange-500 focus:border-orange-500 text-sm flex-1"/>
+                    <input type="text" name="themeColor" value={groupSettings.themeColor} onChange={handleSettingChange} className="px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500 text-sm flex-1"/>
                     <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
                         <div className="w-20 h-10 rounded-md flex-shrink-0" style={{backgroundColor: groupSettings.themeColor}}></div>
-                        <span className="font-mono text-xs md:text-sm text-gray-700 dark:text-gray-300">{groupSettings.themeColor}</span>
+                        <span className="font-mono text-xs md:text-sm text-gray-700">{groupSettings.themeColor}</span>
                     </div>
                  </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">{t('generalSettings')}</h2>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-4 border-b pb-2">{t('generalSettings')}</h2>
                 <div className="space-y-4">
                     <div>
-                        <label htmlFor="websiteTitle" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('websiteTitle')}</label>
-                        <input id="websiteTitle" name="websiteTitle" type="text" value={groupSettings.websiteTitle} onChange={handleSettingChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600"/>
+                        <label htmlFor="websiteTitle" className="block text-sm font-medium text-gray-700">{t('websiteTitle')}</label>
+                        <input id="websiteTitle" name="websiteTitle" type="text" value={groupSettings.websiteTitle} onChange={handleSettingChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"/>
                     </div>
                     <div>
-                        <label htmlFor="websiteDescription" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('websiteDescription')}</label>
-                        <textarea id="websiteDescription" name="websiteDescription" value={groupSettings.websiteDescription} onChange={handleSettingChange} rows={3} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600"></textarea>
+                        <label htmlFor="websiteDescription" className="block text-sm font-medium text-gray-700">{t('websiteDescription')}</label>
+                        <textarea id="websiteDescription" name="websiteDescription" value={groupSettings.websiteDescription} onChange={handleSettingChange} rows={3} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"></textarea>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@ const WebsiteSettingsContainer: React.FC = () => {
 
     if (currentGroupId === 'all') {
         return (
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md text-center">
+            <div className="bg-white p-8 rounded-lg shadow-md text-center">
                 <i className="fas fa-globe text-4xl text-gray-400 mb-4"></i>
                 <h2 className="text-xl font-semibold mb-2">{t('manageWebsiteSettings')}</h2>
                 <p className="text-gray-500">{t('selectGroupToConfigure')}</p>

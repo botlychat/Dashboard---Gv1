@@ -1,0 +1,32 @@
+/* Force light mode and prevent dark mode from activating */
+:root {
+  color-scheme: light only;
+}
+
+html {
+  color-scheme: light only;
+}
+
+/* Ensure body and root elements always have light background */
+body, #root {
+  background-color: white !important;
+  color: #1f2937 !important;
+}
+
+/* Override any system dark mode preferences */
+@media (prefers-color-scheme: dark) {
+  body, #root {
+    background-color: white !important;
+    color: #1f2937 !important;
+  }
+}
+
+/* Language toggle switch styling */
+.toggle-checkbox:checked {
+  right: 0;
+  border-color: #fb923c;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #fb923c;
+}

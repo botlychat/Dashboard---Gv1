@@ -293,11 +293,11 @@ const MainContent: React.FC = () => {
   const title = pageTitles[location.pathname] || t('dashboard');
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <div className="flex h-screen bg-white text-gray-900">
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header title={title} onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} />
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 p-4 sm:p-6">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-white p-4 sm:p-6">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/calendar" element={<Calendar />} />

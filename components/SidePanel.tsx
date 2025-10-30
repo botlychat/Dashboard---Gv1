@@ -37,17 +37,17 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, onClose, title, children 
       <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
         <div className={`relative w-screen max-w-3xl transform transition ease-in-out duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           {/* Panel content */}
-          <div className="flex h-full flex-col bg-white dark:bg-gray-800 shadow-xl">
+          <div className="flex h-full flex-col bg-white shadow-xl">
             {/* Header */}
-            <div className="bg-gray-50 dark:bg-gray-700 px-4 sm:px-6 py-4 flex-shrink-0 border-b dark:border-gray-600">
+            <div className="bg-gray-50 px-4 sm:px-6 py-4 flex-shrink-0 border-b border-gray-200">
               <div className="flex items-start justify-between">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white" id="slide-over-title">
+                <h2 className="text-xl font-semibold text-gray-900" id="slide-over-title">
                   {title}
                 </h2>
                 <div className="ml-3 flex h-7 items-center">
                   <button
                     type="button"
-                    className="p-1 rounded-md text-gray-400 dark:text-gray-300 hover:text-gray-500 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="p-1 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onClick={onClose}
                   >
                     <span className="sr-only">Close panel</span>
