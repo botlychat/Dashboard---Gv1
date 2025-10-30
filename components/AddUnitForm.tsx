@@ -142,7 +142,7 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, isMultiple: boolean) => {
       if (e.target.files) {
           const files = Array.from(e.target.files);
-          const readerPromises = files.map(file => new Promise<string>((resolve) => {
+          const readerPromises = files.map((file: File) => new Promise<string>((resolve) => {
               const reader = new FileReader();
               reader.onloadend = () => resolve(reader.result as string);
               reader.readAsDataURL(file);
@@ -161,7 +161,7 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
   const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
         const files = Array.from(e.target.files);
-        const validFiles = files.filter(file => {
+        const validFiles = files.filter((file: File) => {
             if (file.size > MAX_VIDEO_SIZE_BYTES) {
                 showToast(`File "${file.name}" is too large. Maximum size is ${MAX_VIDEO_SIZE_MB}MB.`, 'error');
                 return false;
@@ -169,7 +169,7 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
             return true;
         });
 
-        const readerPromises = validFiles.map(file => new Promise<string>((resolve) => {
+        const readerPromises = validFiles.map((file: File) => new Promise<string>((resolve) => {
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result as string);
             reader.readAsDataURL(file);
