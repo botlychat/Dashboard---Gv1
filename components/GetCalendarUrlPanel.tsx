@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Unit } from '../types';
+import { useLanguage } from '../App';
 
 interface GetCalendarUrlPanelProps {
   units: Unit[];
 }
 
 const GetCalendarUrlPanel: React.FC<GetCalendarUrlPanelProps> = ({ units }) => {
+    const { t } = useLanguage();
     const [copiedUnitId, setCopiedUnitId] = useState<number | null>(null);
 
     const handleCopy = (unitId: number, url: string) => {
@@ -17,15 +19,15 @@ const GetCalendarUrlPanel: React.FC<GetCalendarUrlPanelProps> = ({ units }) => {
     return (
         <div className="space-y-6">
             <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border-l-4 border-orange-500 text-orange-700 dark:text-orange-300">
-                <h4 className="font-bold">💡 How to use:</h4>
+                <h4 className="font-bold">💡 {t('howToUse')}:</h4>
                 <ol className="list-decimal list-inside mt-2 text-sm">
-                    <li>Click 'Copy URL' for any unit.</li>
-                    <li>Share the URL with other calendar applications.</li>
-                    <li>They can import/subscribe to this unit's calendar.</li>
+                    <li>{t('clickCopyUrlForAnyUnit')}</li>
+                    <li>{t('shareUrlWithOtherCalendar')}</li>
+                    <li>{t('canImportOrSubscribe')}</li>
                 </ol>
             </div>
             <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Unit Calendar URLs</h3>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t('unitCalendarUrls')}</h3>
                 {units.map(unit => {
                     const calendarUrl = `https://www.riyadh-getaways.com/api/ical/${unit.id}/${Date.now().toString(36)}.ics`;
                     return (
@@ -42,7 +44,7 @@ const GetCalendarUrlPanel: React.FC<GetCalendarUrlPanelProps> = ({ units }) => {
                                     onClick={() => handleCopy(unit.id, calendarUrl)}
                                     className="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600"
                                 >
-                                    {copiedUnitId === unit.id ? <><i className="fas fa-check text-green-500 mr-2"></i>Copied!</> : <><i className="fas fa-copy mr-2"></i>Copy</>}
+                                    {copiedUnitId === unit.id ? <><i className="fas fa-check text-green-500 mr-2"></i>{t('copied')}</> : <><i className="fas fa-copy mr-2"></i>{t('copy')}</>}
                                 </button>
                             </div>
                         </div>
