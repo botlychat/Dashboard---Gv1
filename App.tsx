@@ -5,14 +5,14 @@ import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
 import Calendar from './pages/Calendar';
 import Units from './pages/Units';
-import WebsiteSettings from './pages/WebsiteSettings';
+import WebsiteSettingsPage from './pages/WebsiteSettings';
 import AiAgent from './pages/AiAgent';
 import Contacts from './pages/Contacts';
 import Reviews from './pages/Reviews';
 import AccountSettingsPage from './pages/AccountSettings';
 import useLocalStorage from './hooks/useLocalStorage';
-import { initialUnitGroups, initialAccountSettings, initialBookings, initialContacts, initialUnits } from './data/mockData';
-import { UnitGroup, AccountSettings, Unit, Booking, Contact, FormDataType, BookingStatus } from './types';
+import { initialUnitGroups, initialAccountSettings, initialBookings, initialContacts, initialUnits, initialWebsiteSettings } from './data/mockData';
+import { UnitGroup, AccountSettings, Unit, Booking, Contact, FormDataType, BookingStatus, WebsiteSettings } from './types';
 import SidePanel from './components/SidePanel';
 import AddBookingForm from './components/AddBookingForm';
 import { translations } from './utils/translations';
@@ -56,6 +56,57 @@ export const useLanguage = (): LanguageContextType => {
     const context = useContext(LanguageContext);
     if (!context) {
         throw new Error('useLanguage must be used within a LanguageProvider');
+    }
+    return context;
+};
+
+// Theme Context for applying custom theme colors
+interface ThemeContextType {
+    themeColor: string;
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [websiteSettings] = useLocalStorage<WebsiteSettings>('websiteSettings', initialWebsiteSettings);
+    const { currentGroupId } = useContext(GroupContext) || { currentGroupId: 'all' };
+
+    const groupSettings = websiteSettings[currentGroupId];
+    const themeColor = groupSettings?.themeColor || '#fb923c';
+
+    useEffect(() => {
+        // Inject CSS variables for theme color
+        const root = document.documentElement;
+        root.style.setProperty('--theme-color', themeColor);
+        
+        // Also apply to button backgrounds and other elements dynamically
+        const style = document.getElementById('theme-style') || document.createElement('style');
+        style.id = 'theme-style';
+        style.innerHTML = `
+            :root {
+                --theme-color: ${themeColor};
+            }
+            .theme-button { background-color: var(--theme-color); }
+            .theme-button:hover { opacity: 0.9; }
+            .theme-accent { color: var(--theme-color); }
+            .theme-border { border-color: var(--theme-color); }
+        `;
+        if (!document.getElementById('theme-style')) {
+            document.head.appendChild(style);
+        }
+    }, [themeColor]);
+
+    return (
+        <ThemeContext.Provider value={{ themeColor }}>
+            {children}
+        </ThemeContext.Provider>
+    );
+};
+
+export const useTheme = (): ThemeContextType => {
+    const context = useContext(ThemeContext);
+    if (!context) {
+        throw new Error('useTheme must be used within a ThemeProvider');
     }
     return context;
 };
@@ -230,7 +281,7 @@ const MainContent: React.FC = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/units" element={<Units />} />
-            <Route path="/website-settings" element={<WebsiteSettings />} />
+            <Route path="/website-settings" element={<WebsiteSettingsPage />} />
             <Route path="/ai-agent" element={<AiAgent />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/reviews" element={<Reviews />} />
@@ -248,9 +299,11 @@ const App: React.FC = () => {
       <LanguageProvider>
         <AccountProvider>
           <GroupProvider>
-            <GlobalActionsProvider>
-              <MainContent />
-            </GlobalActionsProvider>
+            <ThemeProvider>
+              <GlobalActionsProvider>
+                <MainContent />
+              </GlobalActionsProvider>
+            </ThemeProvider>
           </GroupProvider>
         </AccountProvider>
       </LanguageProvider>

@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialBookings, initialUnits } from '../data/mockData';
 import { Booking, BookingStatus, Unit, currencySymbols, currencyNames } from '../types';
-import { useGroup, useAccount, useGlobalActions, useLanguage } from '../App';
+import { useGroup, useAccount, useGlobalActions, useLanguage, useTheme } from '../App';
 
 const StatCard: React.FC<{ icon: string; title: string; value: string | number; color: string }> = ({ icon, title, value, color }) => (
     <div className="bg-white dark:bg-gray-800 p-3 md:p-6 rounded-lg shadow-md flex flex-col md:flex-row md:items-center md:space-x-4 gap-2 md:gap-0">
@@ -33,6 +33,7 @@ const Dashboard: React.FC = () => {
     const { accountSettings } = useAccount();
     const { openAddBookingPanel } = useGlobalActions();
     const { t, language } = useLanguage();
+    const { themeColor } = useTheme();
     const [allBookings] = useLocalStorage<Booking[]>('bookings', initialBookings);
     const [allUnits] = useLocalStorage<Unit[]>('units', initialUnits);
 
@@ -160,7 +161,8 @@ const Dashboard: React.FC = () => {
                     <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2">
                         <button
                             onClick={() => openAddBookingPanel()}
-                            className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors text-sm font-medium w-full sm:w-auto justify-center"
+                            className="flex items-center px-4 py-2 text-white rounded-md hover:opacity-90 transition-opacity text-sm font-medium w-full sm:w-auto justify-center"
+                            style={{ backgroundColor: themeColor }}
                         >
                             <i className="fas fa-plus me-2"></i>
                             <span>{t('addBooking')}</span>

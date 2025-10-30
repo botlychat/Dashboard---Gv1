@@ -161,38 +161,12 @@ export const initialUnits: Unit[] = [
 ];
 
 export const initialBookings: Booking[] = [
-  // Existing bookings
-  { id: 1, clientId: 1, clientName: 'Ahmed Al-Mansouri', unitId: 1, checkIn: getRelativeDate(-2), checkOut: getRelativeDate(3), status: BookingStatus.InProgress, price: 8000, bookingSource: 'Website', paymentMethod: 'Credit Card', paidAmount: 8000, notes: 'Early check-in requested' },
-  { id: 2, clientId: 2, clientName: 'Sarah Johnson', unitId: 2, checkIn: getRelativeDate(5), checkOut: getRelativeDate(9), status: BookingStatus.Confirmed, price: 1800, bookingSource: 'Phone', paymentMethod: 'Bank Transfer', paidAmount: 1800 },
-  { id: 3, clientId: 3, clientName: 'Mohammed bin Khalid', unitId: 6, checkIn: getRelativeDate(10), checkOut: getRelativeDate(14), status: BookingStatus.Pending, price: 2400 },
-  { id: 4, clientId: 1, clientName: 'Ahmed Al-Mansouri', unitId: 2, checkIn: getRelativeDate(1), checkOut: getRelativeDate(4), status: BookingStatus.Cancelled, price: 1350 },
-  { id: 5, clientId: 2, clientName: 'Sarah Johnson', unitId: 1, checkIn: getRelativeDate(20), checkOut: getRelativeDate(25), status: BookingStatus.Confirmed, price: 9000 },
-  { id: 6, clientId: 4, clientName: 'Fatima Al-Fahad', unitId: 6, checkIn: getRelativeDate(35), checkOut: getRelativeDate(40), status: BookingStatus.Confirmed, price: 3250, notes: 'Anniversary trip' },
-  { id: 7, clientId: 2, clientName: 'Sarah Johnson', unitId: 2, checkIn: getRelativeDate(42), checkOut: getRelativeDate(45), status: BookingStatus.Confirmed, price: 1350, paidAmount: 1350 },
-  { id: 8, clientId: 3, clientName: 'Mohammed bin Khalid', unitId: 1, checkIn: '2024-07-01', checkOut: '2024-07-08', status: BookingStatus.Confirmed, price: 12600 },
-  
-  // Add more bookings to match new contacts
-  ...Array.from({ length: 22 }, (_, i) => {
-    const contact = initialContacts[i + 8]; 
-    const unit = initialUnits[i % initialUnits.length];
-    const checkInOffset = -60 + i * 5;
-    const bookingLength = 3 + (i % 4);
-    const checkOutOffset = checkInOffset + bookingLength;
-    const price = unit.pricing.baseRate * bookingLength;
-    const isPaid = contact.payment === 'Paid';
-
-    return {
-      id: 9 + i,
-      clientId: contact.id,
-      clientName: contact.name,
-      unitId: unit.id,
-      checkIn: getRelativeDate(checkInOffset),
-      checkOut: getRelativeDate(checkOutOffset),
-      status: BookingStatus.Confirmed,
-      price: price,
-      paidAmount: isPaid ? price : 0,
-    };
-  })
+  // 5 bookings in October 2025
+  { id: 1, clientId: 1, clientName: 'Ahmed Al-Mansouri', unitId: 1, checkIn: '2025-10-02', checkOut: '2025-10-05', status: BookingStatus.Confirmed, price: 8000, bookingSource: 'Website', paymentMethod: 'Credit Card', paidAmount: 8000, notes: 'Early check-in requested' },
+  { id: 2, clientId: 2, clientName: 'Sarah Johnson', unitId: 2, checkIn: '2025-10-08', checkOut: '2025-10-12', status: BookingStatus.Confirmed, price: 1800, bookingSource: 'Phone', paymentMethod: 'Bank Transfer', paidAmount: 1800 },
+  { id: 3, clientId: 3, clientName: 'Mohammed bin Khalid', unitId: 6, checkIn: '2025-10-14', checkOut: '2025-10-18', status: BookingStatus.Confirmed, price: 2400 },
+  { id: 4, clientId: 4, clientName: 'Fatima Al-Fahad', unitId: 3, checkIn: '2025-10-20', checkOut: '2025-10-24', status: BookingStatus.Confirmed, price: 3250, notes: 'Anniversary trip' },
+  { id: 5, clientId: 5, clientName: 'Yusuf Khan', unitId: 4, checkIn: '2025-10-25', checkOut: '2025-10-29', status: BookingStatus.Confirmed, price: 2800, bookingSource: 'Agent', paidAmount: 2800 }
 ];
 
 const sampleFeedbacks = [

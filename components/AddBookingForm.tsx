@@ -124,9 +124,9 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
         <form onSubmit={handleSubmit}>
             <style>{`
                 .form-label { display: block; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 500; color: #374151; }
-                .dark .form-label { color: #d1d5db; }
+                .dark .form-label { color: #ffffff; }
                 .form-input { display: block; width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; background-color: #fff; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
-                .dark .form-input { background-color: #374151; border-color: #4b5563; color: #fff; }
+                .dark .form-input { background-color: #374151; border-color: #4b5563; color: #ffffff; }
                 .form-input:focus { outline: 2px solid transparent; outline-offset: 2px; border-color: #fb923c; ring: 1px solid #fb923c; }
             `}</style>
             <div className="space-y-4">
@@ -201,7 +201,7 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                     {errors.unitId && <p className="text-red-500 text-xs mt-1">{errors.unitId}</p>}
                  </div>
                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-md text-center">
-                     <p className="text-sm text-gray-600 dark:text-gray-300">{t('totalPrice')}</p>
+                     <p className="text-sm text-gray-600 dark:text-white">{t('totalPrice')}</p>
                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{currencySymbol}{totalPrice.toLocaleString()}</p>
                  </div>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

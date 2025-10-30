@@ -56,13 +56,18 @@ const WebsiteSettingsComponent: React.FC = () => {
                 </div>
             </div>
             
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg shadow-md">
                 <h2 className="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">{t('themeColor')}</h2>
-                 <div className="flex items-center space-x-4">
-                    <input type="color" name="themeColor" value={groupSettings.themeColor} onChange={handleSettingChange} className="w-12 h-12 p-1 border-none rounded-md cursor-pointer"/>
-                    <input type="text" name="themeColor" value={groupSettings.themeColor} onChange={handleSettingChange} className="px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:ring-orange-500 focus:border-orange-500"/>
-                    <div className="w-24 h-10 rounded-md" style={{backgroundColor: groupSettings.themeColor}}></div>
-                    <span className="font-mono">{groupSettings.themeColor}</span>
+                 <div className="flex flex-col md:flex-row md:items-center gap-4">
+                    <div className="flex items-center gap-2">
+                        <input type="color" name="themeColor" value={groupSettings.themeColor} onChange={handleSettingChange} className="w-12 h-12 p-1 border-none rounded-md cursor-pointer flex-shrink-0"/>
+                        <label className="text-xs md:text-sm text-gray-600 dark:text-gray-400">{t('pickColor')}</label>
+                    </div>
+                    <input type="text" name="themeColor" value={groupSettings.themeColor} onChange={handleSettingChange} className="px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 focus:ring-orange-500 focus:border-orange-500 text-sm flex-1"/>
+                    <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
+                        <div className="w-20 h-10 rounded-md flex-shrink-0" style={{backgroundColor: groupSettings.themeColor}}></div>
+                        <span className="font-mono text-xs md:text-sm text-gray-700 dark:text-gray-300">{groupSettings.themeColor}</span>
+                    </div>
                  </div>
             </div>
 
