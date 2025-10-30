@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useLanguage, useAccount } from '../App';
+import { useLanguage, useAccount, useTheme } from '../App';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -10,6 +10,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
   const { t, language } = useLanguage();
   const { accountSettings } = useAccount();
+  const { themeColor } = useTheme();
 
   const navItems = [
     { to: '/', icon: 'fa-chart-pie', label: t('dashboard') },
@@ -21,7 +22,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
     { to: '/reviews', icon: 'fa-star', label: t('reviews') },
   ];
 
-  const activeLinkClass = 'bg-orange-600 text-white';
   const inactiveLinkClass = 'text-gray-300 hover:bg-gray-700 hover:text-white';
 
   const transformClass = isOpen
@@ -43,8 +43,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
               title=""
               onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
-                `flex items-center px-4 py-3 my-1 rounded-md text-sm font-medium transition-colors duration-200 ${isActive ? activeLinkClass : inactiveLinkClass}`
+                `flex items-center px-4 py-3 my-1 rounded-md text-sm font-medium transition-colors duration-200 ${isActive ? 'text-white' : inactiveLinkClass}`
               }
+              style={({ isActive }) => isActive ? { backgroundColor: themeColor } : {}}
             >
               <i className={`fa-solid ${item.icon} w-6 h-6 me-3`}></i>
               {item.label}
