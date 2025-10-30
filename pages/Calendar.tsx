@@ -433,13 +433,17 @@ const Calendar: React.FC = () => {
             </div>
             <div className="relative overflow-visible">
                 {/* Multi-day bookings overlay layer - positioned absolutely to span across grid */}
-                <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: '0.25rem' }}>
+                <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gridAutoRows: 'minmax(9rem, auto)', gap: '0.25rem' }}>
                     {days.map((date, index) => {
                         const dayBookings = bookingsForDay(date);
                         const multiDayBookingsOnThisDay = dayBookings.filter(b => getBookingPosition(b, date) === 'first');
                         
+                        // Calculate the row and column position for this day
+                        const row = Math.floor(index / 7) + 1;
+                        const col = (index % 7) + 1;
+                        
                         return (
-                            <div key={`multi-${index}`} style={{ gridColumn: index + 1, position: 'relative', minHeight: 0 }}>
+                            <div key={`multi-${index}`} style={{ gridRow: row, gridColumn: col, position: 'relative', minHeight: 0 }}>
                                 {multiDayBookingsOnThisDay.map(booking => {
                                     const checkIn = new Date(booking.checkIn);
                                     const checkOut = new Date(booking.checkOut);
@@ -448,6 +452,10 @@ const Calendar: React.FC = () => {
                                     
                                     // Calculate span: number of days the booking spans
                                     const spanDays = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+                                    
+                                    // Calculate how many days can fit in the current week
+                                    const daysUntilWeekEnd = 7 - col + 1;
+                                    const daysInFirstWeek = Math.min(spanDays, daysUntilWeekEnd);
                                     
                                     const unit = getUnitById(booking.unitId);
                                     const statusConfig = getBookingStatusConfig(booking.status, t);
@@ -459,7 +467,8 @@ const Calendar: React.FC = () => {
                                             onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
                                             className={`py-1.5 px-1.5 text-xs rounded-md border-s-4 pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 dark:bg-gray-600 border-gray-400 cursor-not-allowed text-gray-700 dark:text-gray-300' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
                                             style={{
-                                                gridColumn: `${index + 1} / span ${spanDays}`,
+                                                gridRow: row,
+                                                gridColumn: `${col} / span ${daysInFirstWeek}`,
                                                 zIndex: 10,
                                                 position: 'relative',
                                                 overflow: 'visible',
