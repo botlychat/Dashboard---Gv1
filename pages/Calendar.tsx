@@ -431,75 +431,40 @@ const Calendar: React.FC = () => {
             <div className="grid grid-cols-7 text-center font-semibold text-gray-600 dark:text-gray-400 border-b dark:border-gray-700 pb-2 mb-2">
                 {dayHeaderKeys.map(dayKey => <div key={dayKey}>{t(dayKey)}</div>)}
             </div>
-            <div className="grid grid-cols-7 gap-1">
-                {days.map((date, index) => {
-                    const isCurrentMonth = date.getMonth() === currentDate.getMonth();
-                    const isToday = date.toDateString() === new Date().toDateString();
-                    const dayBookings = bookingsForDay(date);
-
-                    const availableUnitsForDay = units.filter(unit => !dayBookings.some(b => b.unitId === unit.id));
-                    const dailyPrice = availableUnitsForDay.length > 0
-                        ? Math.min(...availableUnitsForDay.map(u => getDailyPrice(u, date)))
-                        : null;
-                    
-                    const showPrice = currentGroupId !== 'all';
-
-                    return (
-                        <div key={index} className={`relative border dark:border-gray-700 min-h-[9rem] flex flex-col p-1.5 group ${isCurrentMonth ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/50'}`}>
-                            <div className="flex justify-between items-start">
-                                <span className={`text-sm font-medium self-start mb-1 ${isToday ? 'bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center' : ''} ${!isCurrentMonth ? 'text-gray-400 dark:text-gray-500' : ''}`}>
-                                    {date.getDate()}
-                                </span>
-                                <div className="relative">
-                                    <button onClick={(e) => handleActionMenuClick(date, e)} className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 rounded-full">
-                                        <i className="fas fa-plus-circle"></i>
-                                    </button>
-                                    {actionMenuDate?.getTime() === date.getTime() && (
-                                        <div ref={actionMenuRef} className={`absolute z-20 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 text-start overflow-hidden ${actionMenuPosition === 'left' ? 'start-0' : 'end-0'}`}>
-                                            <button onClick={() => handleAddBookingFromDate(date)} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-plus me-2"></i>{t('addNewBooking')}</button>
-                                            <button onClick={() => openActionPanel(date, 'closeUnits')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-lock me-2"></i>{t('closeUnits')}</button>
-                                            <button onClick={() => openActionPanel(date, 'adjustPrice')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-dollar-sign me-2"></i>{t('adjustDayPrice')}</button>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                             {dailyPrice && !dayBookings.length && showPrice && (
-                                <div className="absolute bottom-1 end-1 text-xs text-green-600 dark:text-green-400 font-semibold p-1 bg-green-50 dark:bg-green-900/50 rounded">
-                                    {currencySymbols[accountSettings.currency]}{dailyPrice} {currencyNames[language][accountSettings.currency]}
-                                </div>
-                            )}
-
-                            <div className="space-y-1 overflow-y-auto text-xs mt-1">
-                                {dayBookings.map(booking => {
+            <div className="relative">
+                {/* Multi-day bookings overlay layer */}
+                <div className="grid grid-cols-7 gap-1 pointer-events-none absolute inset-0">
+                    {days.map((date, index) => {
+                        const dayBookings = bookingsForDay(date);
+                        const multiDayBookingsOnThisDay = dayBookings.filter(b => getBookingPosition(b, date) === 'first');
+                        
+                        return (
+                            <div key={`multi-${index}`} className="relative">
+                                {multiDayBookingsOnThisDay.map(booking => {
+                                    const checkIn = new Date(booking.checkIn);
+                                    const checkOut = new Date(booking.checkOut);
+                                    checkIn.setHours(0, 0, 0, 0);
+                                    checkOut.setHours(0, 0, 0, 0);
+                                    
+                                    // Calculate span: number of days the booking spans
+                                    const spanDays = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+                                    
                                     const unit = getUnitById(booking.unitId);
                                     const statusConfig = getBookingStatusConfig(booking.status, t);
                                     const isBlocker = booking.clientName === t('unitClosed');
-                                    const bookingPosition = getBookingPosition(booking, date);
-                                    
-                                    // Only render booking on first day or single-day bookings (for continuous display)
-                                    if (bookingPosition === 'middle' || bookingPosition === 'last') {
-                                        return null;
-                                    }
-                                    
-                                    // Determine border radius and padding for continuous multi-day display
-                                    let borderRadiusClass = 'rounded-md';
-                                    let paddingClass = 'px-1.5';
-                                    
-                                    if (bookingPosition === 'first') {
-                                        borderRadiusClass = 'rounded-s-md rounded-e-none';
-                                        paddingClass = 'ps-1.5 pe-0';
-                                    }
-                                    // 'single' keeps default rounded-md and px-1.5
                                     
                                     return (
-                                        <div 
-                                            key={booking.id} 
+                                        <div
+                                            key={booking.id}
                                             onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
-                                            className={`py-1.5 ${paddingClass} ${borderRadiusClass} truncate border-s-4 ${isBlocker ? 'bg-gray-200 dark:bg-gray-600 border-gray-400 cursor-not-allowed text-gray-700 dark:text-gray-300' : `cursor-pointer ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`} 
-                                            title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}>
-                                            
-                                             {isBlocker ? (
+                                            className={`absolute top-0 start-0 py-1.5 px-1.5 text-xs rounded-md border-s-4 truncate pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 dark:bg-gray-600 border-gray-400 cursor-not-allowed text-gray-700 dark:text-gray-300' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
+                                            style={{
+                                                width: `calc(${spanDays} * (100% / 7) + ${(spanDays - 1) * 0.25}rem)`,
+                                                zIndex: 10,
+                                            }}
+                                            title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}
+                                        >
+                                            {isBlocker ? (
                                                 <p className="font-semibold flex items-center text-xs">
                                                     <i className="fas fa-lock me-1.5"></i> {unit?.name}
                                                 </p>
@@ -513,9 +478,88 @@ const Calendar: React.FC = () => {
                                     );
                                 })}
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
+
+                {/* Main calendar grid with day cells */}
+                <div className="grid grid-cols-7 gap-1">
+                    {days.map((date, index) => {
+                        const isCurrentMonth = date.getMonth() === currentDate.getMonth();
+                        const isToday = date.toDateString() === new Date().toDateString();
+                        const dayBookings = bookingsForDay(date);
+
+                        const availableUnitsForDay = units.filter(unit => !dayBookings.some(b => b.unitId === unit.id));
+                        const dailyPrice = availableUnitsForDay.length > 0
+                            ? Math.min(...availableUnitsForDay.map(u => getDailyPrice(u, date)))
+                            : null;
+                        
+                        const showPrice = currentGroupId !== 'all';
+
+                        return (
+                            <div key={index} className={`relative border dark:border-gray-700 min-h-[9rem] flex flex-col p-1.5 group ${isCurrentMonth ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/50'}`}>
+                                <div className="flex justify-between items-start">
+                                    <span className={`text-sm font-medium self-start mb-1 ${isToday ? 'bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center' : ''} ${!isCurrentMonth ? 'text-gray-400 dark:text-gray-500' : ''}`}>
+                                        {date.getDate()}
+                                    </span>
+                                    <div className="relative">
+                                        <button onClick={(e) => handleActionMenuClick(date, e)} className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 rounded-full">
+                                            <i className="fas fa-plus-circle"></i>
+                                        </button>
+                                        {actionMenuDate?.getTime() === date.getTime() && (
+                                            <div ref={actionMenuRef} className={`absolute z-20 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 text-start overflow-hidden ${actionMenuPosition === 'left' ? 'start-0' : 'end-0'}`}>
+                                                <button onClick={() => handleAddBookingFromDate(date)} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-plus me-2"></i>{t('addNewBooking')}</button>
+                                                <button onClick={() => openActionPanel(date, 'closeUnits')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-lock me-2"></i>{t('closeUnits')}</button>
+                                                <button onClick={() => openActionPanel(date, 'adjustPrice')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-dollar-sign me-2"></i>{t('adjustDayPrice')}</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                 {dailyPrice && !dayBookings.length && showPrice && (
+                                    <div className="absolute bottom-1 end-1 text-xs text-green-600 dark:text-green-400 font-semibold p-1 bg-green-50 dark:bg-green-900/50 rounded">
+                                        {currencySymbols[accountSettings.currency]}{dailyPrice} {currencyNames[language][accountSettings.currency]}
+                                    </div>
+                                )}
+
+                                <div className="space-y-1 overflow-y-auto text-xs mt-1">
+                                    {dayBookings.map(booking => {
+                                        const bookingPosition = getBookingPosition(booking, date);
+                                        
+                                        // Only render single-day bookings here - multi-day bookings rendered in overlay
+                                        if (bookingPosition !== 'single') {
+                                            return null;
+                                        }
+                                        
+                                        const unit = getUnitById(booking.unitId);
+                                        const statusConfig = getBookingStatusConfig(booking.status, t);
+                                        const isBlocker = booking.clientName === t('unitClosed');
+                                        
+                                        return (
+                                            <div 
+                                                key={booking.id} 
+                                                onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
+                                                className={`py-1.5 px-1.5 rounded-md truncate border-s-4 ${isBlocker ? 'bg-gray-200 dark:bg-gray-600 border-gray-400 cursor-not-allowed text-gray-700 dark:text-gray-300' : `cursor-pointer ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`} 
+                                                title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}>
+                                                
+                                                 {isBlocker ? (
+                                                    <p className="font-semibold flex items-center text-xs">
+                                                        <i className="fas fa-lock me-1.5"></i> {unit?.name}
+                                                    </p>
+                                                ) : (
+                                                    <>
+                                                        <p className="font-semibold">{booking.clientName}</p>
+                                                        <p className="text-xs opacity-80">{unit?.name}</p>
+                                                    </>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
         </div>
         <button 
