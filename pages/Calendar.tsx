@@ -93,11 +93,6 @@ const Calendar: React.FC = () => {
         };
     }, []);
 
-    useEffect(() => {
-        setSelectedUnitIds([]);
-        setFilterOpen(false);
-    }, [currentGroupId]);
-
     const { units, bookings } = useMemo(() => {
         if (currentGroupId === 'all') {
             return { units: allUnits, bookings: allBookings };
@@ -107,6 +102,14 @@ const Calendar: React.FC = () => {
         const filteredBookings = allBookings.filter(b => filteredUnitIds.has(b.unitId));
         return { units: filteredUnits, bookings: filteredBookings };
     }, [currentGroupId, allUnits, allBookings]);
+
+    // Auto-select all units when group changes or on initial load
+    useEffect(() => {
+        if (units.length > 0) {
+            setSelectedUnitIds(units.map(u => u.id));
+        }
+        setFilterOpen(false);
+    }, [currentGroupId, units]);
 
     const filteredBookings = useMemo(() => {
         if (selectedUnitIds.length === 0) {
@@ -437,91 +440,97 @@ const Calendar: React.FC = () => {
                 <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gridAutoRows: 'minmax(7rem, auto)', gap: '0.25rem' }}>
                     {(() => {
                         const renderedBookings = new Set<string>();
-                        return days.map((date, index) => {
-                            const dayBookings = bookingsForDay(date);
-                            const multiDayBookingsOnThisDay = dayBookings.filter(b => {
-                                const position = getBookingPosition(b, date);
-                                return position === 'first' || position === 'middle' || position === 'last';
-                            });
-                            
-                            // Calculate the row and column position for this day
+                        const bookingSegments: Array<{ booking: any, row: number, col: number, span: number, isFirst: boolean, isLast: boolean }> = [];
+                        
+                        // First pass: identify all booking segments that need to be rendered
+                        days.forEach((date, index) => {
                             const row = Math.floor(index / 7) + 1;
                             const col = (index % 7) + 1;
+                            const dayBookings = bookingsForDay(date);
+                            
+                            dayBookings.forEach(booking => {
+                                const position = getBookingPosition(booking, date);
+                                
+                                // Only process multi-day bookings
+                                if (position === 'single') return;
+                                
+                                const checkIn = new Date(booking.checkIn);
+                                const checkOut = new Date(booking.checkOut);
+                                checkIn.setHours(0, 0, 0, 0);
+                                checkOut.setHours(0, 0, 0, 0);
+                                
+                                const currentDate = new Date(date);
+                                currentDate.setHours(0, 0, 0, 0);
+                                
+                                const bookingRowKey = `${booking.id}-row${row}`;
+                                
+                                // If this booking hasn't been rendered in this row yet
+                                if (!renderedBookings.has(bookingRowKey)) {
+                                    // Calculate span: number of days remaining in the booking from current date
+                                    const daysRemaining = Math.ceil((checkOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+                                    
+                                    // Calculate how many days can fit in the current week
+                                    const daysUntilWeekEnd = 7 - col + 1;
+                                    const daysInThisWeek = Math.min(daysRemaining, daysUntilWeekEnd);
+                                    
+                                    const isFirstSegment = currentDate.getTime() === checkIn.getTime();
+                                    const isLastSegment = new Date(currentDate.getTime() + (daysInThisWeek * 86400000)).getTime() >= checkOut.getTime();
+                                    
+                                    bookingSegments.push({
+                                        booking,
+                                        row,
+                                        col,
+                                        span: daysInThisWeek,
+                                        isFirst: isFirstSegment,
+                                        isLast: isLastSegment
+                                    });
+                                    
+                                    renderedBookings.add(bookingRowKey);
+                                }
+                            });
+                        });
+                        
+                        // Second pass: render the segments
+                        return bookingSegments.map((segment, segIndex) => {
+                            const { booking, row, col, span, isFirst, isLast } = segment;
+                            
+                            const unit = getUnitById(booking.unitId);
+                            const statusConfig = getBookingStatusConfig(booking.status, t);
+                            const isBlocker = booking.clientName === t('unitClosed');
+                            const bookingRowKey = `${booking.id}-row${row}-${segIndex}`;
                             
                             return (
-                                <div key={`multi-${index}`} style={{ gridRow: row, gridColumn: col, position: 'relative', minHeight: 0 }}>
-                                    {multiDayBookingsOnThisDay.map(booking => {
-                                        const checkIn = new Date(booking.checkIn);
-                                        const checkOut = new Date(booking.checkOut);
-                                        checkIn.setHours(0, 0, 0, 0);
-                                        checkOut.setHours(0, 0, 0, 0);
-                                        
-                                        const currentDate = new Date(date);
-                                        currentDate.setHours(0, 0, 0, 0);
-                                        
-                                        // Check if this is the first occurrence of this booking in the current week row
-                                        const bookingRowKey = `${booking.id}-row${row}`;
-                                        
-                                        // Determine if this is the start of the booking segment for this week
-                                        const isWeekStart = col === 1 || currentDate.getTime() === checkIn.getTime();
-                                        
-                                        // Skip if we've already rendered this booking segment in this week
-                                        if (renderedBookings.has(bookingRowKey)) {
-                                            return null;
-                                        }
-                                        
-                                        // Calculate span: number of days remaining in the booking
-                                        const daysRemaining = Math.ceil((checkOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
-                                        
-                                        // Calculate how many days can fit in the current week
-                                        const daysUntilWeekEnd = 7 - col + 1;
-                                        const daysInThisWeek = Math.min(daysRemaining, daysUntilWeekEnd);
-                                        
-                                        // Mark this booking segment as rendered for this week
-                                        renderedBookings.add(bookingRowKey);
-                                        
-                                        const unit = getUnitById(booking.unitId);
-                                        const statusConfig = getBookingStatusConfig(booking.status, t);
-                                        const isBlocker = booking.clientName === t('unitClosed');
-                                        
-                                        const isFirstSegment = currentDate.getTime() === checkIn.getTime();
-                                        const isLastSegment = new Date(currentDate.getTime() + (daysInThisWeek * 86400000)).getTime() >= checkOut.getTime();
-                                        
-                                        return (
-                                            <div
-                                                key={bookingRowKey}
-                                                onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
-                                                className={`py-1 sm:py-1.5 px-1 sm:px-1.5 text-[10px] sm:text-xs pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 border-gray-400 cursor-not-allowed text-gray-700' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
-                                                style={{
-                                                    gridRow: row,
-                                                    gridColumn: `${col} / span ${daysInThisWeek}`,
-                                                    zIndex: 10,
-                                                    position: 'relative',
-                                                    overflow: 'hidden',
-                                                    borderLeftWidth: isFirstSegment ? '4px' : '0',
-                                                    borderRightWidth: isLastSegment && !isFirstSegment ? '4px' : '0',
-                                                    borderTopWidth: '1px',
-                                                    borderBottomWidth: '1px',
-                                                    borderTopLeftRadius: isFirstSegment ? '0.375rem' : '0',
-                                                    borderBottomLeftRadius: isFirstSegment ? '0.375rem' : '0',
-                                                    borderTopRightRadius: isLastSegment ? '0.375rem' : '0',
-                                                    borderBottomRightRadius: isLastSegment ? '0.375rem' : '0',
-                                                }}
-                                                title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}
-                                            >
-                                                {isBlocker ? (
-                                                    <p className="font-semibold flex items-center text-[10px] sm:text-xs truncate">
-                                                        <i className="fas fa-lock me-1"></i> <span className="truncate">{unit?.name}</span>
-                                                    </p>
-                                                ) : (
-                                                    <>
-                                                        <p className="font-semibold truncate leading-tight">{booking.clientName}</p>
-                                                        <p className="text-[9px] sm:text-xs opacity-80 truncate leading-tight">{unit?.name}</p>
-                                                    </>
-                                                )}
-                                            </div>
-                                        );
-                                    })}
+                                <div
+                                    key={bookingRowKey}
+                                    onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
+                                    className={`py-1 sm:py-1.5 px-1 sm:px-1.5 text-[10px] sm:text-xs pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 border-gray-400 cursor-not-allowed text-gray-700' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
+                                    style={{
+                                        gridRow: row,
+                                        gridColumn: `${col} / span ${span}`,
+                                        zIndex: 10,
+                                        position: 'relative',
+                                        overflow: 'hidden',
+                                        borderLeftWidth: isFirst ? '4px' : '0',
+                                        borderRightWidth: isLast && !isFirst ? '4px' : '0',
+                                        borderTopWidth: '1px',
+                                        borderBottomWidth: '1px',
+                                        borderTopLeftRadius: isFirst ? '0.375rem' : '0',
+                                        borderBottomLeftRadius: isFirst ? '0.375rem' : '0',
+                                        borderTopRightRadius: isLast ? '0.375rem' : '0',
+                                        borderBottomRightRadius: isLast ? '0.375rem' : '0',
+                                    }}
+                                    title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}
+                                >
+                                    {isBlocker ? (
+                                        <p className="font-semibold flex items-center text-[10px] sm:text-xs truncate">
+                                            <i className="fas fa-lock me-1"></i> <span className="truncate">{unit?.name}</span>
+                                        </p>
+                                    ) : (
+                                        <>
+                                            <p className="font-semibold truncate leading-tight">{booking.clientName}</p>
+                                            <p className="text-[9px] sm:text-xs opacity-80 truncate leading-tight">{unit?.name}</p>
+                                        </>
+                                    )}
                                 </div>
                             );
                         });
@@ -563,8 +572,13 @@ const Calendar: React.FC = () => {
                                 </div>
 
                                  {dailyPrice && !dayBookings.length && showPrice && (
-                                    <div className="absolute bottom-1 end-1 text-[10px] sm:text-xs text-green-600 font-semibold px-1 py-0.5 bg-green-50 rounded whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%]">
-                                        {formatCurrency(dailyPrice, accountSettings.currency, language)}
+                                    <div className="absolute bottom-1 inset-x-0 flex flex-col items-center justify-center text-center px-1">
+                                        <div className="text-[10px] sm:text-xs text-green-600 font-bold leading-tight">
+                                            {currencySymbols[language][accountSettings.currency]}{dailyPrice.toLocaleString()}
+                                        </div>
+                                        <div className="text-[8px] sm:text-[10px] text-green-600 font-medium leading-tight">
+                                            {currencyNames[language][accountSettings.currency]}
+                                        </div>
                                     </div>
                                 )}
 
