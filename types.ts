@@ -199,7 +199,19 @@ export const currencyNames: { en: { [key in Currency]: string }, ar: { [key in C
     }
 };
 
-// Helper function to format currency with proper positioning based on language
+/**
+ * Formats a number as currency with proper localization for English and Arabic
+ * 
+ * @param amount - The numeric amount to format
+ * @param currency - The currency code (SAR, USD, EUR, etc.)
+ * @param language - The display language ('en' for English, 'ar' for Arabic)
+ * @returns Formatted currency string with thousands separators
+ * 
+ * @example
+ * formatCurrency(1500, 'SAR', 'en') // Returns "1,500 SAR"
+ * formatCurrency(1500, 'SAR', 'ar') // Returns "1,500 ر.س"
+ * formatCurrency(1234567, 'USD', 'en') // Returns "1,234,567 USD"
+ */
 export const formatCurrency = (amount: number, currency: Currency, language: 'en' | 'ar'): string => {
     const symbol = currencySymbols[language][currency];
     const formattedAmount = amount.toLocaleString();

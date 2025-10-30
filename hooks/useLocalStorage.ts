@@ -1,6 +1,23 @@
 
 import React, { useState, useEffect } from 'react';
 
+/**
+ * Custom React hook for syncing state with browser localStorage
+ * 
+ * Automatically serializes/deserializes values as JSON and handles:
+ * - Migration from plain strings to JSON format
+ * - Parse errors with fallback to initial value
+ * - Cross-tab synchronization via storage events
+ * 
+ * @template T - The type of the stored value
+ * @param key - The localStorage key to use
+ * @param initialValue - Default value if no stored value exists
+ * @returns A stateful value and setter function, similar to useState
+ * 
+ * @example
+ * const [name, setName] = useLocalStorage<string>('username', 'Guest');
+ * const [bookings, setBookings] = useLocalStorage<Booking[]>('bookings', []);
+ */
 function useLocalStorage<T,>(key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
