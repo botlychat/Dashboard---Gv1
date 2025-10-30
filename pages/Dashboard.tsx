@@ -241,27 +241,12 @@ const Dashboard: React.FC = () => {
                             <XAxis dataKey="name" stroke="#64748b" style={{ fontSize: '14px', fontWeight: '500' }} />
                             <YAxis yAxisId="left" orientation="left" stroke="#6366f1" width={80} tickFormatter={(tick) => formatCurrency(tick, accountSettings.currency, 'en')} style={{ fontSize: '13px' }} />
                             <YAxis yAxisId="right" orientation="right" stroke="#10b981" width={60} style={{ fontSize: '13px' }} />
-                            <Tooltip 
-                                contentStyle={{ 
-                                    backgroundColor: '#1e293b', 
-                                    border: 'none', 
-                                    borderRadius: '12px',
-                                    boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
-                                    padding: '12px 16px'
-                                }} 
-                                labelStyle={{ color: '#e2e8f0', fontWeight: '600', marginBottom: '8px' }}
-                                itemStyle={{ color: '#f1f5f9', fontSize: '14px' }}
-                                formatter={(value, name) => [
-                                    name === t('revenue') ? formatCurrency(value as number, accountSettings.currency, 'en') : value,
-                                    name
-                                ]} 
-                            />
                             <Legend 
                                 wrapperStyle={{ paddingTop: '20px' }}
                                 iconType="circle"
                             />
-                            <Bar yAxisId="left" dataKey="revenue" fill="url(#revenueGradient)" name={t('revenue')} radius={[8, 8, 0, 0]} />
-                            <Bar yAxisId="right" dataKey="bookings" fill="url(#bookingsGradient)" name={t('bookings')} radius={[8, 8, 0, 0]} />
+                            <Bar yAxisId="left" dataKey="revenue" fill="url(#revenueGradient)" name={t('revenue')} radius={[8, 8, 0, 0]} cursor="default" isAnimationActive={false} />
+                            <Bar yAxisId="right" dataKey="bookings" fill="url(#bookingsGradient)" name={t('bookings')} radius={[8, 8, 0, 0]} cursor="default" isAnimationActive={false} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
