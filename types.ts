@@ -203,7 +203,8 @@ export const currencyNames: { en: { [key in Currency]: string }, ar: { [key in C
 export const formatCurrency = (amount: number, currency: Currency, language: 'en' | 'ar'): string => {
     const symbol = currencySymbols[language][currency];
     const formattedAmount = amount.toLocaleString();
-    // In Arabic, currency comes on the left; in English, currency comes on the right
+    // In Arabic: currency symbol appears first in the string (will display on right in RTL)
+    // In English: currency symbol appears after the number (displays on right in LTR)
     return language === 'ar' ? `${symbol} ${formattedAmount}` : `${formattedAmount} ${symbol}`;
 };
 

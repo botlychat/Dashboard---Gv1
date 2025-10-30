@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ title, onToggleSidebar }) => {
         </button>
         <h1 className="text-lg md:text-2xl font-semibold text-gray-900 ms-2 md:ms-4 lg:ms-0 truncate">{title}</h1>
       </div>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center gap-4">
         <div className="relative">
           <select
             value={currentGroupId}
