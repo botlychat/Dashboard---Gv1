@@ -30,6 +30,14 @@ const AiAgentComponent: React.FC = () => {
     const { currentGroupId } = useGroup();
     const { t } = useLanguage();
     const [config, setConfig] = useLocalStorage<AiConfig>('aiConfig', initialAiConfig);
+    const bookingMethodRef = React.useRef<HTMLDivElement>(null);
+
+    // Scroll to booking method section when component mounts (when a group is selected)
+    useEffect(() => {
+        if (bookingMethodRef.current) {
+            bookingMethodRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, [currentGroupId]);
 
     // Safely get group config with fallback (handle number vs string keys)
     const groupConfig = useMemo(() => {
@@ -155,7 +163,7 @@ const AiAgentComponent: React.FC = () => {
                 </div>
                 )}
 
-                <div className="bg-white p-6 rounded-lg shadow-md">
+                <div ref={bookingMethodRef} className="bg-white p-6 rounded-lg shadow-md scroll-mt-6">
                     <h2 className="text-xl font-semibold mb-1">{t('bookingMethod')}</h2>
                     <p className="text-sm text-gray-500 mb-4">{t('aiHandlesBooking')}</p>
                     <div className="space-y-3">
@@ -165,14 +173,14 @@ const AiAgentComponent: React.FC = () => {
                                 <div
                                     key={method}
                                     onClick={() => handleConfigChange('bookingMethod', method)}
-                                    className={`p-4 border rounded-lg cursor-pointer transition-all flex items-start gap-3 ${isSelected ? 'bg-orange-50 border-orange-500' : 'bg-gray-50 hover:bg-gray-100 border-gray-300'}`}
+                                    className={`p-4 border rounded-lg cursor-pointer transition-all flex items-start gap-3 ${isSelected ? 'bg-green-50 border-green-500' : 'bg-gray-50 hover:bg-gray-100 border-gray-300'}`}
                                 >
-                                    <div className={`flex-shrink-0 w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${isSelected ? 'border-orange-500 bg-white' : 'border-gray-400'}`}>
-                                        {isSelected && <div className="w-3 h-3 rounded-full bg-orange-500"></div>}
+                                    <div className={`flex-shrink-0 w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${isSelected ? 'border-green-500 bg-white' : 'border-gray-400'}`}>
+                                        {isSelected && <div className="w-3 h-3 rounded-full bg-green-500"></div>}
                                     </div>
                                     <div className="flex-1">
                                         <h3 className="font-semibold text-gray-900">{t(method === AiBookingMethod.Full ? 'aiFullBooking' : 'websiteOnlyBooking')}</h3>
-                                        <p className="text-xs text-gray-600 mt-1">
+                                        <p className="text-xs text-gray-900 mt-1">
                                             {t(method === AiBookingMethod.Full ? 'aiFullBookingDesc' : 'websiteOnlyBookingDesc')}
                                         </p>
                                     </div>
@@ -409,7 +417,16 @@ const AiAgentContainer: React.FC = () => {
                                     {!isSelected && (
                                         <button
                                             className="px-3 py-1 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-md"
-                                            onClick={() => setCurrentGroupId(group.id)}
+                                            onClick={() => {
+                                                setCurrentGroupId(group.id);
+                                                // Small delay to allow the component to render before scrolling
+                                                setTimeout(() => {
+                                                    const settingsSection = document.querySelector('.scroll-mt-6');
+                                                    if (settingsSection) {
+                                                        settingsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                    }
+                                                }, 100);
+                                            }}
                                             title={t('edit')}
                                         >
                                             {t('edit')}

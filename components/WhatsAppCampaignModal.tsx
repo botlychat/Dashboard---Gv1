@@ -74,16 +74,16 @@ const WhatsAppCampaignModal: React.FC<WhatsAppCampaignModalProps> = ({ isOpen, o
              <div>
                 <label className="block text-sm font-medium mb-2">{t('recipients')}</label>
                 <div className="flex space-x-4">
-                    <label className={`flex-1 p-3 border rounded-lg cursor-pointer transition-colors flex items-center gap-3 ${useSelected ? 'bg-orange-50 border-orange-500' : 'bg-gray-50 border-gray-300'}`}>
-                        <div className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${useSelected ? 'border-orange-500 bg-white' : 'border-gray-400'}`}>
-                            {useSelected && <div className="w-3 h-3 rounded-full bg-orange-500"></div>}
+                    <label className={`flex-1 p-3 border rounded-lg cursor-pointer transition-colors flex items-center gap-3 ${useSelected ? 'bg-green-50 border-green-500' : 'bg-gray-50 border-gray-300'}`}>
+                        <div className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${useSelected ? 'border-green-500 bg-white' : 'border-gray-400'}`}>
+                            {useSelected && <div className="w-3 h-3 rounded-full bg-green-500"></div>}
                         </div>
                         <input type="radio" name="recipients" checked={useSelected} onChange={() => setUseSelected(true)} disabled={selectedIds.length === 0} className="sr-only"/>
                         <span className="text-gray-900 font-medium">{t('sendTo')} {selectedIds.length} {t('selectedRecipients')}</span>
                     </label>
-                    <label className={`flex-1 p-3 border rounded-lg cursor-pointer transition-colors flex items-center gap-3 ${!useSelected ? 'bg-orange-50 border-orange-500' : 'bg-gray-50 border-gray-300'}`}>
-                        <div className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${!useSelected ? 'border-orange-500 bg-white' : 'border-gray-400'}`}>
-                            {!useSelected && <div className="w-3 h-3 rounded-full bg-orange-500"></div>}
+                    <label className={`flex-1 p-3 border rounded-lg cursor-pointer transition-colors flex items-center gap-3 ${!useSelected ? 'bg-green-50 border-green-500' : 'bg-gray-50 border-gray-300'}`}>
+                        <div className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${!useSelected ? 'border-green-500 bg-white' : 'border-gray-400'}`}>
+                            {!useSelected && <div className="w-3 h-3 rounded-full bg-green-500"></div>}
                         </div>
                         <input type="radio" name="recipients" checked={!useSelected} onChange={() => setUseSelected(false)} className="sr-only"/>
                         <span className="text-gray-900 font-medium">{t('sendTo')} {t('all')} {allContacts.length} {t('contacts')}</span>
