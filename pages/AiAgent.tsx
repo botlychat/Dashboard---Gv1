@@ -159,18 +159,26 @@ const AiAgentComponent: React.FC = () => {
                     <h2 className="text-xl font-semibold mb-1">{t('bookingMethod')}</h2>
                     <p className="text-sm text-gray-500 mb-4">{t('aiHandlesBooking')}</p>
                     <div className="space-y-3">
-                        {[AiBookingMethod.Full, AiBookingMethod.WebsiteOnly].map(method => (
-                            <div
-                                key={method}
-                                onClick={() => handleConfigChange('bookingMethod', method)}
-                                className={`p-4 border rounded-lg cursor-pointer transition-all ${groupConfig.bookingMethod === method ? 'bg-orange-50 border-orange-500' : 'bg-gray-50 hover:bg-gray-100'}`}
-                            >
-                                <h3 className="font-semibold text-gray-800">{t(method === AiBookingMethod.Full ? 'aiFullBooking' : 'websiteOnlyBooking')}</h3>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    {t(method === AiBookingMethod.Full ? 'aiFullBookingDesc' : 'websiteOnlyBookingDesc')}
-                                </p>
-                            </div>
-                        ))}
+                        {[AiBookingMethod.Full, AiBookingMethod.WebsiteOnly].map(method => {
+                            const isSelected = groupConfig.bookingMethod === method;
+                            return (
+                                <div
+                                    key={method}
+                                    onClick={() => handleConfigChange('bookingMethod', method)}
+                                    className={`p-4 border rounded-lg cursor-pointer transition-all flex items-start gap-3 ${isSelected ? 'bg-orange-50 border-orange-500' : 'bg-gray-50 hover:bg-gray-100 border-gray-300'}`}
+                                >
+                                    <div className={`flex-shrink-0 w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${isSelected ? 'border-orange-500 bg-white' : 'border-gray-400'}`}>
+                                        {isSelected && <div className="w-3 h-3 rounded-full bg-orange-500"></div>}
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="font-semibold text-gray-900">{t(method === AiBookingMethod.Full ? 'aiFullBooking' : 'websiteOnlyBooking')}</h3>
+                                        <p className="text-xs text-gray-600 mt-1">
+                                            {t(method === AiBookingMethod.Full ? 'aiFullBookingDesc' : 'websiteOnlyBookingDesc')}
+                                        </p>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 
