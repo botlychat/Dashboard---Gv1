@@ -130,7 +130,7 @@ const AiAgentComponent: React.FC = () => {
         });
     };
 
-    const usagePercentage = (groupConfig.activeConversations / groupConfig.maxConversations) * 100;
+    const usagePercentage = (groupConfig.activeConversations / 1500) * 100;  // Fixed plan of 1500 conversations
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -141,14 +141,14 @@ const AiAgentComponent: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('currentActiveConversations')}</p>
                     <div className="flex items-end space-x-2">
                         <span className="text-4xl font-bold">{groupConfig.activeConversations}</span>
-                        <span className="text-gray-500 dark:text-gray-400 pb-1">/ {groupConfig.maxConversations} {t('conversationsInPlan')}</span>
+                        <span className="text-gray-500 dark:text-gray-400 pb-1">/ 1500 {t('conversationsInPlan')}</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 my-4">
                         <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${usagePercentage}%` }}></div>
                     </div>
                     <div className="flex justify-between text-sm font-medium">
                         <span className="text-gray-600 dark:text-gray-300">{usagePercentage.toFixed(1)}% {t('used')}</span>
-                        <span className="text-green-600 dark:text-green-400">{groupConfig.maxConversations - groupConfig.activeConversations} {t('remaining')}</span>
+                        <span className="text-green-600 dark:text-green-400">{1500 - groupConfig.activeConversations} {t('remaining')}</span>
                     </div>
                 </div>
 
@@ -331,14 +331,15 @@ const AiAgentContainer: React.FC = () => {
     const { t } = useLanguage();
     const [config] = useLocalStorage<AiConfig>('aiConfig', initialAiConfig);
 
+    // Fixed plan total: 1500 conversations across all groups
+    const TOTAL_PLAN = 1500;
+
     // Totals across all groups
-    const { totalActive, totalMax } = useMemo(() => {
+    const totalActive = useMemo(() => {
         const allConfigs: AiConfigData[] = Object.values(config as any);
-        const totalActive = allConfigs.reduce((sum, c) => sum + (c?.activeConversations || 0), 0);
-        const totalMax = allConfigs.reduce((sum, c) => sum + (c?.maxConversations || 0), 0);
-        return { totalActive, totalMax };
+        return allConfigs.reduce((sum, c) => sum + (c?.activeConversations || 0), 0);
     }, [config]);
-    const usagePercentage = totalMax > 0 ? (totalActive / totalMax) * 100 : 0;
+    const usagePercentage = (totalActive / TOTAL_PLAN) * 100;
 
     return (
         <div className="max-w-5xl mx-auto space-y-6">
@@ -349,14 +350,14 @@ const AiAgentContainer: React.FC = () => {
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('acrossAllGroups')}</p>
                 <div className="flex items-end space-x-2">
                     <span className="text-4xl font-bold">{totalActive.toLocaleString()}</span>
-                    <span className="text-gray-500 dark:text-gray-400 pb-1">/ {totalMax.toLocaleString()} {t('conversationsInPlan')}</span>
+                    <span className="text-gray-500 dark:text-gray-400 pb-1">/ {TOTAL_PLAN.toLocaleString()} {t('conversationsInPlan')}</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 my-4">
                     <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${usagePercentage}%` }}></div>
                 </div>
                 <div className="flex justify-between text-sm font-medium mb-4">
                     <span className="text-gray-600 dark:text-gray-300">{usagePercentage.toFixed(1)}% {t('used')}</span>
-                    <span className="text-green-600 dark:text-green-400">{(totalMax - totalActive).toLocaleString()} {t('remaining')}</span>
+                    <span className="text-green-600 dark:text-green-400">{(TOTAL_PLAN - totalActive).toLocaleString()} {t('remaining')}</span>
                 </div>
 
                 {/* Breakdown: each group's share of the total */}
@@ -375,20 +376,20 @@ const AiAgentContainer: React.FC = () => {
                                 reminders: ['', ''],
                                 customRoles: []
                             } as AiConfigData;
-                            const sharePct = totalActive > 0 ? (cfg.activeConversations / totalActive) * 100 : 0;
+                            const groupPercentage = (cfg.activeConversations / TOTAL_PLAN) * 100;
                             const isSelected = currentGroupId !== 'all' && Number(currentGroupId) === Number(group.id);
                             return (
                                 <div key={group.id} className={`flex items-center gap-3 p-2 rounded-md ${isSelected ? 'bg-orange-50 dark:bg-orange-900/10' : 'bg-transparent'}`}>
                                     <div className="min-w-40">
                                         <p className="font-medium truncate" title={group.name}>{group.name}</p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">{cfg.activeConversations.toLocaleString()} / {cfg.maxConversations.toLocaleString()}</p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">Consumed: {cfg.activeConversations.toLocaleString()}</p>
                                     </div>
                                     <div className="flex-1">
                                         <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                            <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${Math.min(100, sharePct)}%` }}></div>
+                                            <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: `${Math.min(100, groupPercentage)}%` }}></div>
                                         </div>
                                     </div>
-                                    <div className="w-20 text-end text-sm font-medium">{sharePct.toFixed(1)}%</div>
+                                    <div className="w-20 text-end text-sm font-medium">{groupPercentage.toFixed(1)}%</div>
                                     <button
                                         className="px-3 py-1 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-md"
                                         onClick={() => setCurrentGroupId(group.id)}

@@ -90,9 +90,30 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             .theme-button:hover { opacity: 0.9; }
             .theme-accent { color: var(--theme-color); }
             .theme-border { border-color: var(--theme-color); }
+            
+            /* Apply theme color to hardcoded orange elements globally */
+            .bg-orange-500 { background-color: var(--theme-color); }
+            .bg-orange-600:hover { background-color: var(--theme-color); opacity: 0.9; }
+            .hover\:bg-orange-600:hover { background-color: var(--theme-color); opacity: 0.9; }
+            .peer-checked\:bg-orange-500:checked ~ .peer-checked\:bg-orange-500 { background-color: var(--theme-color); }
+            .peer-checked\:bg-orange-500 { background-color: var(--theme-color); }
+            .disabled\:bg-orange-300:disabled { background-color: var(--theme-color); opacity: 0.6; }
+            .bg-orange-50 { background-color: var(--theme-color); opacity: 0.1; }
+            .dark\:bg-orange-900\/20 { background-color: var(--theme-color); opacity: 0.2; }
+            .border-orange-500 { border-color: var(--theme-color); }
+            .dark\:border-orange-500 { border-color: var(--theme-color); }
+            .file\:bg-orange-50 { background-color: var(--theme-color); opacity: 0.1; }
+            .file\:text-orange-700 { color: var(--theme-color); }
+            .hover\:file\:bg-orange-100:hover { background-color: var(--theme-color); opacity: 0.15; }
         `;
         if (!document.getElementById('theme-style')) {
             document.head.appendChild(style);
+        } else {
+            // Update existing style
+            const existingStyle = document.getElementById('theme-style') as HTMLStyleElement;
+            if (existingStyle) {
+                existingStyle.innerHTML = style.innerHTML;
+            }
         }
     }, [themeColor]);
 

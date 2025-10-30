@@ -175,14 +175,14 @@ export const currencyNames: { en: { [key in Currency]: string }, ar: { [key in C
         EUR: 'EUR',
     },
     ar: {
-        SAR: 'ريال',
-        AED: 'درهم',
-        QAR: 'ريال',
-        BHD: 'دينار',
-        OMR: 'ريال',
-        KWD: 'دينار',
-        USD: 'دولار',
-        EUR: 'يورو',
+        SAR: 'SAR - ريال',
+        AED: 'AED - درهم',
+        QAR: 'QAR - ريال',
+        BHD: 'BHD - دينار',
+        OMR: 'OMR - ريال',
+        KWD: 'KWD - دينار',
+        USD: 'USD - دولار',
+        EUR: 'EUR - يورو',
     }
 };
 

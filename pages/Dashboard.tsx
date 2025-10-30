@@ -158,10 +158,10 @@ const Dashboard: React.FC = () => {
                             <input type="date" name="to" value={dateRange.to} min={dateRange.from} onChange={handleDateChange} className="p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 text-sm"/>
                         </div>
                     </div>
-                    <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2">
+                    <div className="flex flex-row items-center justify-center gap-2">
                         <button
                             onClick={() => openAddBookingPanel()}
-                            className="flex items-center px-4 py-2 text-white rounded-md hover:opacity-90 transition-opacity text-sm font-medium w-full sm:w-auto justify-center"
+                            className="flex items-center px-4 py-2 text-white rounded-md hover:opacity-90 transition-opacity text-sm font-medium justify-center"
                             style={{ backgroundColor: themeColor }}
                         >
                             <i className="fas fa-plus me-2"></i>
@@ -169,7 +169,7 @@ const Dashboard: React.FC = () => {
                         </button>
                         <NavLink
                             to="/calendar"
-                            className="flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm font-medium w-full sm:w-auto justify-center"
+                            className="flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm font-medium justify-center"
                         >
                             <i className="fas fa-calendar-alt me-2"></i>
                             <span>{t('viewCalendar')}</span>
