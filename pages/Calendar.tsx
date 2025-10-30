@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialBookings, initialUnits } from '../data/mockData';
-import { Booking, Unit, BookingStatus, ExternalCalendar, currencySymbols, PricingOverride, formatCurrency } from '../types';
+import { Booking, Unit, BookingStatus, ExternalCalendar, currencySymbols, currencyNames, PricingOverride, formatCurrency } from '../types';
 import { useGroup, useAccount, useGlobalActions, useLanguage } from '../App';
 import SidePanel from '../components/SidePanel';
 import SyncCalendarForm from '../components/SyncCalendarForm';
@@ -570,7 +570,7 @@ const Calendar: React.FC = () => {
                         return (
                             <div key={index} className={`relative border min-h-[7rem] sm:min-h-[9rem] flex flex-col p-1 sm:p-1.5 group ${isCurrentMonth ? 'bg-white' : 'bg-gray-50'}`}>
                                 <div className="flex justify-between items-start mb-1">
-                                    <span className={`text-xs sm:text-sm font-medium self-start ${isToday ? 'bg-orange-500 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-[10px] sm:text-sm' : ''} ${!isCurrentMonth ? 'text-gray-400' : ''}`}>
+                                    <span className={`text-xs sm:text-sm font-medium self-start ${isToday ? 'bg-orange-500 text-white rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center text-[11px] sm:text-sm leading-none' : ''} ${!isCurrentMonth ? 'text-gray-400' : ''}`}>
                                         {date.getDate()}
                                     </span>
                                     <div className="relative">
