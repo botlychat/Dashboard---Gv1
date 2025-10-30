@@ -142,7 +142,7 @@ const Units: React.FC = () => {
                  <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-semibold">{title}</h2>
                      <div className="flex space-x-2">
-                        <button onClick={() => setIsAddGroupPanelOpen(true)} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">
+                        <button onClick={() => setIsAddGroupPanelOpen(true)} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white text-sm font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">
                             {t('addGroup')}
                         </button>
                         <button onClick={handleOpenAddPanel} className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-md hover:bg-orange-600">
