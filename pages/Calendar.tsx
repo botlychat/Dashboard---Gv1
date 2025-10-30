@@ -437,7 +437,7 @@ const Calendar: React.FC = () => {
             </div>
             <div className="relative">
                 {/* Multi-day bookings overlay layer - positioned absolutely to span across grid */}
-                <div className="absolute inset-0 pointer-events-none z-10" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gridAutoRows: '1fr', gap: '0.25rem' }}>
+                <div className="absolute inset-0 pointer-events-none z-10" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gridTemplateRows: `repeat(${Math.ceil(days.length / 7)}, minmax(7rem, auto))`, gap: '0.25rem' }}>
                     {(() => {
                         const renderedBookings = new Set<string>();
                         const bookingSegments: Array<{ booking: any, row: number, col: number, span: number, isFirst: boolean, isLast: boolean }> = [];
@@ -517,11 +517,11 @@ const Calendar: React.FC = () => {
                                         gridRow: row,
                                         gridColumn: `${col} / span ${span}`,
                                         alignSelf: 'start',
-                                        marginTop: '2rem',
-                                        marginLeft: '0.25rem',
-                                        marginRight: '0.25rem',
+                                        marginTop: '1.5rem',
+                                        marginLeft: '0.375rem',
+                                        marginRight: '0.375rem',
                                         height: 'fit-content',
-                                        maxHeight: 'calc(100% - 2.5rem)',
+                                        maxHeight: 'calc(100% - 2rem)',
                                         padding: '0.25rem 0.375rem',
                                         fontSize: '10px',
                                         overflow: 'hidden',
