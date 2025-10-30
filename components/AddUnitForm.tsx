@@ -255,12 +255,12 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
     <form onSubmit={handleSubmit}>
       <style>{`
             .form-label { display: block; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 500; color: #374151; }
-            .dark .form-label { color: #d1d5db; }
-            .form-input { display: block; width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; background-color: #fff; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
-            .dark .form-input { background-color: #374151; border-color: #4b5563; color: #fff; }
+            html.dark .form-label { color: #f3f4f6; }
+            .form-input { display: block; width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.375rem; background-color: #ffffff; color: #111827; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+            html.dark .form-input { background-color: #1f2937; border-color: #4b5563; color: #f3f4f6; }
             .form-input:focus { outline: 2px solid transparent; outline-offset: 2px; border-color: #fb923c; ring: 1px solid #fb923c; }
             .form-checkbox { height: 1.25rem; width: 1.25rem; border-radius: 0.25rem; border-color: #d1d5db; color: #f97316; }
-            .dark .form-checkbox { background-color: #4b5563; border-color: #6b7280;}
+            html.dark .form-checkbox { background-color: #374151; border-color: #6b7280;}
       `}</style>
       <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
           <nav className="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">

@@ -146,12 +146,16 @@ const Calendar: React.FC = () => {
     };
 
     const handleActionMenuClick = (date: Date, event: React.MouseEvent) => {
-        // Determine if menu should open to the left to avoid going off-screen
+        // Determine if menu should open to the left or right to stay within viewport
         const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-        const spaceToRight = window.innerWidth - rect.right;
         const menuWidth = 192; // w-48 = 12rem = 192px
+        const padding = 10;
         
-        if (spaceToRight < menuWidth + 10) {
+        const spaceToRight = window.innerWidth - rect.right;
+        const spaceToLeft = rect.left;
+        
+        // If not enough space on right and there's more space on left, position left
+        if (spaceToRight < menuWidth + padding && spaceToLeft > spaceToRight) {
             setActionMenuPosition('left');
         } else {
             setActionMenuPosition('right');
@@ -451,7 +455,7 @@ const Calendar: React.FC = () => {
                                         <i className="fas fa-plus-circle"></i>
                                     </button>
                                     {actionMenuDate?.getTime() === date.getTime() && (
-                                        <div ref={actionMenuRef} className={`absolute z-20 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 text-start ${actionMenuPosition === 'left' ? 'start-0' : 'end-0'}`}>
+                                        <div ref={actionMenuRef} className={`absolute z-20 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 text-start overflow-hidden ${actionMenuPosition === 'left' ? 'start-0' : 'end-0'}`}>
                                             <button onClick={() => handleAddBookingFromDate(date)} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-plus me-2"></i>{t('addNewBooking')}</button>
                                             <button onClick={() => openActionPanel(date, 'closeUnits')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-lock me-2"></i>{t('closeUnits')}</button>
                                             <button onClick={() => openActionPanel(date, 'adjustPrice')} className="block w-full text-start px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i className="fas fa-dollar-sign me-2"></i>{t('adjustDayPrice')}</button>
@@ -473,6 +477,11 @@ const Calendar: React.FC = () => {
                                     const isBlocker = booking.clientName === t('unitClosed');
                                     const bookingPosition = getBookingPosition(booking, date);
                                     
+                                    // Only render booking on first day or single-day bookings (for continuous display)
+                                    if (bookingPosition === 'middle' || bookingPosition === 'last') {
+                                        return null;
+                                    }
+                                    
                                     // Determine border radius and padding for continuous multi-day display
                                     let borderRadiusClass = 'rounded-md';
                                     let paddingClass = 'px-1.5';
@@ -480,12 +489,6 @@ const Calendar: React.FC = () => {
                                     if (bookingPosition === 'first') {
                                         borderRadiusClass = 'rounded-s-md rounded-e-none';
                                         paddingClass = 'ps-1.5 pe-0';
-                                    } else if (bookingPosition === 'middle') {
-                                        borderRadiusClass = 'rounded-none';
-                                        paddingClass = 'px-0';
-                                    } else if (bookingPosition === 'last') {
-                                        borderRadiusClass = 'rounded-e-md rounded-s-none';
-                                        paddingClass = 'ps-0 pe-1.5';
                                     }
                                     // 'single' keeps default rounded-md and px-1.5
                                     
