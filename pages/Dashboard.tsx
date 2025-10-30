@@ -222,19 +222,46 @@ const Dashboard: React.FC = () => {
                 </div>
             </div>
 
-            <div className="hidden md:block bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4">{t('monthlyRevenueAndBookings')}</h2>
-                <div style={{ width: '100%', height: 300 }}>
+            <div className="hidden md:block bg-gradient-to-br from-slate-50 to-slate-100 p-6 rounded-xl shadow-lg border border-slate-200">
+                <h2 className="text-xl font-bold mb-6 text-slate-800">{t('monthlyRevenueAndBookings')}</h2>
+                <div style={{ width: '100%', height: 350 }}>
                     <ResponsiveContainer>
-                        <BarChart data={chartData} margin={{ left: language === 'ar' ? 10 : 10, right: language === 'ar' ? 30 : 20, top: 5, bottom: 5 }}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128, 128, 128, 0.2)" />
-                            <XAxis dataKey="name" />
-                            <YAxis yAxisId="left" orientation={language === 'ar' ? 'right' : 'left'} stroke="#8884d8" width={language === 'ar' ? 110 : 70} tickFormatter={(tick) => formatCurrency(tick, accountSettings.currency, language)} />
-                            <YAxis yAxisId="right" orientation={language === 'ar' ? 'left' : 'right'} stroke="#82ca9d" width={60} />
-                            <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} formatter={(value, name) => name === 'Revenue' ? formatCurrency(value as number, accountSettings.currency, language) : value} />
-                            <Legend />
-                            <Bar yAxisId="left" dataKey="revenue" fill="#8884d8" name={t('revenue')} />
-                            <Bar yAxisId="right" dataKey="bookings" fill="#82ca9d" name={t('bookings')} />
+                        <BarChart data={chartData} margin={{ left: 10, right: 10, top: 10, bottom: 10 }} barGap={8}>
+                            <defs>
+                                <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="#6366f1" stopOpacity={0.9}/>
+                                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.7}/>
+                                </linearGradient>
+                                <linearGradient id="bookingsGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="#10b981" stopOpacity={0.9}/>
+                                    <stop offset="100%" stopColor="#059669" stopOpacity={0.7}/>
+                                </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#cbd5e1" opacity={0.5} />
+                            <XAxis dataKey="name" stroke="#64748b" style={{ fontSize: '14px', fontWeight: '500' }} />
+                            <YAxis yAxisId="left" orientation="left" stroke="#6366f1" width={80} tickFormatter={(tick) => formatCurrency(tick, accountSettings.currency, 'en')} style={{ fontSize: '13px' }} />
+                            <YAxis yAxisId="right" orientation="right" stroke="#10b981" width={60} style={{ fontSize: '13px' }} />
+                            <Tooltip 
+                                contentStyle={{ 
+                                    backgroundColor: '#1e293b', 
+                                    border: 'none', 
+                                    borderRadius: '12px',
+                                    boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+                                    padding: '12px 16px'
+                                }} 
+                                labelStyle={{ color: '#e2e8f0', fontWeight: '600', marginBottom: '8px' }}
+                                itemStyle={{ color: '#f1f5f9', fontSize: '14px' }}
+                                formatter={(value, name) => [
+                                    name === t('revenue') ? formatCurrency(value as number, accountSettings.currency, 'en') : value,
+                                    name
+                                ]} 
+                            />
+                            <Legend 
+                                wrapperStyle={{ paddingTop: '20px' }}
+                                iconType="circle"
+                            />
+                            <Bar yAxisId="left" dataKey="revenue" fill="url(#revenueGradient)" name={t('revenue')} radius={[8, 8, 0, 0]} />
+                            <Bar yAxisId="right" dataKey="bookings" fill="url(#bookingsGradient)" name={t('bookings')} radius={[8, 8, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
