@@ -435,9 +435,9 @@ const Calendar: React.FC = () => {
             <div className="grid grid-cols-7 text-center font-semibold text-gray-600 border-b pb-2 mb-2 text-xs sm:text-sm">
                 {dayHeaderKeys.map(dayKey => <div key={dayKey}>{t(dayKey)}</div>)}
             </div>
-            <div className="relative overflow-visible">
+            <div className="relative">
                 {/* Multi-day bookings overlay layer - positioned absolutely to span across grid */}
-                <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gridAutoRows: 'minmax(7rem, auto)', gap: '0.25rem' }}>
+                <div className="absolute inset-0 pointer-events-none z-10" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gridAutoRows: 'minmax(7rem, auto)', gap: '0.25rem' }}>
                     {(() => {
                         const renderedBookings = new Set<string>();
                         const bookingSegments: Array<{ booking: any, row: number, col: number, span: number, isFirst: boolean, isLast: boolean }> = [];
@@ -503,12 +503,16 @@ const Calendar: React.FC = () => {
                                 <div
                                     key={bookingRowKey}
                                     onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
-                                    className={`py-1 sm:py-1.5 px-1 sm:px-1.5 text-[10px] sm:text-xs pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 border-gray-400 cursor-not-allowed text-gray-700' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
+                                    className={`pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 border-gray-400 cursor-not-allowed text-gray-700' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
                                     style={{
                                         gridRow: row,
                                         gridColumn: `${col} / span ${span}`,
-                                        zIndex: 10,
-                                        position: 'relative',
+                                        alignSelf: 'start',
+                                        marginTop: '0.25rem',
+                                        height: 'fit-content',
+                                        maxHeight: 'calc(100% - 0.5rem)',
+                                        padding: '0.25rem 0.375rem',
+                                        fontSize: '10px',
                                         overflow: 'hidden',
                                         borderLeftWidth: isFirst ? '4px' : '0',
                                         borderRightWidth: isLast && !isFirst ? '4px' : '0',
@@ -522,13 +526,14 @@ const Calendar: React.FC = () => {
                                     title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}
                                 >
                                     {isBlocker ? (
-                                        <p className="font-semibold flex items-center text-[10px] sm:text-xs truncate">
-                                            <i className="fas fa-lock me-1"></i> <span className="truncate">{unit?.name}</span>
+                                        <p className="font-semibold flex items-center text-[10px] sm:text-xs truncate leading-tight">
+                                            <i className="fas fa-lock me-1 text-[9px] sm:text-[10px]"></i> 
+                                            <span className="truncate">{unit?.name}</span>
                                         </p>
                                     ) : (
                                         <>
-                                            <p className="font-semibold truncate leading-tight">{booking.clientName}</p>
-                                            <p className="text-[9px] sm:text-xs opacity-80 truncate leading-tight">{unit?.name}</p>
+                                            <p className="font-semibold truncate leading-tight text-[10px] sm:text-xs">{booking.clientName}</p>
+                                            <p className="text-[9px] sm:text-[10px] opacity-80 truncate leading-tight">{unit?.name}</p>
                                         </>
                                     )}
                                 </div>
@@ -538,7 +543,7 @@ const Calendar: React.FC = () => {
                 </div>
 
                 {/* Main calendar grid with day cells */}
-                <div className="grid grid-cols-7 gap-1">
+                <div className="grid grid-cols-7 gap-1 relative">
                     {days.map((date, index) => {
                         const isCurrentMonth = date.getMonth() === currentDate.getMonth();
                         const isToday = date.toDateString() === new Date().toDateString();
@@ -552,7 +557,7 @@ const Calendar: React.FC = () => {
                         const showPrice = currentGroupId !== 'all';
 
                         return (
-                            <div key={index} className={`relative border min-h-[7rem] sm:min-h-[9rem] flex flex-col p-1 sm:p-1.5 group overflow-visible ${isCurrentMonth ? 'bg-white' : 'bg-gray-50'}`}>
+                            <div key={index} className={`relative border min-h-[7rem] sm:min-h-[9rem] flex flex-col p-1 sm:p-1.5 group ${isCurrentMonth ? 'bg-white' : 'bg-gray-50'}`}>
                                 <div className="flex justify-between items-start mb-1">
                                     <span className={`text-xs sm:text-sm font-medium self-start ${isToday ? 'bg-orange-500 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-[10px] sm:text-sm' : ''} ${!isCurrentMonth ? 'text-gray-400' : ''}`}>
                                         {date.getDate()}
