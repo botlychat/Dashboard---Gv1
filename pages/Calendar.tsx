@@ -428,7 +428,7 @@ const Calendar: React.FC = () => {
                     </button>
                 </div>
             </div>
-            <div className="grid grid-cols-7 text-center font-semibold text-gray-600 dark:text-gray-400 border-b dark:border-gray-700 pb-2 mb-2">
+            <div className="grid grid-cols-7 text-center font-semibold text-gray-600 dark:text-gray-300 border-b dark:border-gray-700 pb-2 mb-2">
                 {dayHeaderKeys.map(dayKey => <div key={dayKey}>{t(dayKey)}</div>)}
             </div>
             <div className="relative overflow-visible">
@@ -501,7 +501,7 @@ const Calendar: React.FC = () => {
                         return (
                             <div key={index} className={`relative border dark:border-gray-700 min-h-[9rem] flex flex-col p-1.5 group overflow-visible ${isCurrentMonth ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/50'}`}>
                                 <div className="flex justify-between items-start">
-                                    <span className={`text-sm font-medium self-start mb-1 ${isToday ? 'bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center' : ''} ${!isCurrentMonth ? 'text-gray-400 dark:text-gray-500' : ''}`}>
+                                    <span className={`text-sm font-medium self-start mb-1 ${isToday ? 'bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center' : ''} ${!isCurrentMonth ? 'text-gray-400 dark:text-gray-400' : ''}`}>
                                         {date.getDate()}
                                     </span>
                                     <div className="relative">

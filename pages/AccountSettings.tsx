@@ -27,35 +27,35 @@ const AccountSettingsPage: React.FC = () => {
                 <h2 className="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">{t('businessInfo')}</h2>
                 <div className="space-y-4">
                     <div>
-                        <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('commercialBusinessName')}</label>
+                        <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('commercialBusinessName')}</label>
                         <input
                             type="text"
                             id="businessName"
                             name="businessName"
                             value={accountSettings.businessName}
                             onChange={handleInputChange}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                         />
                     </div>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('accountEmail')}</label>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('accountEmail')}</label>
                         <input
                             type="email"
                             id="email"
                             name="email"
                             value={accountSettings.email}
                             onChange={handleInputChange}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                         />
                     </div>
                      <div>
-                        <label htmlFor="currency" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('currency')}</label>
+                        <label htmlFor="currency" className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('currency')}</label>
                         <select
                             id="currency"
                             name="currency"
                             value={accountSettings.currency}
                             onChange={handleInputChange}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                         >
                             <option value="SAR">SAR (﷼) - Saudi Riyal</option>
                             <option value="AED">AED (د.إ) - UAE Dirham</option>
@@ -74,16 +74,16 @@ const AccountSettingsPage: React.FC = () => {
                 <h2 className="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">{t('changePassword')}</h2>
                 <div className="space-y-4">
                      <div>
-                        <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('currentPassword')}</label>
-                        <input type="password" id="currentPassword" name="currentPassword" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600" />
+                        <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('currentPassword')}</label>
+                        <input type="password" id="currentPassword" name="currentPassword" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" />
                     </div>
                      <div>
-                        <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('newPassword')}</label>
-                        <input type="password" id="newPassword" name="newPassword" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600" />
+                        <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('newPassword')}</label>
+                        <input type="password" id="newPassword" name="newPassword" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" />
                     </div>
                      <div>
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('confirmNewPassword')}</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600" />
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('confirmNewPassword')}</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" />
                     </div>
                 </div>
             </div>

@@ -164,21 +164,21 @@ const OverrideForm: React.FC<OverrideFormProps> = ({ units, onSave, onClose, edi
         <form onSubmit={handleSubmit} className="space-y-6">
             <div>
                 <label className="block text-sm font-medium mb-1">{t('overrideName')}</label>
-                <input name="name" value={formData.name} onChange={handleChange} placeholder={`${t('example')}: ${t('christmasSpecial')}`} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
+                <input name="name" value={formData.name} onChange={handleChange} placeholder={`${t('example')}: ${t('christmasSpecial')}`} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"/>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  <div>
                     <label className="block text-sm font-medium mb-1">{t('startDate')}</label>
-                    <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
+                    <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"/>
                 </div>
                 <div>
                     <label className="block text-sm font-medium mb-1">{t('endDate')}</label>
-                    <input type="date" name="endDate" value={formData.endDate} min={formData.startDate} onChange={handleChange} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
+                    <input type="date" name="endDate" value={formData.endDate} min={formData.startDate} onChange={handleChange} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"/>
                 </div>
             </div>
              <div>
                 <label className="block text-sm font-medium mb-1">{t('price')} ({t('perNight')} {currencySymbol})</label>
-                <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder={`${t('example')}: 950`} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"/>
+                <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder={`${t('example')}: 950`} required className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"/>
             </div>
 
             <div>

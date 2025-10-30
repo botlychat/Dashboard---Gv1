@@ -58,7 +58,7 @@ const AdjustPricePanel: React.FC<AdjustPricePanelProps> = ({ date, units, getDai
                                     value={overriddenPrice ?? ''}
                                     onChange={(e) => handleChange(unit.id, e.target.value)}
                                     placeholder={defaultPrice.toString()}
-                                    className="w-32 p-2 text-right border rounded-md dark:bg-gray-700 dark:border-gray-600"
+                                    className="w-32 p-2 text-right border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                                 />
                             </div>
                         </div>

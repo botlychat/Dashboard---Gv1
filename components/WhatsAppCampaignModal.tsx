@@ -86,12 +86,12 @@ const WhatsAppCampaignModal: React.FC<WhatsAppCampaignModalProps> = ({ isOpen, o
             </div>
              <div>
                 <label htmlFor="campaignDateTime" className="block text-sm font-medium mb-1">{t('scheduleDateTime')}</label>
-                <input id="campaignDateTime" type="datetime-local" value={scheduleDate} onChange={e => setScheduleDate(e.target.value)} min={minDateString} className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" required/>
+                <input id="campaignDateTime" type="datetime-local" value={scheduleDate} onChange={e => setScheduleDate(e.target.value)} min={minDateString} className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required/>
                 <p className="text-xs text-gray-500 mt-1">{t('campaignMustBeScheduled')} {MIN_SCHEDULE_HOURS} {t('hoursInAdvance')}</p>
             </div>
             <div>
               <label htmlFor="campaignMessage" className="block text-sm font-medium mb-1">{t('message')}</label>
-              <textarea id="campaignMessage" value={message} onChange={e => setMessage(e.target.value)} maxLength={MAX_MESSAGE_LENGTH} rows={5} className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" placeholder={t('enterMessage')} required></textarea>
+              <textarea id="campaignMessage" value={message} onChange={e => setMessage(e.target.value)} maxLength={MAX_MESSAGE_LENGTH} rows={5} className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" placeholder={t('enterMessage')} required></textarea>
               <p className="text-right text-xs text-gray-500">{t('characterLimit')}: {message.length}/{MAX_MESSAGE_LENGTH}</p>
             </div>
             <div>

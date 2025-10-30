@@ -45,27 +45,27 @@ const EditContactModal: React.FC<EditContactModalProps> = ({ isOpen, onClose, co
           <div className="p-6 space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1">{t('name')}</label>
-              <input name="name" value={formData.name || ''} onChange={handleChange} className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" required />
+              <input name="name" value={formData.name || ''} onChange={handleChange} className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">{t('phone')}</label>
-              <input name="phone" value={formData.phone || ''} onChange={handleChange} className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" required />
+              <input name="phone" value={formData.phone || ''} onChange={handleChange} className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">{t('email')}</label>
-              <input type="email" name="email" value={formData.email || ''} onChange={handleChange} className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" required />
+              <input type="email" name="email" value={formData.email || ''} onChange={handleChange} className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">{t('group')}</label>
-                <select className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600">
+                <select className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
                     <option>{t('selectGroup')}</option>
                     {unitGroups.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">{t('unit')}</label>
-                <select className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600">
+                <select className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
                     <option>{t('selectAUnit')}</option>
                     {units.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
                 </select>

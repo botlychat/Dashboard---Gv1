@@ -12,7 +12,7 @@ const StatCard: React.FC<{ icon: string; title: string; value: string | number; 
             <i className={`fas ${icon} text-white text-lg md:text-xl`}></i>
         </div>
         <div className="flex-1">
-            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">{title}</p>
+            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-300">{title}</p>
             <p className="text-lg md:text-2xl font-bold text-gray-800 dark:text-white">{value}</p>
         </div>
     </div>
@@ -211,7 +211,7 @@ const Dashboard: React.FC = () => {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
+                            <tr className="text-gray-500 dark:text-gray-300 border-b dark:border-gray-700">
                                 <th className="py-3 px-4 font-medium">{t('client')}</th>
                                 <th className="py-3 px-4 font-medium">{t('unit')}</th>
                                 <th className="py-3 px-4 font-medium">{t('dates')}</th>
