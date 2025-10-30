@@ -382,10 +382,10 @@ const AiAgentContainer: React.FC = () => {
                             const groupPercentage = (cfg.activeConversations / TOTAL_PLAN) * 100;
                             const isSelected = currentGroupId !== 'all' && Number(currentGroupId) === Number(group.id);
                             return (
-                                <div key={group.id} className={`flex items-center gap-3 p-2 rounded-md ${isSelected ? 'bg-orange-50 dark:bg-orange-900/10' : 'bg-transparent'}`}>
+                                <div key={group.id} className={`flex items-center gap-3 p-2 rounded-md ${isSelected ? 'bg-orange-50 dark:bg-orange-900/10 dark:text-white' : 'bg-transparent'}`}>
                                     <div className="min-w-40">
                                         <p className="font-medium truncate" title={group.name}>{group.name}</p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">Consumed: {cfg.activeConversations.toLocaleString()}</p>
+                                        <p className={`text-xs ${isSelected ? 'dark:text-gray-200' : 'dark:text-gray-400'} text-gray-500`}>Consumed: {cfg.activeConversations.toLocaleString()}</p>
                                     </div>
                                     <div className="flex-1">
                                         <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
