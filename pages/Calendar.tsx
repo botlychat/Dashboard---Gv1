@@ -381,13 +381,13 @@ const Calendar: React.FC = () => {
             <div className="flex flex-wrap items-center justify-between mb-6 gap-4">
                 <div className="flex items-center space-x-2">
                     <button onClick={prevMonth} className="p-2 rounded-full hover:bg-gray-100">
-                        <i className="fas fa-chevron-left"></i>
+                        <i className={`fas ${language === 'ar' ? 'fa-chevron-right' : 'fa-chevron-left'}`}></i>
                     </button>
                     <h2 className="text-xl font-semibold">
                         {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
                     </h2>
                     <button onClick={nextMonth} className="p-2 rounded-full hover:bg-gray-100">
-                        <i className="fas fa-chevron-right"></i>
+                        <i className={`fas ${language === 'ar' ? 'fa-chevron-left' : 'fa-chevron-right'}`}></i>
                     </button>
                     <button onClick={today} className="px-4 py-2 text-sm font-medium border rounded-md hover:bg-gray-100">{t('today')}</button>
                 </div>
