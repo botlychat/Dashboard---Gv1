@@ -74,11 +74,11 @@ const WhatsAppCampaignModal: React.FC<WhatsAppCampaignModalProps> = ({ isOpen, o
              <div>
                 <label className="block text-sm font-medium mb-2">{t('recipients')}</label>
                 <div className="flex space-x-4">
-                    <label className={`flex-1 p-3 border rounded-lg cursor-pointer ${useSelected ? 'bg-orange-50 border-orange-500' : 'bg-gray-50'}`}>
+                    <label className={`flex-1 p-3 border rounded-lg cursor-pointer transition-colors ${useSelected ? 'bg-orange-50 dark:bg-orange-900/30 border-orange-500 text-gray-900 dark:text-white' : 'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200'}`}>
                         <input type="radio" name="recipients" checked={useSelected} onChange={() => setUseSelected(true)} disabled={selectedIds.length === 0} className="mr-2"/>
                         {t('sendTo')} {selectedIds.length} {t('selectedRecipients')}
                     </label>
-                    <label className={`flex-1 p-3 border rounded-lg cursor-pointer ${!useSelected ? 'bg-orange-50 border-orange-500' : 'bg-gray-50'}`}>
+                    <label className={`flex-1 p-3 border rounded-lg cursor-pointer transition-colors ${!useSelected ? 'bg-orange-50 dark:bg-orange-900/30 border-orange-500 text-gray-900 dark:text-white' : 'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200'}`}>
                         <input type="radio" name="recipients" checked={!useSelected} onChange={() => setUseSelected(false)} className="mr-2"/>
                         {t('sendTo')} {t('all')} {allContacts.length} {t('contacts')}
                     </label>
