@@ -8,6 +8,7 @@ import SyncCalendarForm from '../components/SyncCalendarForm';
 import GetCalendarUrlPanel from '../components/GetCalendarUrlPanel';
 import BookingDetailsPanel from '../components/BookingDetailsPanel';
 import CloseUnitsPanel from '../components/CloseUnitsPanel';
+import ConfirmDialog from '../components/ConfirmDialog';
 import AdjustPricePanel from '../components/AdjustPricePanel';
 
 
@@ -73,6 +74,7 @@ const Calendar: React.FC = () => {
     const [isCloseUnitsPanelOpen, setIsCloseUnitsPanelOpen] = useState(false);
     const [isAdjustPricePanelOpen, setIsAdjustPricePanelOpen] = useState(false);
     const [actionMenuPosition, setActionMenuPosition] = useState<'left' | 'right'>('right');
+    const [cancelBookingId, setCancelBookingId] = useState<number | null>(null);
     const filterRef = useRef<HTMLDivElement>(null);
     const actionMenuRef = useRef<HTMLDivElement>(null);
     
@@ -129,17 +131,16 @@ const Calendar: React.FC = () => {
     };
 
     const handleCancelBooking = (bookingId: number) => {
-        if (window.confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
-            setAllBookings(prevBookings =>
-                prevBookings.map(b =>
-                    b.id === bookingId ? { ...b, status: BookingStatus.Cancelled } : b
-                )
-            );
-            setIsBookingDetailsPanelOpen(false);
-        }
+        setCancelBookingId(bookingId);
     };
 
-    const handleAddBookingFromDate = (date: Date) => {
+    const confirmCancelBooking = (bookingId: number) => {
+        setAllBookings(prevBookings =>
+            prevBookings.map(b =>
+                b.id === bookingId ? { ...b, status: BookingStatus.Cancelled } : b
+            )
+        );
+    };    const handleAddBookingFromDate = (date: Date) => {
         const isoDate = date.toISOString().split('T')[0];
         openAddBookingPanel(isoDate);
         setActionMenuDate(null);
@@ -580,6 +581,18 @@ const Calendar: React.FC = () => {
         >
             <i className="fas fa-plus"></i>
         </button>
+
+        {cancelBookingId && (
+            <ConfirmDialog
+                title={t('cancelBooking')}
+                message="Are you sure you want to cancel this booking? This action cannot be undone."
+                confirmText={t('confirm')}
+                cancelText={t('cancel')}
+                type="danger"
+                onConfirm={() => confirmCancelBooking(cancelBookingId)}
+                onCancel={() => setCancelBookingId(null)}
+            />
+        )}
         </>
     );
 };

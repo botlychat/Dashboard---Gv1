@@ -1,10 +1,11 @@
 import React from 'react';
-import { useAccount, useLanguage } from '../App';
+import { useAccount, useLanguage, useToast } from '../App';
 import { Currency } from '../types';
 
 const AccountSettingsPage: React.FC = () => {
     const { accountSettings, setAccountSettings } = useAccount();
     const { t } = useLanguage();
+    const { showToast } = useToast();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -18,7 +19,7 @@ const AccountSettingsPage: React.FC = () => {
         e.preventDefault();
         // In a real app, this would involve an API call.
         // Here, useLocalStorage handles saving automatically.
-        alert(t('settingsSaved'));
+        showToast(t('settingsSaved'), 'success');
     };
 
     return (

@@ -16,6 +16,7 @@ import { UnitGroup, AccountSettings, Unit, Booking, Contact, FormDataType, Booki
 import SidePanel from './components/SidePanel';
 import AddBookingForm from './components/AddBookingForm';
 import { translations } from './utils/translations';
+import Toast, { ToastType } from './components/Toast';
 
 
 // Language Context
@@ -56,6 +57,54 @@ export const useLanguage = (): LanguageContextType => {
     const context = useContext(LanguageContext);
     if (!context) {
         throw new Error('useLanguage must be used within a LanguageProvider');
+    }
+    return context;
+};
+
+// Toast Context
+interface ToastData {
+    id: number;
+    message: string;
+    type: ToastType;
+}
+
+interface ToastContextType {
+    showToast: (message: string, type: ToastType) => void;
+}
+
+const ToastContext = createContext<ToastContextType | undefined>(undefined);
+
+export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [toasts, setToasts] = useState<ToastData[]>([]);
+
+    const showToast = (message: string, type: ToastType) => {
+        const id = Date.now();
+        setToasts(prev => [...prev, { id, message, type }]);
+    };
+
+    const removeToast = (id: number) => {
+        setToasts(prev => prev.filter(toast => toast.id !== id));
+    };
+
+    return (
+        <ToastContext.Provider value={{ showToast }}>
+            {children}
+            {toasts.map(toast => (
+                <Toast
+                    key={toast.id}
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => removeToast(toast.id)}
+                />
+            ))}
+        </ToastContext.Provider>
+    );
+};
+
+export const useToast = (): ToastContextType => {
+    const context = useContext(ToastContext);
+    if (!context) {
+        throw new Error('useToast must be used within a ToastProvider');
     }
     return context;
 };
@@ -318,15 +367,17 @@ const App: React.FC = () => {
   return (
     <HashRouter>
       <LanguageProvider>
-        <AccountProvider>
-          <GroupProvider>
-            <ThemeProvider>
-              <GlobalActionsProvider>
-                <MainContent />
-              </GlobalActionsProvider>
-            </ThemeProvider>
-          </GroupProvider>
-        </AccountProvider>
+        <ToastProvider>
+          <AccountProvider>
+            <GroupProvider>
+              <ThemeProvider>
+                <GlobalActionsProvider>
+                  <MainContent />
+                </GlobalActionsProvider>
+              </ThemeProvider>
+            </GroupProvider>
+          </AccountProvider>
+        </ToastProvider>
       </LanguageProvider>
     </HashRouter>
   );

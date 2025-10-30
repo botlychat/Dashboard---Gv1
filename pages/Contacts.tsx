@@ -4,6 +4,7 @@ import { initialContacts, initialBookings, initialUnits, initialUnitGroups } fro
 import { Contact, Booking, Unit, UnitGroup } from '../types';
 import WhatsAppCampaignModal from '../components/WhatsAppCampaignModal';
 import EditContactModal from '../components/EditContactModal';
+import ConfirmDialog from '../components/ConfirmDialog';
 import { useLanguage } from '../App';
 
 const ITEMS_PER_PAGE = 25;
@@ -22,6 +23,7 @@ const Contacts: React.FC = () => {
     const [isCampaignModalOpen, setCampaignModalOpen] = useState(false);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [editingContact, setEditingContact] = useState<Contact | null>(null);
+    const [deleteContactId, setDeleteContactId] = useState<number | null>(null);
 
     const contactData = useMemo(() => {
         return contacts.map(contact => {
@@ -82,11 +84,13 @@ const Contacts: React.FC = () => {
     };
     
     const handleDelete = (contactId: number) => {
-        if (window.confirm("Delete this contact? This action cannot be undone.")) {
-            setContacts(prev => prev.filter(c => c.id !== contactId));
-            setSelectedIds(prev => prev.filter(id => id !== contactId));
-        }
-    }
+        setDeleteContactId(contactId);
+    };
+
+    const confirmDelete = (contactId: number) => {
+        setContacts(prev => prev.filter(c => c.id !== contactId));
+        setSelectedIds(prev => prev.filter(id => id !== contactId));
+    };
 
     const handleEdit = (contact: Contact) => {
         setEditingContact(contact);
@@ -199,6 +203,18 @@ const Contacts: React.FC = () => {
                      {t('selectedContacts', { count: selectedIds.length })}
                 </div>
             </div>
+
+            {deleteContactId && (
+                <ConfirmDialog
+                    title={t('deleteContact')}
+                    message="Delete this contact? This action cannot be undone."
+                    confirmText={t('delete')}
+                    cancelText={t('cancel')}
+                    type="danger"
+                    onConfirm={() => confirmDelete(deleteContactId)}
+                    onCancel={() => setDeleteContactId(null)}
+                />
+            )}
         </div>
     );
 };

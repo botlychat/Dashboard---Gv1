@@ -7,6 +7,7 @@ import SidePanel from '../components/SidePanel';
 import AddUnitForm from '../components/AddUnitForm';
 import AddGroupForm from '../components/AddGroupForm';
 import PricingOverridesPanel from '../components/PricingOverridesPanel';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const Units: React.FC = () => {
     const [units, setUnits] = useLocalStorage<Unit[]>('units', initialUnits);
@@ -21,6 +22,7 @@ const Units: React.FC = () => {
     const [isUnitPanelOpen, setIsUnitPanelOpen] = useState(false);
     const [isAddGroupPanelOpen, setIsAddGroupPanelOpen] = useState(false);
     const [editingUnit, setEditingUnit] = useState<Unit | null>(null);
+    const [deleteConfirm, setDeleteConfirm] = useState<{ type: 'unit' | 'pricing', id: number } | null>(null);
 
     const currencySymbol = currencySymbols[language][accountSettings.currency];
     const currencyName = currencyNames[language][accountSettings.currency];
@@ -59,11 +61,13 @@ const Units: React.FC = () => {
     };
 
     const handleDeleteUnit = (unitId: number) => {
-        if (window.confirm("Are you sure you want to delete this unit? This will also remove all of its associated bookings. This action cannot be undone.")) {
-            setUnits(prev => prev.filter(u => u.id !== unitId));
-            // Also delete associated bookings to prevent orphaned data
-            setBookings(prev => prev.filter(b => b.unitId !== unitId));
-        }
+        setDeleteConfirm({ type: 'unit', id: unitId });
+    };
+
+    const confirmDeleteUnit = (unitId: number) => {
+        setUnits(prev => prev.filter(u => u.id !== unitId));
+        // Also delete associated bookings to prevent orphaned data
+        setBookings(prev => prev.filter(b => b.unitId !== unitId));
     };
 
     const handleAddGroup = (newGroupData: Omit<UnitGroup, 'id' | 'color'>) => {
@@ -85,9 +89,11 @@ const Units: React.FC = () => {
     };
 
     const handleDeletePricingOverride = (id: number) => {
-        if (window.confirm("Are you sure you want to delete this pricing period?")) {
-            setPricingOverrides(prev => prev.filter(po => po.id !== id));
-        }
+        setDeleteConfirm({ type: 'pricing', id });
+    };
+
+    const confirmDeletePricing = (id: number) => {
+        setPricingOverrides(prev => prev.filter(po => po.id !== id));
     };
     
     const currentGroup = currentGroupId !== 'all' ? groups.find(g => g.id === Number(currentGroupId)) : null;
@@ -190,6 +196,30 @@ const Units: React.FC = () => {
                     </table>
                 </div>
             </div>
+
+            {deleteConfirm && deleteConfirm.type === 'unit' && (
+                <ConfirmDialog
+                    title={t('deleteUnit')}
+                    message="Are you sure you want to delete this unit? This will also remove all of its associated bookings. This action cannot be undone."
+                    confirmText={t('delete')}
+                    cancelText={t('cancel')}
+                    type="danger"
+                    onConfirm={() => confirmDeleteUnit(deleteConfirm.id)}
+                    onCancel={() => setDeleteConfirm(null)}
+                />
+            )}
+
+            {deleteConfirm && deleteConfirm.type === 'pricing' && (
+                <ConfirmDialog
+                    title={t('deletePricingPeriod')}
+                    message="Are you sure you want to delete this pricing period?"
+                    confirmText={t('delete')}
+                    cancelText={t('cancel')}
+                    type="danger"
+                    onConfirm={() => confirmDeletePricing(deleteConfirm.id)}
+                    onCancel={() => setDeleteConfirm(null)}
+                />
+            )}
         </div>
     );
 };

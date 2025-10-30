@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Contact } from '../types';
-import { useLanguage } from '../App';
+import { useLanguage, useToast } from '../App';
 
 interface WhatsAppCampaignModalProps {
   isOpen: boolean;
@@ -17,6 +17,7 @@ const MIN_SCHEDULE_HOURS = 48;
 
 const WhatsAppCampaignModal: React.FC<WhatsAppCampaignModalProps> = ({ isOpen, onClose, allContacts, selectedIds }) => {
   const { t } = useLanguage();
+  const { showToast } = useToast();
   const [useSelected, setUseSelected] = useState(true);
   const [message, setMessage] = useState('');
   const [attachment, setAttachment] = useState<File | null>(null);
@@ -38,7 +39,7 @@ const WhatsAppCampaignModal: React.FC<WhatsAppCampaignModalProps> = ({ isOpen, o
       if (e.target.files && e.target.files[0]) {
           const file = e.target.files[0];
           if (file.size > MAX_ATTACHMENT_SIZE_MB * 1024 * 1024) {
-              alert(`File is too large. Max size is ${MAX_ATTACHMENT_SIZE_MB}MB.`);
+              showToast(`File is too large. Max size is ${MAX_ATTACHMENT_SIZE_MB}MB.`, 'error');
               e.target.value = '';
               setAttachment(null);
           } else {
@@ -50,14 +51,14 @@ const WhatsAppCampaignModal: React.FC<WhatsAppCampaignModalProps> = ({ isOpen, o
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if(recipients.length === 0) {
-        alert("No recipients to send to.");
+        showToast("No recipients to send to.", 'error');
         return;
     }
     if(!scheduleDate) {
-        alert(`Please schedule the campaign at least ${MIN_SCHEDULE_HOURS} hours in advance.`);
+        showToast(`Please schedule the campaign at least ${MIN_SCHEDULE_HOURS} hours in advance.`, 'warning');
         return;
     }
-    alert(`Campaign scheduled for ${recipients.length} recipients on ${new Date(scheduleDate).toLocaleString()}.\nTotal Cost: ${totalCost} SR`);
+    showToast(`Campaign scheduled for ${recipients.length} recipients on ${new Date(scheduleDate).toLocaleString()}.\nTotal Cost: ${totalCost} SR`, 'success');
     onClose();
   };
 

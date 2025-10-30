@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Unit, ExternalCalendar } from '../types';
-import { useLanguage } from '../App';
+import { useLanguage, useToast } from '../App';
 
 interface SyncCalendarFormProps {
     units: Unit[];
@@ -12,6 +12,7 @@ interface SyncCalendarFormProps {
 
 const SyncCalendarForm: React.FC<SyncCalendarFormProps> = ({ units, externalCalendars, onSave, onUpdate, onDelete }) => {
     const { t } = useLanguage();
+    const { showToast } = useToast();
     const [unitId, setUnitId] = useState('');
     const [name, setName] = useState('');
     const [url, setUrl] = useState('');
@@ -53,12 +54,12 @@ const SyncCalendarForm: React.FC<SyncCalendarFormProps> = ({ units, externalCale
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!unitId || !name || !url) {
-            alert(t('fillAllRequiredFields'));
+            showToast(t('fillAllRequiredFields'), 'error');
             return;
         }
 
         if (!url.toLowerCase().endsWith('.ics')) {
-            alert(t('invalidIcsUrl'));
+            showToast(t('invalidIcsUrl'), 'error');
             return;
         }
 

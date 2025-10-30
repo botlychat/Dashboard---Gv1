@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Unit, UnitGroup, currencySymbols, Bedroom, formatCurrency } from '../types';
-import { useAccount, useLanguage } from '../App';
+import { useAccount, useLanguage, useToast } from '../App';
 
 interface AddUnitFormProps {
   unitGroups: UnitGroup[];
@@ -55,6 +55,7 @@ const initialFormData = {
 
 const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, editingUnit }) => {
   const { t } = useLanguage();
+  const { showToast } = useToast();
   const TABS = [t('basicInfo'), t('pricing'), t('amenitiesAndFeatures'), t('media'), t('cancellationAndRefund')];
 
   const [activeTab, setActiveTab] = useState(TABS[0]);
@@ -162,7 +163,7 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
         const files = Array.from(e.target.files);
         const validFiles = files.filter(file => {
             if (file.size > MAX_VIDEO_SIZE_BYTES) {
-                alert(`File "${file.name}" is too large. Maximum size is ${MAX_VIDEO_SIZE_MB}MB.`);
+                showToast(`File "${file.name}" is too large. Maximum size is ${MAX_VIDEO_SIZE_MB}MB.`, 'error');
                 return false;
             }
             return true;
@@ -190,7 +191,7 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedGroup) {
-        alert("Please select a valid group.");
+        showToast("Please select a valid group.", 'error');
         return;
     }
 

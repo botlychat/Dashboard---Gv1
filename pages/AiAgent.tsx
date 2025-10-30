@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialAiConfig } from '../data/mockData';
 import { AiConfig, AiConfigData, AiBookingMethod } from '../types';
-import { useGroup, useLanguage, useTheme } from '../App';
+import { useGroup, useLanguage, useTheme, useToast } from '../App';
 
 interface EditSaveButtonsProps {
     isEditing: boolean;
@@ -131,10 +131,12 @@ const AiAgentComponent: React.FC = () => {
         handleConfigChange('couponCode', code);
     };
 
-    const copyToClipboard = (text: string | undefined) => {
+    const { showToast } = useToast();
+
+    const copyToClipboard = (text: string) => {
         if(!text) return;
         navigator.clipboard.writeText(text).then(() => {
-            alert(t('copiedToClipboard', { code: text }));
+            showToast(t('copiedToClipboard', { code: text }), 'success');
         });
     };
 

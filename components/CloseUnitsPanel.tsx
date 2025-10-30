@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Unit, Booking } from '../types';
+import { useToast } from '../App';
 
 interface CloseUnitsPanelProps {
     date: Date;
@@ -10,6 +11,7 @@ interface CloseUnitsPanelProps {
 }
 
 const CloseUnitsPanel: React.FC<CloseUnitsPanelProps> = ({ date, units, bookingsForDay, onClose, onSave }) => {
+    const { showToast } = useToast();
     const availableUnits = units.filter(unit => 
         !bookingsForDay.some(b => b.unitId === unit.id)
     );
@@ -32,7 +34,7 @@ const CloseUnitsPanel: React.FC<CloseUnitsPanelProps> = ({ date, units, bookings
     
     const handleSave = () => {
         if(selectedUnitIds.length === 0) {
-            alert("Please select at least one unit to close.");
+            showToast("Please select at least one unit to close.", 'warning');
             return;
         }
         onSave(selectedUnitIds);
