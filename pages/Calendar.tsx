@@ -437,55 +437,64 @@ const Calendar: React.FC = () => {
             </div>
             <div className="relative">
                 {/* Multi-day bookings overlay layer - positioned absolutely to span across grid */}
-                <div className="absolute inset-0 pointer-events-none z-10" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gridAutoRows: 'minmax(7rem, auto)', gap: '0.25rem' }}>
+                <div className="absolute inset-0 pointer-events-none z-10" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gridAutoRows: '1fr', gap: '0.25rem' }}>
                     {(() => {
                         const renderedBookings = new Set<string>();
                         const bookingSegments: Array<{ booking: any, row: number, col: number, span: number, isFirst: boolean, isLast: boolean }> = [];
                         
-                        // First pass: identify all booking segments that need to be rendered
-                        days.forEach((date, index) => {
-                            const row = Math.floor(index / 7) + 1;
-                            const col = (index % 7) + 1;
+                        // Collect all multi-day bookings
+                        const allMultiDayBookings = new Map<string, any>();
+                        days.forEach((date) => {
                             const dayBookings = bookingsForDay(date);
-                            
                             dayBookings.forEach(booking => {
                                 const position = getBookingPosition(booking, date);
-                                
-                                // Only process multi-day bookings
-                                if (position === 'single') return;
-                                
-                                const checkIn = new Date(booking.checkIn);
-                                const checkOut = new Date(booking.checkOut);
-                                checkIn.setHours(0, 0, 0, 0);
-                                checkOut.setHours(0, 0, 0, 0);
-                                
+                                if (position !== 'single' && !allMultiDayBookings.has(booking.id)) {
+                                    allMultiDayBookings.set(booking.id, booking);
+                                }
+                            });
+                        });
+                        
+                        // Process each multi-day booking and create segments that span across weeks
+                        allMultiDayBookings.forEach(booking => {
+                            const checkIn = new Date(booking.checkIn);
+                            const checkOut = new Date(booking.checkOut);
+                            checkIn.setHours(0, 0, 0, 0);
+                            checkOut.setHours(0, 0, 0, 0);
+                            
+                            // Find all days this booking appears in the calendar
+                            days.forEach((date, index) => {
                                 const currentDate = new Date(date);
                                 currentDate.setHours(0, 0, 0, 0);
                                 
-                                const bookingRowKey = `${booking.id}-row${row}`;
-                                
-                                // If this booking hasn't been rendered in this row yet
-                                if (!renderedBookings.has(bookingRowKey)) {
-                                    // Calculate span: number of days remaining in the booking from current date
-                                    const daysRemaining = Math.ceil((checkOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+                                // Check if this date is within the booking range
+                                if (currentDate >= checkIn && currentDate < checkOut) {
+                                    const row = Math.floor(index / 7) + 1;
+                                    const col = (index % 7) + 1;
+                                    const bookingRowKey = `${booking.id}-row${row}`;
                                     
-                                    // Calculate how many days can fit in the current week
-                                    const daysUntilWeekEnd = 7 - col + 1;
-                                    const daysInThisWeek = Math.min(daysRemaining, daysUntilWeekEnd);
-                                    
-                                    const isFirstSegment = currentDate.getTime() === checkIn.getTime();
-                                    const isLastSegment = new Date(currentDate.getTime() + (daysInThisWeek * 86400000)).getTime() >= checkOut.getTime();
-                                    
-                                    bookingSegments.push({
-                                        booking,
-                                        row,
-                                        col,
-                                        span: daysInThisWeek,
-                                        isFirst: isFirstSegment,
-                                        isLast: isLastSegment
-                                    });
-                                    
-                                    renderedBookings.add(bookingRowKey);
+                                    // If this booking hasn't been rendered in this row yet
+                                    if (!renderedBookings.has(bookingRowKey)) {
+                                        // Calculate span: days from current date to either end of booking or end of week
+                                        const daysRemaining = Math.ceil((checkOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+                                        const daysUntilWeekEnd = 7 - col + 1;
+                                        const daysInThisWeek = Math.min(daysRemaining, daysUntilWeekEnd);
+                                        
+                                        const isFirstSegment = currentDate.getTime() === checkIn.getTime();
+                                        const nextMonday = new Date(currentDate);
+                                        nextMonday.setDate(nextMonday.getDate() + daysInThisWeek);
+                                        const isLastSegment = nextMonday >= checkOut;
+                                        
+                                        bookingSegments.push({
+                                            booking,
+                                            row,
+                                            col,
+                                            span: daysInThisWeek,
+                                            isFirst: isFirstSegment,
+                                            isLast: isLastSegment
+                                        });
+                                        
+                                        renderedBookings.add(bookingRowKey);
+                                    }
                                 }
                             });
                         });
@@ -508,9 +517,9 @@ const Calendar: React.FC = () => {
                                         gridRow: row,
                                         gridColumn: `${col} / span ${span}`,
                                         alignSelf: 'start',
-                                        marginTop: '0.25rem',
+                                        marginTop: '1.75rem',
                                         height: 'fit-content',
-                                        maxHeight: 'calc(100% - 0.5rem)',
+                                        maxHeight: 'calc(100% - 2rem)',
                                         padding: '0.25rem 0.375rem',
                                         fontSize: '10px',
                                         overflow: 'hidden',
