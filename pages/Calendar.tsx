@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialBookings, initialUnits } from '../data/mockData';
-import { Booking, Unit, BookingStatus, ExternalCalendar, currencySymbols, currencyNames, PricingOverride } from '../types';
+import { Booking, Unit, BookingStatus, ExternalCalendar, currencySymbols, currencyNames, PricingOverride, formatCurrency } from '../types';
 import { useGroup, useAccount, useGlobalActions, useLanguage } from '../App';
 import SidePanel from '../components/SidePanel';
 import SyncCalendarForm from '../components/SyncCalendarForm';
@@ -529,7 +529,7 @@ const Calendar: React.FC = () => {
 
                                  {dailyPrice && !dayBookings.length && showPrice && (
                                     <div className="absolute bottom-1 end-1 text-xs text-green-600 font-semibold p-1 bg-green-50 rounded">
-                                        {currencySymbols[accountSettings.currency]}{dailyPrice} {currencyNames[language][accountSettings.currency]}
+                                        {formatCurrency(dailyPrice, accountSettings.currency, language)} {currencyNames[language][accountSettings.currency]}
                                     </div>
                                 )}
 

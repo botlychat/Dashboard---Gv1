@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Booking, Unit, currencySymbols, FormDataType } from '../types';
+import { Booking, Unit, currencySymbols, FormDataType, formatCurrency } from '../types';
 import { useAccount, useLanguage } from '../App';
 
 interface AddBookingFormProps {
@@ -10,18 +10,18 @@ interface AddBookingFormProps {
 }
 
 const countryCodes = [
-    { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦' },
-    { code: '+971', name: 'UAE', flag: '🇦🇪' },
-    { code: '+974', name: 'Qatar', flag: '🇶🇦' },
-    { code: '+973', name: 'Bahrain', flag: '🇧🇭' },
-    { code: '+968', name: 'Oman', flag: '🇴🇲' },
-    { code: '+965', name: 'Kuwait', flag: '🇰🇼' },
+    { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦', example: '501234567' },
+    { code: '+971', name: 'UAE', flag: '🇦🇪', example: '501234567' },
+    { code: '+974', name: 'Qatar', flag: '🇶🇦', example: '33123456' },
+    { code: '+973', name: 'Bahrain', flag: '🇧🇭', example: '36123456' },
+    { code: '+968', name: 'Oman', flag: '🇴🇲', example: '92123456' },
+    { code: '+965', name: 'Kuwait', flag: '🇰🇼', example: '50012345' },
 ];
 
 const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, onClose, defaultDate }) => {
     const { accountSettings } = useAccount();
-    const { t } = useLanguage();
-    const currencySymbol = currencySymbols[accountSettings.currency];
+    const { t, language } = useLanguage();
+    const currencySymbol = currencySymbols[language][accountSettings.currency];
 
     const [formData, setFormData] = useState({
         clientName: '',
@@ -95,7 +95,16 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
     const validate = (): boolean => {
         const newErrors: Partial<Record<keyof Omit<typeof formData, 'phoneCountryCode'>, string>> = {};
         if (!formData.clientName.trim()) newErrors.clientName = "Client name is required.";
-        if (!formData.clientPhone.trim()) newErrors.clientPhone = "Phone number is required.";
+        if (!formData.clientPhone.trim()) {
+            newErrors.clientPhone = "Phone number is required.";
+        } else {
+            // Validate phone number format (digits only, 8-10 digits)
+            const phoneRegex = /^\d{8,10}$/;
+            if (!phoneRegex.test(formData.clientPhone.replace(/\s/g, ''))) {
+                const selectedCountry = countryCodes.find(c => c.code === formData.phoneCountryCode);
+                newErrors.clientPhone = `Invalid format. Example: ${selectedCountry?.example || '501234567'}`;
+            }
+        }
         if (!formData.checkIn) newErrors.checkIn = "Check-in date is required.";
         if (!formData.checkOut) newErrors.checkOut = "Check-out date is required.";
         if (formData.checkIn && formData.checkOut && new Date(formData.checkOut) <= new Date(formData.checkIn)) {
@@ -182,7 +191,15 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                                 </div>
                             )}
                         </div>
-                        <input name="clientPhone" value={formData.clientPhone} onChange={handleChange} className="form-input rounded-s-none" />
+                        <input 
+                            name="clientPhone" 
+                            value={formData.clientPhone} 
+                            onChange={handleChange} 
+                            placeholder={countryCodes.find(c => c.code === formData.phoneCountryCode)?.example || '501234567'}
+                            className="form-input rounded-s-none" 
+                            type="tel"
+                            maxLength={10}
+                        />
                     </div>
                     {errors.clientPhone && <p className="text-red-500 text-xs mt-1">{errors.clientPhone}</p>}
                  </div>
@@ -208,7 +225,7 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                  </div>
                  <div className="p-4 bg-gray-50 rounded-md text-center">
                      <p className="text-sm text-gray-600">{t('totalPrice')}</p>
-                     <p className="text-2xl font-bold text-gray-900">{currencySymbol}{totalPrice.toLocaleString()}</p>
+                     <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalPrice, accountSettings.currency, language)}</p>
                  </div>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                      <div>
@@ -230,7 +247,7 @@ const AddBookingForm: React.FC<AddBookingFormProps> = ({ units, onAddBooking, on
                      </div>
                      <div>
                         <label className="form-label">{t('paidAmount')} ({currencySymbol})</label>
-                        <input type="number" name="paidAmount" value={formData.paidAmount} onChange={handleChange} className="form-input" />
+                        <input type="number" name="paidAmount" value={formData.paidAmount} onChange={handleChange} className="form-input" placeholder="0" />
                          {errors.paidAmount && <p className="text-red-500 text-xs mt-1">{errors.paidAmount}</p>}
                      </div>
                  </div>

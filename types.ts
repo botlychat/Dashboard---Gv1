@@ -152,15 +152,28 @@ export interface AccountSettings {
   currency: Currency;
 }
 
-export const currencySymbols: { [key in Currency]: string } = {
-    SAR: '﷼',
-    AED: 'د.إ',
-    QAR: 'ر.ق',
-    BHD: '.د.ب',
-    OMR: 'ر.ع.',
-    KWD: 'د.ك',
-    USD: '$',
-    EUR: '€',
+// Language-based currency symbols
+export const currencySymbols: { en: { [key in Currency]: string }, ar: { [key in Currency]: string } } = {
+    en: {
+        SAR: 'SAR',
+        AED: 'AED',
+        QAR: 'QAR',
+        BHD: 'BHD',
+        OMR: 'OMR',
+        KWD: 'KWD',
+        USD: 'USD',
+        EUR: 'EUR',
+    },
+    ar: {
+        SAR: 'ر.س',
+        AED: 'د.إ',
+        QAR: 'ر.ق',
+        BHD: 'د.ب',
+        OMR: 'ر.ع',
+        KWD: 'د.ك',
+        USD: '$',
+        EUR: '€',
+    }
 };
 
 export const currencyNames: { en: { [key in Currency]: string }, ar: { [key in Currency]: string } } = {
@@ -175,15 +188,23 @@ export const currencyNames: { en: { [key in Currency]: string }, ar: { [key in C
         EUR: 'EUR',
     },
     ar: {
-        SAR: 'SAR - ريال',
-        AED: 'AED - درهم',
-        QAR: 'QAR - ريال',
-        BHD: 'BHD - دينار',
-        OMR: 'OMR - ريال',
-        KWD: 'KWD - دينار',
-        USD: 'USD - دولار',
-        EUR: 'EUR - يورو',
+        SAR: 'ر.س',
+        AED: 'د.إ',
+        QAR: 'ر.ق',
+        BHD: 'د.ب',
+        OMR: 'ر.ع',
+        KWD: 'د.ك',
+        USD: '$',
+        EUR: '€',
     }
+};
+
+// Helper function to format currency with proper positioning based on language
+export const formatCurrency = (amount: number, currency: Currency, language: 'en' | 'ar'): string => {
+    const symbol = currencySymbols[language][currency];
+    const formattedAmount = amount.toLocaleString();
+    // In Arabic, currency comes before the number (on the left in RTL layout)
+    return language === 'ar' ? `${symbol} ${formattedAmount}` : `${symbol}${formattedAmount}`;
 };
 
 export interface ExternalCalendar {

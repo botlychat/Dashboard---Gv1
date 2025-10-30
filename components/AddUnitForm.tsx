@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Unit, UnitGroup, currencySymbols, Bedroom } from '../types';
+import { Unit, UnitGroup, currencySymbols, Bedroom, formatCurrency } from '../types';
 import { useAccount, useLanguage } from '../App';
 
 interface AddUnitFormProps {
@@ -59,7 +59,8 @@ const AddUnitForm: React.FC<AddUnitFormProps> = ({ unitGroups, onSave, onClose, 
 
   const [activeTab, setActiveTab] = useState(TABS[0]);
   const { accountSettings } = useAccount();
-  const currencySymbol = currencySymbols[accountSettings.currency];
+  const { language } = useLanguage();
+  const currencySymbol = currencySymbols[language][accountSettings.currency];
   
   const [formData, setFormData] = useState(initialFormData);
 

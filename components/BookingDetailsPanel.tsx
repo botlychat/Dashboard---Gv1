@@ -1,5 +1,5 @@
 import React from 'react';
-import { Booking, Unit, BookingStatus, currencySymbols } from '../types';
+import { Booking, Unit, BookingStatus, currencySymbols, formatCurrency } from '../types';
 import { useAccount, useLanguage } from '../App';
 
 interface BookingDetailsPanelProps {
@@ -64,8 +64,8 @@ const InfoItem: React.FC<{ icon: string; label: string; value?: React.ReactNode 
 
 const BookingDetailsPanel: React.FC<BookingDetailsPanelProps> = ({ booking, unit, onClose, onCancelBooking }) => {
     const { accountSettings } = useAccount();
-    const { t } = useLanguage();
-    const currencySymbol = currencySymbols[accountSettings.currency];
+    const { t, language } = useLanguage();
+    const currencySymbol = currencySymbols[language][accountSettings.currency];
 
     if (!unit) return <div className="p-6">{t('unitInfoNotAvailable')}</div>;
 
@@ -106,16 +106,16 @@ const BookingDetailsPanel: React.FC<BookingDetailsPanelProps> = ({ booking, unit
                      <div className="space-y-3">
                          <div className="flex justify-between items-center text-lg">
                              <span className="text-gray-600">{t('totalPrice')}:</span>
-                             <span className="font-bold text-gray-900">{currencySymbol}{booking.price.toLocaleString()}</span>
+                             <span className="font-bold text-gray-900">{formatCurrency(booking.price, accountSettings.currency, language)}</span>
                          </div>
                          <div className="flex justify-between items-center text-sm">
                              <span className="text-gray-500">{t('paidAmount')}:</span>
-                             <span className="font-medium text-green-600">{currencySymbol}{(booking.paidAmount || 0).toLocaleString()}</span>
+                             <span className="font-medium text-green-600">{formatCurrency(booking.paidAmount || 0, accountSettings.currency, language)}</span>
                          </div>
                           <div className="border-t my-2"></div>
                          <div className={`flex justify-between items-center text-lg font-bold ${balance > 0 ? 'text-red-600' : 'text-gray-800'}`}>
                              <span>{t('balanceDue')}:</span>
-                             <span>{currencySymbol}{balance.toLocaleString()}</span>
+                             <span>{formatCurrency(balance, accountSettings.currency, language)}</span>
                          </div>
                      </div>
                 </InfoBlock>

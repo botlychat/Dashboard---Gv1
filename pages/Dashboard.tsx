@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialBookings, initialUnits } from '../data/mockData';
-import { Booking, BookingStatus, Unit, currencySymbols, currencyNames } from '../types';
+import { Booking, BookingStatus, Unit, currencySymbols, currencyNames, formatCurrency } from '../types';
 import { useGroup, useAccount, useGlobalActions, useLanguage, useTheme } from '../App';
 
 const StatCard: React.FC<{ icon: string; title: string; value: string | number; color: string }> = ({ icon, title, value, color }) => (
@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
         return { from: startOfMonth, to: endOfMonth };
     });
 
-    const currencySymbol = currencySymbols[accountSettings.currency];
+    const currencySymbol = currencySymbols[language][accountSettings.currency];
     const currencyName = currencyNames[language][accountSettings.currency];
 
     const { units, bookings: bookingsInGroup } = useMemo(() => {
@@ -181,7 +181,7 @@ const Dashboard: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                 <StatCard icon="fa-bookmark" title={t('totalBookings')} value={stats.totalBookings} color="bg-blue-500" />
                 <StatCard icon="fa-building" title={t('totalUnits')} value={stats.totalUnits} color="bg-purple-500" />
-                <StatCard icon="fa-dollar-sign" title={t('totalRevenue')} value={`${currencySymbol}${stats.totalRevenue.toLocaleString()} ${currencyName}`} color="bg-green-500" />
+                <StatCard icon="fa-dollar-sign" title={t('totalRevenue')} value={`${formatCurrency(stats.totalRevenue, accountSettings.currency, language)} ${currencyName}`} color="bg-green-500" />
                 <StatCard icon="fa-chart-line" title={t('occupancyRate')} value={stats.occupancyRate} color="bg-orange-500" />
             </div>
 
@@ -192,9 +192,9 @@ const Dashboard: React.FC = () => {
                         <BarChart data={chartData}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(128, 128, 128, 0.2)" />
                             <XAxis dataKey="name" />
-                            <YAxis yAxisId="left" orientation="left" stroke="#8884d8" tickFormatter={(tick) => `${currencySymbol}${tick}`} />
+                            <YAxis yAxisId="left" orientation="left" stroke="#8884d8" tickFormatter={(tick) => formatCurrency(tick, accountSettings.currency, language)} />
                             <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-                            <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} formatter={(value, name) => name === 'Revenue' ? `${currencySymbol}${value}` : value} />
+                            <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} formatter={(value, name) => name === 'Revenue' ? formatCurrency(value as number, accountSettings.currency, language) : value} />
                             <Legend />
                             <Bar yAxisId="left" dataKey="revenue" fill="#8884d8" name={t('revenue')} />
                             <Bar yAxisId="right" dataKey="bookings" fill="#82ca9d" name={t('bookings')} />
@@ -232,7 +232,7 @@ const Dashboard: React.FC = () => {
                                                 {t(`status${booking.status.replace(/\s+/g, '')}`)}
                                             </span>
                                         </td>
-                                        <td className="py-3 px-4 text-end font-medium">{currencySymbol}{booking.price.toLocaleString()}</td>
+                                        <td className="py-3 px-4 text-end font-medium">{formatCurrency(booking.price, accountSettings.currency, language)}</td>
                                     </tr>
                                 )
                             })}

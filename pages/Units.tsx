@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { initialUnits, initialUnitGroups, initialBookings } from '../data/mockData';
-import { Unit, UnitGroup, currencySymbols, currencyNames, Booking, PricingOverride } from '../types';
+import { Unit, UnitGroup, currencySymbols, currencyNames, Booking, PricingOverride, formatCurrency } from '../types';
 import { useGroup, useAccount, useLanguage } from '../App';
 import SidePanel from '../components/SidePanel';
 import AddUnitForm from '../components/AddUnitForm';
@@ -22,7 +22,7 @@ const Units: React.FC = () => {
     const [isAddGroupPanelOpen, setIsAddGroupPanelOpen] = useState(false);
     const [editingUnit, setEditingUnit] = useState<Unit | null>(null);
 
-    const currencySymbol = currencySymbols[accountSettings.currency];
+    const currencySymbol = currencySymbols[language][accountSettings.currency];
     const currencyName = currencyNames[language][accountSettings.currency];
     
     const filteredUnits = useMemo(() => {
@@ -172,7 +172,7 @@ const Units: React.FC = () => {
                                     <td className="py-3 px-4">{getGroupName(unit.groupId)}</td>
                                     <td className="py-3 px-4">{unit.type}</td>
                                     <td className="py-3 px-4">{unit.maxGuests}</td>
-                                    <td className="py-3 px-4">{currencySymbol}{unit.pricing.baseRate.toFixed(2)} {currencyName}</td>
+                                    <td className="py-3 px-4">{formatCurrency(unit.pricing.baseRate, accountSettings.currency, language)} {currencyName}</td>
                                     <td className="py-3 px-4">
                                         <span className={`px-2 py-1 text-xs font-semibold rounded-full ${unit.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                                             {unit.status}

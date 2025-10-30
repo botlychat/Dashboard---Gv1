@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Unit, currencySymbols } from '../types';
-import { useAccount } from '../App';
+import { Unit, currencySymbols, formatCurrency } from '../types';
+import { useAccount, useLanguage } from '../App';
 
 interface AdjustPricePanelProps {
     date: Date;
@@ -12,7 +12,8 @@ interface AdjustPricePanelProps {
 
 const AdjustPricePanel: React.FC<AdjustPricePanelProps> = ({ date, units, getDailyPrice, onClose, onSave }) => {
     const { accountSettings } = useAccount();
-    const currencySymbol = currencySymbols[accountSettings.currency];
+    const { language } = useLanguage();
+    const currencySymbol = currencySymbols[language][accountSettings.currency];
     const [priceOverrides, setPriceOverrides] = useState<{ [unitId: string]: string }>({});
 
     useEffect(() => {

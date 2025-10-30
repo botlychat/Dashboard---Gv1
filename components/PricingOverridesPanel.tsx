@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PricingOverride, Unit, currencySymbols } from '../types';
+import { PricingOverride, Unit, currencySymbols, formatCurrency } from '../types';
 import SidePanel from './SidePanel';
 import { useAccount, useLanguage } from '../App';
 
@@ -11,7 +11,8 @@ interface PricingOverridesPanelProps {
 }
 
 const PricingOverridesPanel: React.FC<PricingOverridesPanelProps> = ({ units, pricingOverrides, onSave, onDelete }) => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
+    const { accountSettings } = useAccount();
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [editingOverride, setEditingOverride] = useState<PricingOverride | null>(null);
 
@@ -72,7 +73,7 @@ const PricingOverridesPanel: React.FC<PricingOverridesPanelProps> = ({ units, pr
                                 </div>
                                 <div className="flex items-center space-x-4">
                                     <p className="font-bold text-lg text-green-600">
-                                        {currencySymbols['SAR']}{po.price.toFixed(2)}
+                                        {formatCurrency(po.price, accountSettings.currency, language)}
                                         <span className="text-xs text-gray-500 font-normal">{t('night')}</span>
                                     </p>
                                     <div>
@@ -100,9 +101,9 @@ interface OverrideFormProps {
 }
 
 const OverrideForm: React.FC<OverrideFormProps> = ({ units, onSave, onClose, editingOverride }) => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const { accountSettings } = useAccount();
-    const currencySymbol = currencySymbols[accountSettings.currency];
+    const currencySymbol = currencySymbols[language][accountSettings.currency];
     const [formData, setFormData] = useState({
         name: '',
         startDate: '',
