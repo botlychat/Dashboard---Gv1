@@ -161,12 +161,43 @@ export const initialUnits: Unit[] = [
 ];
 
 export const initialBookings: Booking[] = [
-  // 5 bookings in October 2025
+  // October 2025 bookings
   { id: 1, clientId: 1, clientName: 'Ahmed Al-Mansouri', unitId: 1, checkIn: '2025-10-02', checkOut: '2025-10-05', status: BookingStatus.Confirmed, price: 8000, bookingSource: 'Website', paymentMethod: 'Credit Card', paidAmount: 8000, notes: 'Early check-in requested' },
   { id: 2, clientId: 2, clientName: 'Sarah Johnson', unitId: 2, checkIn: '2025-10-08', checkOut: '2025-10-12', status: BookingStatus.Confirmed, price: 1800, bookingSource: 'Phone', paymentMethod: 'Bank Transfer', paidAmount: 1800 },
-  { id: 3, clientId: 3, clientName: 'Mohammed bin Khalid', unitId: 6, checkIn: '2025-10-14', checkOut: '2025-10-18', status: BookingStatus.Confirmed, price: 2400 },
-  { id: 4, clientId: 4, clientName: 'Fatima Al-Fahad', unitId: 3, checkIn: '2025-10-20', checkOut: '2025-10-24', status: BookingStatus.Confirmed, price: 3250, notes: 'Anniversary trip' },
-  { id: 5, clientId: 5, clientName: 'Yusuf Khan', unitId: 4, checkIn: '2025-10-25', checkOut: '2025-10-29', status: BookingStatus.Confirmed, price: 2800, bookingSource: 'Agent', paidAmount: 2800 }
+  { id: 3, clientId: 3, clientName: 'Mohammed bin Khalid', unitId: 6, checkIn: '2025-10-21', checkOut: '2025-10-24', status: BookingStatus.Confirmed, price: 2400 },
+  { id: 4, clientId: 4, clientName: 'Fatima Al-Fahad', unitId: 3, checkIn: '2025-10-15', checkOut: '2025-10-18', status: BookingStatus.Confirmed, price: 3250, notes: 'Anniversary trip' },
+  { id: 5, clientId: 5, clientName: 'Yusuf Khan', unitId: 4, checkIn: '2025-10-25', checkOut: '2025-10-28', status: BookingStatus.Confirmed, price: 2800, bookingSource: 'Agent', paidAmount: 2800 },
+  
+  // Multi-week spanning bookings
+  { id: 6, clientId: 6, clientName: 'Aisha Khan', unitId: 5, checkIn: '2025-10-27', checkOut: '2025-11-03', status: BookingStatus.Confirmed, price: 5600, bookingSource: 'Website', paymentMethod: 'Credit Card', paidAmount: 5600, notes: 'Week-long family vacation' },
+  { id: 7, clientId: 7, clientName: 'Omar Al-Jaber', unitId: 1, checkIn: '2025-11-05', checkOut: '2025-11-12', status: BookingStatus.Pending, price: 9800, bookingSource: 'Phone', paymentMethod: 'Bank Transfer', paidAmount: 4900, notes: 'Partial payment received' },
+  
+  // Overlapping units in November
+  { id: 8, clientId: 8, clientName: 'Zainab Williams', unitId: 2, checkIn: '2025-11-01', checkOut: '2025-11-04', status: BookingStatus.Confirmed, price: 1350, bookingSource: 'Website', paidAmount: 1350 },
+  { id: 9, clientId: 9, clientName: 'Ali Hassan', unitId: 3, checkIn: '2025-11-06', checkOut: '2025-11-09', status: BookingStatus.Confirmed, price: 2100, bookingSource: 'Agent', paidAmount: 2100 },
+  { id: 10, clientId: 10, clientName: 'Noura Brown', unitId: 4, checkIn: '2025-11-08', checkOut: '2025-11-15', status: BookingStatus.InProgress, price: 4900, bookingSource: 'Website', paymentMethod: 'Credit Card', paidAmount: 4900 },
+  
+  // Single day bookings
+  { id: 11, clientId: 11, clientName: 'Ahmed Smith', unitId: 6, checkIn: '2025-11-10', checkOut: '2025-11-11', status: BookingStatus.Confirmed, price: 600, bookingSource: 'Phone', paidAmount: 600, notes: 'One night stay' },
+  { id: 12, clientId: 12, clientName: 'Sarah Al-Fahad', unitId: 7, checkIn: '2025-11-12', checkOut: '2025-11-13', status: BookingStatus.Confirmed, price: 550, bookingSource: 'Website', paidAmount: 550 },
+  
+  // Long spanning booking across multiple weeks
+  { id: 13, clientId: 13, clientName: 'Mohammed Johnson', unitId: 8, checkIn: '2025-11-13', checkOut: '2025-11-23', status: BookingStatus.Confirmed, price: 7500, bookingSource: 'Agent', paymentMethod: 'Bank Transfer', paidAmount: 7500, notes: 'Extended business trip' },
+  
+  // Weekend bookings
+  { id: 14, clientId: 14, clientName: 'Fatima Khan', unitId: 2, checkIn: '2025-11-14', checkOut: '2025-11-16', status: BookingStatus.Confirmed, price: 900, bookingSource: 'Website', paidAmount: 900 },
+  { id: 15, clientId: 15, clientName: 'Yusuf Williams', unitId: 9, checkIn: '2025-11-17', checkOut: '2025-11-20', status: BookingStatus.Pending, price: 2100, bookingSource: 'Phone', paidAmount: 0, notes: 'Payment pending' },
+  
+  // Late November bookings
+  { id: 16, clientId: 16, clientName: 'Aisha Al-Mansouri', unitId: 1, checkIn: '2025-11-20', checkOut: '2025-11-25', status: BookingStatus.Confirmed, price: 7000, bookingSource: 'Website', paymentMethod: 'Credit Card', paidAmount: 7000 },
+  { id: 17, clientId: 17, clientName: 'Omar Hassan', unitId: 3, checkIn: '2025-11-22', checkOut: '2025-11-27', status: BookingStatus.Confirmed, price: 3500, bookingSource: 'Agent', paidAmount: 3500 },
+  { id: 18, clientId: 18, clientName: 'Zainab Brown', unitId: 5, checkIn: '2025-11-25', checkOut: '2025-11-29', status: BookingStatus.Confirmed, price: 3200, bookingSource: 'Website', paidAmount: 3200 },
+  
+  // Cancelled booking
+  { id: 19, clientId: 19, clientName: 'Ali Al-Jaber', unitId: 4, checkIn: '2025-11-26', checkOut: '2025-11-28', status: BookingStatus.Cancelled, price: 1400, bookingSource: 'Phone', notes: 'Cancelled due to travel restrictions' },
+  
+  // December bookings
+  { id: 20, clientId: 20, clientName: 'Noura Smith', unitId: 6, checkIn: '2025-12-01', checkOut: '2025-12-05', status: BookingStatus.Confirmed, price: 2400, bookingSource: 'Website', paymentMethod: 'Credit Card', paidAmount: 2400 }
 ];
 
 const sampleFeedbacks = [
