@@ -431,15 +431,15 @@ const Calendar: React.FC = () => {
             <div className="grid grid-cols-7 text-center font-semibold text-gray-600 dark:text-gray-400 border-b dark:border-gray-700 pb-2 mb-2">
                 {dayHeaderKeys.map(dayKey => <div key={dayKey}>{t(dayKey)}</div>)}
             </div>
-            <div className="relative">
-                {/* Multi-day bookings overlay layer */}
-                <div className="grid grid-cols-7 gap-1 pointer-events-none absolute inset-0">
+            <div className="relative overflow-visible">
+                {/* Multi-day bookings overlay layer - positioned absolutely to span across grid */}
+                <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: '0.25rem' }}>
                     {days.map((date, index) => {
                         const dayBookings = bookingsForDay(date);
                         const multiDayBookingsOnThisDay = dayBookings.filter(b => getBookingPosition(b, date) === 'first');
                         
                         return (
-                            <div key={`multi-${index}`} className="relative">
+                            <div key={`multi-${index}`} style={{ gridColumn: index + 1, position: 'relative', minHeight: 0 }}>
                                 {multiDayBookingsOnThisDay.map(booking => {
                                     const checkIn = new Date(booking.checkIn);
                                     const checkOut = new Date(booking.checkOut);
@@ -457,10 +457,12 @@ const Calendar: React.FC = () => {
                                         <div
                                             key={booking.id}
                                             onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
-                                            className={`absolute top-0 start-0 py-1.5 px-1.5 text-xs rounded-md border-s-4 truncate pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 dark:bg-gray-600 border-gray-400 cursor-not-allowed text-gray-700 dark:text-gray-300' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
+                                            className={`py-1.5 px-1.5 text-xs rounded-md border-s-4 pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 dark:bg-gray-600 border-gray-400 cursor-not-allowed text-gray-700 dark:text-gray-300' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
                                             style={{
-                                                width: `calc(${spanDays} * (100% / 7) + ${(spanDays - 1) * 0.25}rem)`,
+                                                gridColumn: `${index + 1} / span ${spanDays}`,
                                                 zIndex: 10,
+                                                position: 'relative',
+                                                overflow: 'visible',
                                             }}
                                             title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}
                                         >
@@ -470,8 +472,8 @@ const Calendar: React.FC = () => {
                                                 </p>
                                             ) : (
                                                 <>
-                                                    <p className="font-semibold">{booking.clientName}</p>
-                                                    <p className="text-xs opacity-80">{unit?.name}</p>
+                                                    <p className="font-semibold truncate">{booking.clientName}</p>
+                                                    <p className="text-xs opacity-80 truncate">{unit?.name}</p>
                                                 </>
                                             )}
                                         </div>
@@ -497,7 +499,7 @@ const Calendar: React.FC = () => {
                         const showPrice = currentGroupId !== 'all';
 
                         return (
-                            <div key={index} className={`relative border dark:border-gray-700 min-h-[9rem] flex flex-col p-1.5 group ${isCurrentMonth ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/50'}`}>
+                            <div key={index} className={`relative border dark:border-gray-700 min-h-[9rem] flex flex-col p-1.5 group overflow-visible ${isCurrentMonth ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/50'}`}>
                                 <div className="flex justify-between items-start">
                                     <span className={`text-sm font-medium self-start mb-1 ${isToday ? 'bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center' : ''} ${!isCurrentMonth ? 'text-gray-400 dark:text-gray-500' : ''}`}>
                                         {date.getDate()}
