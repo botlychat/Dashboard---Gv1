@@ -429,69 +429,103 @@ const Calendar: React.FC = () => {
                     </button>
                 </div>
             </div>
-            <div className="grid grid-cols-7 text-center font-semibold text-gray-600 border-b pb-2 mb-2">
+            <div className="grid grid-cols-7 text-center font-semibold text-gray-600 border-b pb-2 mb-2 text-xs sm:text-sm">
                 {dayHeaderKeys.map(dayKey => <div key={dayKey}>{t(dayKey)}</div>)}
             </div>
             <div className="relative overflow-visible">
                 {/* Multi-day bookings overlay layer - positioned absolutely to span across grid */}
-                <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gridAutoRows: 'minmax(9rem, auto)', gap: '0.25rem' }}>
-                    {days.map((date, index) => {
-                        const dayBookings = bookingsForDay(date);
-                        const multiDayBookingsOnThisDay = dayBookings.filter(b => getBookingPosition(b, date) === 'first');
-                        
-                        // Calculate the row and column position for this day
-                        const row = Math.floor(index / 7) + 1;
-                        const col = (index % 7) + 1;
-                        
-                        return (
-                            <div key={`multi-${index}`} style={{ gridRow: row, gridColumn: col, position: 'relative', minHeight: 0 }}>
-                                {multiDayBookingsOnThisDay.map(booking => {
-                                    const checkIn = new Date(booking.checkIn);
-                                    const checkOut = new Date(booking.checkOut);
-                                    checkIn.setHours(0, 0, 0, 0);
-                                    checkOut.setHours(0, 0, 0, 0);
-                                    
-                                    // Calculate span: number of days the booking spans
-                                    const spanDays = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
-                                    
-                                    // Calculate how many days can fit in the current week
-                                    const daysUntilWeekEnd = 7 - col + 1;
-                                    const daysInFirstWeek = Math.min(spanDays, daysUntilWeekEnd);
-                                    
-                                    const unit = getUnitById(booking.unitId);
-                                    const statusConfig = getBookingStatusConfig(booking.status, t);
-                                    const isBlocker = booking.clientName === t('unitClosed');
-                                    
-                                    return (
-                                        <div
-                                            key={booking.id}
-                                            onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
-                                            className={`py-1.5 px-1.5 text-xs rounded-md border-s-4 pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 border-gray-400 cursor-not-allowed text-gray-700' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
-                                            style={{
-                                                gridRow: row,
-                                                gridColumn: `${col} / span ${daysInFirstWeek}`,
-                                                zIndex: 10,
-                                                position: 'relative',
-                                                overflow: 'visible',
-                                            }}
-                                            title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}
-                                        >
-                                            {isBlocker ? (
-                                                <p className="font-semibold flex items-center text-xs">
-                                                    <i className="fas fa-lock me-1.5"></i> {unit?.name}
-                                                </p>
-                                            ) : (
-                                                <>
-                                                    <p className="font-semibold truncate">{booking.clientName}</p>
-                                                    <p className="text-xs opacity-80 truncate">{unit?.name}</p>
-                                                </>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        );
-                    })}
+                <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gridAutoRows: 'minmax(7rem, auto)', gap: '0.25rem' }}>
+                    {(() => {
+                        const renderedBookings = new Set<string>();
+                        return days.map((date, index) => {
+                            const dayBookings = bookingsForDay(date);
+                            const multiDayBookingsOnThisDay = dayBookings.filter(b => {
+                                const position = getBookingPosition(b, date);
+                                return position === 'first' || position === 'middle' || position === 'last';
+                            });
+                            
+                            // Calculate the row and column position for this day
+                            const row = Math.floor(index / 7) + 1;
+                            const col = (index % 7) + 1;
+                            
+                            return (
+                                <div key={`multi-${index}`} style={{ gridRow: row, gridColumn: col, position: 'relative', minHeight: 0 }}>
+                                    {multiDayBookingsOnThisDay.map(booking => {
+                                        const checkIn = new Date(booking.checkIn);
+                                        const checkOut = new Date(booking.checkOut);
+                                        checkIn.setHours(0, 0, 0, 0);
+                                        checkOut.setHours(0, 0, 0, 0);
+                                        
+                                        const currentDate = new Date(date);
+                                        currentDate.setHours(0, 0, 0, 0);
+                                        
+                                        // Check if this is the first occurrence of this booking in the current week row
+                                        const bookingRowKey = `${booking.id}-row${row}`;
+                                        
+                                        // Determine if this is the start of the booking segment for this week
+                                        const isWeekStart = col === 1 || currentDate.getTime() === checkIn.getTime();
+                                        
+                                        // Skip if we've already rendered this booking segment in this week
+                                        if (renderedBookings.has(bookingRowKey)) {
+                                            return null;
+                                        }
+                                        
+                                        // Calculate span: number of days remaining in the booking
+                                        const daysRemaining = Math.ceil((checkOut.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+                                        
+                                        // Calculate how many days can fit in the current week
+                                        const daysUntilWeekEnd = 7 - col + 1;
+                                        const daysInThisWeek = Math.min(daysRemaining, daysUntilWeekEnd);
+                                        
+                                        // Mark this booking segment as rendered for this week
+                                        renderedBookings.add(bookingRowKey);
+                                        
+                                        const unit = getUnitById(booking.unitId);
+                                        const statusConfig = getBookingStatusConfig(booking.status, t);
+                                        const isBlocker = booking.clientName === t('unitClosed');
+                                        
+                                        const isFirstSegment = currentDate.getTime() === checkIn.getTime();
+                                        const isLastSegment = new Date(currentDate.getTime() + (daysInThisWeek * 86400000)).getTime() >= checkOut.getTime();
+                                        
+                                        return (
+                                            <div
+                                                key={bookingRowKey}
+                                                onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
+                                                className={`py-1 sm:py-1.5 px-1 sm:px-1.5 text-[10px] sm:text-xs pointer-events-auto cursor-pointer ${isBlocker ? 'bg-gray-200 border-gray-400 cursor-not-allowed text-gray-700' : `${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`}
+                                                style={{
+                                                    gridRow: row,
+                                                    gridColumn: `${col} / span ${daysInThisWeek}`,
+                                                    zIndex: 10,
+                                                    position: 'relative',
+                                                    overflow: 'hidden',
+                                                    borderLeftWidth: isFirstSegment ? '4px' : '0',
+                                                    borderRightWidth: isLastSegment && !isFirstSegment ? '4px' : '0',
+                                                    borderTopWidth: '1px',
+                                                    borderBottomWidth: '1px',
+                                                    borderTopLeftRadius: isFirstSegment ? '0.375rem' : '0',
+                                                    borderBottomLeftRadius: isFirstSegment ? '0.375rem' : '0',
+                                                    borderTopRightRadius: isLastSegment ? '0.375rem' : '0',
+                                                    borderBottomRightRadius: isLastSegment ? '0.375rem' : '0',
+                                                }}
+                                                title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}
+                                            >
+                                                {isBlocker ? (
+                                                    <p className="font-semibold flex items-center text-[10px] sm:text-xs truncate">
+                                                        <i className="fas fa-lock me-1"></i> <span className="truncate">{unit?.name}</span>
+                                                    </p>
+                                                ) : (
+                                                    <>
+                                                        <p className="font-semibold truncate leading-tight">{booking.clientName}</p>
+                                                        <p className="text-[9px] sm:text-xs opacity-80 truncate leading-tight">{unit?.name}</p>
+                                                    </>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        });
+                    })()}
                 </div>
 
                 {/* Main calendar grid with day cells */}
@@ -509,9 +543,9 @@ const Calendar: React.FC = () => {
                         const showPrice = currentGroupId !== 'all';
 
                         return (
-                            <div key={index} className={`relative border min-h-[9rem] flex flex-col p-1.5 group overflow-visible ${isCurrentMonth ? 'bg-white' : 'bg-gray-50'}`}>
-                                <div className="flex justify-between items-start">
-                                    <span className={`text-sm font-medium self-start mb-1 ${isToday ? 'bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center' : ''} ${!isCurrentMonth ? 'text-gray-400' : ''}`}>
+                            <div key={index} className={`relative border min-h-[7rem] sm:min-h-[9rem] flex flex-col p-1 sm:p-1.5 group overflow-visible ${isCurrentMonth ? 'bg-white' : 'bg-gray-50'}`}>
+                                <div className="flex justify-between items-start mb-1">
+                                    <span className={`text-xs sm:text-sm font-medium self-start ${isToday ? 'bg-orange-500 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-[10px] sm:text-sm' : ''} ${!isCurrentMonth ? 'text-gray-400' : ''}`}>
                                         {date.getDate()}
                                     </span>
                                     <div className="relative">
@@ -529,12 +563,12 @@ const Calendar: React.FC = () => {
                                 </div>
 
                                  {dailyPrice && !dayBookings.length && showPrice && (
-                                    <div className="absolute bottom-1 end-1 text-xs text-green-600 font-semibold p-1 bg-green-50 rounded">
-                                        {formatCurrency(dailyPrice, accountSettings.currency, language)} {currencyNames[language][accountSettings.currency]}
+                                    <div className="absolute bottom-1 end-1 text-[10px] sm:text-xs text-green-600 font-semibold px-1 py-0.5 bg-green-50 rounded whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%]">
+                                        {formatCurrency(dailyPrice, accountSettings.currency, language)}
                                     </div>
                                 )}
 
-                                <div className="space-y-1 overflow-y-auto text-xs mt-1">
+                                <div className="space-y-1 overflow-y-auto text-[10px] sm:text-xs mt-1">
                                     {dayBookings.map(booking => {
                                         const bookingPosition = getBookingPosition(booking, date);
                                         
@@ -551,17 +585,17 @@ const Calendar: React.FC = () => {
                                             <div 
                                                 key={booking.id} 
                                                 onClick={isBlocker ? undefined : () => handleViewBookingDetails(booking)}
-                                                className={`py-1.5 px-1.5 rounded-md truncate border-s-4 ${isBlocker ? 'bg-gray-200 border-gray-400 cursor-not-allowed text-gray-700' : `cursor-pointer ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`} 
+                                                className={`py-1 sm:py-1.5 px-1 sm:px-1.5 rounded-md truncate border-s-4 ${isBlocker ? 'bg-gray-200 border-gray-400 cursor-not-allowed text-gray-700' : `cursor-pointer ${statusConfig.bgColor} ${statusConfig.textColor} ${statusConfig.borderColor}`} ${booking.status === BookingStatus.Cancelled ? 'line-through' : ''}`} 
                                                 title={isBlocker ? t('unitClosed') : `${booking.clientName} (${unit?.name})`}>
                                                 
                                                  {isBlocker ? (
-                                                    <p className="font-semibold flex items-center text-xs">
-                                                        <i className="fas fa-lock me-1.5"></i> {unit?.name}
+                                                    <p className="font-semibold flex items-center text-[10px] sm:text-xs truncate leading-tight">
+                                                        <i className="fas fa-lock me-1"></i> <span className="truncate">{unit?.name}</span>
                                                     </p>
                                                 ) : (
                                                     <>
-                                                        <p className="font-semibold">{booking.clientName}</p>
-                                                        <p className="text-xs opacity-80">{unit?.name}</p>
+                                                        <p className="font-semibold truncate leading-tight">{booking.clientName}</p>
+                                                        <p className="text-[9px] sm:text-xs opacity-80 truncate leading-tight">{unit?.name}</p>
                                                     </>
                                                 )}
                                             </div>
